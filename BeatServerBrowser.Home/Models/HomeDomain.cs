@@ -19,6 +19,26 @@ namespace BeatServerBrowser.Home.Models
 
             set => this.SetProperty(ref this.beatmaps_, value);
         }
+
+        /// <summary>最小ページ を取得、設定</summary>
+        private uint minPageNumber_;
+        /// <summary>最小ページ を取得、設定</summary>
+        public uint MinPageNumber
+        {
+            get => this.minPageNumber_;
+
+            set => this.SetProperty(ref this.minPageNumber_, value);
+        }
+
+        /// <summary>最大ページ を取得、設定</summary>
+        private uint maxPageNumber_;
+        /// <summary>最大ページ を取得、設定</summary>
+        public uint MaxPageNumber
+        {
+            get => this.maxPageNumber_;
+
+            set => this.SetProperty(ref this.maxPageNumber_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -40,12 +60,19 @@ namespace BeatServerBrowser.Home.Models
         public void Serch()
         {
             this.Beatmaps.Clear();
-            var page = BeatServerDataBase.GetPage(0);
-            if (page.Docs == null) {
-                return;
+            var pagenums = new List<uint>();
+            for (var i = this.MinPageNumber; i < MaxPageNumber; i++) {
+                pagenums.Add(i);
             }
-            foreach (var beatmap in page.Docs) {
-                this.Beatmaps.Add(new BeatmapEntity(beatmap));
+            var pages = BeatServerDataBase.GetPage(pagenums);
+            
+            foreach (var page in pages) {
+                foreach (var beatmap in page.Docs) {
+                    if (page.Docs == null) {
+                        return;
+                    }
+                    this.Beatmaps.Add(new BeatmapEntity(beatmap));
+                }
             }
         }
         #endregion
@@ -58,6 +85,8 @@ namespace BeatServerBrowser.Home.Models
         public HomeDomain()
         {
             this.Beatmaps = new List<BeatmapEntity>();
+            this.MinPageNumber = 0;
+            this.MaxPageNumber = 10;
         }
         #endregion
     }
