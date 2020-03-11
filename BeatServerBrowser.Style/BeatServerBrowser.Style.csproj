@@ -2,10 +2,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <AssemblyName>BeatServerBrowser.Static</AssemblyName>
+    <AssemblyName>BeatServerBrowser.Style</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BeatSaverSharp" Version="1.5.2" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
+    <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.1.0" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
 </Project>

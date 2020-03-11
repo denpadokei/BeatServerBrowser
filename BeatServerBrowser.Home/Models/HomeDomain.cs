@@ -1,4 +1,5 @@
 ﻿using BeatServerBrowser.Home.DataBases;
+using BeatServerBrowser.Home.ViewModels;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace BeatServerBrowser.Home.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
         /// <summary>ビートマップリスト を取得、設定</summary>
-        private List<BeatmapEntity> beatmaps_;
+        private List<BeatMapViewModel> beatmaps_;
         /// <summary>ビートマップリスト を取得、設定</summary>
-        public List<BeatmapEntity> Beatmaps
+        public List<BeatMapViewModel> Beatmaps
         {
             get => this.beatmaps_;
 
@@ -71,7 +72,7 @@ namespace BeatServerBrowser.Home.Models
                     if (page.Docs == null) {
                         return;
                     }
-                    this.Beatmaps.Add(new BeatmapEntity(beatmap));
+                    this.Beatmaps.Add(new BeatMapViewModel(beatmap));
                 }
             }
         }
@@ -84,7 +85,7 @@ namespace BeatServerBrowser.Home.Models
         #region // 構築・破棄
         public HomeDomain()
         {
-            this.Beatmaps = new List<BeatmapEntity>();
+            this.Beatmaps = new List<BeatMapViewModel>();
             this.MinPageNumber = 0;
             this.MaxPageNumber = 10;
         }

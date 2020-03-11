@@ -1,55 +1,67 @@
 ﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Bases;
-using BeatServerBrowser.Core.Collections;
-using BeatServerBrowser.Home.Models;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace BeatServerBrowser.Home.ViewModels
 {
-    public class HomeViewModel : ViewModelBase
+    public class BeatMapViewModel : BindableBase
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>ページコレクション を取得、設定</summary>
-        private List<Page> pages_;
-        /// <summary>ページコレクション を取得、設定</summary>
-        public List<Page> Pages
+        /// <summary>譜面 を取得、設定</summary>
+        private Beatmap beatmap_;
+        /// <summary>譜面 を取得、設定</summary>
+        public Beatmap Beatmap
         {
-            get => this.pages_;
+            get => this.beatmap_;
 
-            set => this.SetProperty(ref this.pages_, value);
+            set => this.SetProperty(ref this.beatmap_, value);
         }
 
-        /// <summary>曲コレクション を取得、設定</summary>
-        private MTObservableCollection<BeatMapViewModel> beatmaps_;
-        /// <summary>曲コレクション を取得、設定</summary>
-        public MTObservableCollection<BeatMapViewModel> Beatmaps
+        /// <summary>曲名 を取得、設定</summary>
+        public string SongTitle
         {
-            get => this.beatmaps_;
+            get => this.Beatmap.Name;
+        }
 
-            set => this.SetProperty(ref this.beatmaps_, value);
+        /// <summary>画像 を取得、設定</summary>
+        private ImageSource cover_;
+        /// <summary>画像 を取得、設定</summary>
+        public ImageSource Cover
+        {
+            get => this.cover_;
+
+            set => this.SetProperty(ref this.cover_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
-        /// <summary>検索コマンド を取得、設定</summary>
-        private DelegateCommand serchCommand_;
-        /// <summary>検索コマンド を取得、設定</summary>
-        public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
+        /// <summary>ワンクリックインストールコマンド を取得、設定</summary>
+        private DelegateCommand downloadCommand_;
+        /// <summary>ワンクリックインストールコマンド を取得、設定</summary>
+        public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download));
+
+        /// <summary>コピーコマンド を取得、設定</summary>
+        private DelegateCommand copyCommand_;
+        /// <summary>コピーコマンド を取得、設定</summary>
+        public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy));
 
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private void Serch()
+        private void Download()
         {
-            this.Beatmaps.Clear();
-            this.domain_.Serch();
-            this.Beatmaps.AddRange(this.domain_.Beatmaps);
+
+        }
+
+        private void Copy()
+        {
+
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -66,17 +78,14 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private readonly HomeDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        #endregion
-
-        public HomeViewModel()
+        public BeatMapViewModel(Beatmap beatmap)
         {
-            this.domain_ = new HomeDomain();
-            this.Pages = new List<Page>();
-            this.Beatmaps = new MTObservableCollection<BeatMapViewModel>();
+            this.Beatmap = beatmap;
+            this.Cover = new BitmapImage(new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}"));
         }
+        #endregion
     }
 }
