@@ -7,11 +7,11 @@ namespace BeatServerBrowser.Home.DataBases
 {
     public static class BeatServerDataBase
     {
-        public static IEnumerable<Page> GetPage(IEnumerable<uint> pages)
+        public static  IEnumerable<Page> GetPage(BeatSaver beatSaver, IEnumerable<uint> pages)
         {
-            var beatserver = new BeatSaver();
             foreach (var pagenum in pages) {
-                yield return beatserver.Latest(pagenum).Result;
+                var page = beatSaver.Latest(pagenum).Result;
+                yield return page;
             }
         }
     }

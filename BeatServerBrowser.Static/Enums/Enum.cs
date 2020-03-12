@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BeatServerBrowser.Static.Enums
 {
-    enum SerchType
+    public enum SerchType
     {
         [Description("HOT！")]
         Hot,
@@ -17,5 +17,13 @@ namespace BeatServerBrowser.Static.Enums
         Downloads,
         [Description("プレイカウント数")]
         Plays,
+    }
+
+    public enum ListType
+    {
+        [Description("グリッド形式")]
+        Grid,
+        [Description("パネル形式")]
+        Panel
     }
 }

@@ -1,4 +1,6 @@
-﻿using BeatServerBrowser.Home.DataBases;
+﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.Interfaces;
+using BeatServerBrowser.Home.DataBases;
 using BeatServerBrowser.Home.ViewModels;
 using Prism.Mvvm;
 using System;
@@ -12,9 +14,9 @@ namespace BeatServerBrowser.Home.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
         /// <summary>ビートマップリスト を取得、設定</summary>
-        private List<BeatMapViewModel> beatmaps_;
+        private List<IBeatmapEntityable> beatmaps_;
         /// <summary>ビートマップリスト を取得、設定</summary>
-        public List<BeatMapViewModel> Beatmaps
+        public List<IBeatmapEntityable> Beatmaps
         {
             get => this.beatmaps_;
 
@@ -65,27 +67,28 @@ namespace BeatServerBrowser.Home.Models
             for (var i = this.MinPageNumber; i < MaxPageNumber; i++) {
                 pagenums.Add(i);
             }
-            var pages = BeatServerDataBase.GetPage(pagenums);
-            
+            var pages = BeatServerDataBase.GetPage(this.beatServer_, pagenums);
+
             foreach (var page in pages) {
                 foreach (var beatmap in page.Docs) {
                     if (page.Docs == null) {
                         return;
                     }
-                    this.Beatmaps.Add(new BeatMapViewModel(beatmap));
+                    this.Beatmaps.Add(new BeatmapEntity(beatmap));
                 }
             }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-
+        private readonly BeatSaver beatServer_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public HomeDomain()
+        public HomeDomain(BeatSaver beatSaver)
         {
-            this.Beatmaps = new List<BeatMapViewModel>();
+            this.beatServer_ = beatSaver;
+            this.Beatmaps = new List<IBeatmapEntityable>();
             this.MinPageNumber = 0;
             this.MaxPageNumber = 10;
         }

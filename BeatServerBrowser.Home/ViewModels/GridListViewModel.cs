@@ -1,46 +1,36 @@
-﻿using BeatSaverSharp;
+﻿using BeatServerBrowser.Core.Bases;
+using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Interfaces;
-using NLog;
+using BeatServerBrowser.Home.Models;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using System.Linq;
-using Unity;
 
-namespace BeatServerBrowser.Core.Bases
+namespace BeatServerBrowser.Home.ViewModels
 {
-    public class ViewModelBase : BindableBase, IWindowPanel
+    public class GridListViewModel : ViewModelBase, IBeatmapable
     {
-
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        protected virtual Logger Logger => LogManager.GetCurrentClassLogger();
-
-        /// <summary>タイトル を取得、設定</summary>
-        private string title_;
-        /// <summary>タイトル を取得、設定</summary>
-        public string Title
+        /// <summary>譜面コレクション を取得、設定</summary>
+        private MTObservableCollection<IBeatmapEntityable> beatmaps_;
+        /// <summary>譜面コレクション を取得、設定</summary>
+        public MTObservableCollection<IBeatmapEntityable> Beatmaps
         {
-            get => this.title_;
+            get => this.beatmaps_;
 
-            set => this.SetProperty(ref this.title_, value);
-        }
-        /// <summary>選択中のリストビューのデータコンテキスト を取得、設定</summary>
-        private Object currentListViewContext_;
-        /// <summary>選択中のリストビューのデータコンテキスト を取得、設定</summary>
-        public Object CurrentListViewContext
-        {
-            get => this.currentListViewContext_;
-
-            set => this.SetProperty(ref this.currentListViewContext_, value);
+            set => this.SetProperty(ref this.beatmaps_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
+        /// <summary>検索コマンド を取得、設定</summary>
+        private DelegateCommand serchCommand_;
+        /// <summary>検索コマンド を取得、設定</summary>
+        public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -50,37 +40,29 @@ namespace BeatServerBrowser.Core.Bases
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            base.OnPropertyChanged(args);
-            Debug.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.ffffff}|{args.PropertyName}値が変更されました。");
-            this.Logger.Debug($"{args.PropertyName}値が変更されました。");
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
+        public void Serch()
+        {
+            this.Beatmaps.Clear();
+            this.domain_.Serch();
+            this.Beatmaps.AddRange(this.domain_.Beatmaps);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        [Dependency]
-        protected IRegionManager regionManager_;
-
-        protected readonly BeatSaver beatSaver_;
-
-        private readonly HttpOptions options_ = new HttpOptions()
-        {
-            ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 0, 1),
-        };
+        private readonly HomeDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public ViewModelBase()
+        public GridListViewModel()
         {
-            this.beatSaver_ = new BeatSaver(this.options_);
+            this.domain_ = new HomeDomain(this.beatSaver_);
+            this.Beatmaps = new MTObservableCollection<IBeatmapEntityable>();
         }
         #endregion
     }

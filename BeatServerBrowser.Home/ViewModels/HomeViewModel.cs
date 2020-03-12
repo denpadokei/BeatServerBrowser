@@ -1,13 +1,18 @@
 ﻿using BeatSaverSharp;
 using BeatServerBrowser.Core.Bases;
 using BeatServerBrowser.Core.Collections;
+using BeatServerBrowser.Core.Extentions;
+using BeatServerBrowser.Core.Interfaces;
 using BeatServerBrowser.Home.Models;
+using BeatServerBrowser.Static.Enums;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+
 
 namespace BeatServerBrowser.Home.ViewModels
 {
@@ -15,25 +20,6 @@ namespace BeatServerBrowser.Home.ViewModels
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>ページコレクション を取得、設定</summary>
-        private List<Page> pages_;
-        /// <summary>ページコレクション を取得、設定</summary>
-        public List<Page> Pages
-        {
-            get => this.pages_;
-
-            set => this.SetProperty(ref this.pages_, value);
-        }
-
-        /// <summary>曲コレクション を取得、設定</summary>
-        private MTObservableCollection<BeatMapViewModel> beatmaps_;
-        /// <summary>曲コレクション を取得、設定</summary>
-        public MTObservableCollection<BeatMapViewModel> Beatmaps
-        {
-            get => this.beatmaps_;
-
-            set => this.SetProperty(ref this.beatmaps_, value);
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -41,15 +27,14 @@ namespace BeatServerBrowser.Home.ViewModels
         private DelegateCommand serchCommand_;
         /// <summary>検索コマンド を取得、設定</summary>
         public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
-
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private void Serch()
+        public void Serch()
         {
-            this.Beatmaps.Clear();
-            this.domain_.Serch();
-            this.Beatmaps.AddRange(this.domain_.Beatmaps);
+            if (this.CurrentListViewContext is IBeatmapable beatmapable) {
+                beatmapable.Serch();
+            }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -74,9 +59,7 @@ namespace BeatServerBrowser.Home.ViewModels
 
         public HomeViewModel()
         {
-            this.domain_ = new HomeDomain();
-            this.Pages = new List<Page>();
-            this.Beatmaps = new MTObservableCollection<BeatMapViewModel>();
+            this.domain_ = new HomeDomain(this.beatSaver_);
         }
     }
 }

@@ -4,42 +4,32 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:usercontrol="clr-namespace:BeatServerBrowser.Home.UserControls"
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:control="clr-namespace:ControlzEx;assembly=MaterialDesignThemes.Wpf"
+             xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls;assembly=BeatServerBrowser.Style"
              xmlns:viewmodel="clr-namespace:BeatServerBrowser.Home.ViewModels"
+             xmlns:enum="clr-namespace:BeatServerBrowser.Static.Enums;assembly=BeatServerBrowser.Static"
+             xmlns:extention="clr-namespace:BeatServerBrowser.Core.Extentions;assembly=BeatServerBrowser.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignWidth="1200" d:DesignHeight="800"
              d:DataContext="{d:DesignInstance {x:Type viewmodel:HomeViewModel}, IsDesignTimeCreatable=True}"
              prism:ViewModelLocator.AutoWireViewModel="True">
+
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type viewmodel:BeatMapViewModel}">
             <usercontrol:BeatMapView />
         </DataTemplate>
     </UserControl.Resources>
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0">
-            <Button Content="検索" Width="75" Height="25" Margin="10" Command="{Binding SerchCommand}"/>
-        </DockPanel>
-        <ScrollViewer Grid.Row="1">
-            <DockPanel Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding Beatmaps}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ContentControl Content="{Binding}" Margin="5"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </DockPanel>
-        </ScrollViewer>
+        
+        <control:ListNavigateControl CurrentListViewContext="{Binding CurrentListViewContext}">
+            <TabItem Header="リスト形式">
+                <ContentControl x:Name="Panel" prism:RegionManager.RegionName="PanelList" prism:RegionManager.RegionContext="{x:Type viewmodel:PanelListViewModel}" />
+            </TabItem>
+            <TabItem Header="グリッド形式" >
+                <ContentControl x:Name="Grid" prism:RegionManager.RegionName="GridList" prism:RegionManager.RegionContext="{x:Type viewmodel:GridListViewModel}"/>
+            </TabItem>
+        </control:ListNavigateControl>
     </Grid>
 </UserControl>
