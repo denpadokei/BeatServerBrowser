@@ -24,6 +24,16 @@ namespace BeatServerBrowser.Home.ViewModels
 
             set => this.SetProperty(ref this.beatmaps_, value);
         }
+
+        /// <summary>検索条件 を取得、設定</summary>
+        private SerchFilter filter_;
+        /// <summary>検索条件 を取得、設定</summary>
+        public SerchFilter Filter
+        {
+            get => this.filter_;
+
+            set => this.SetProperty(ref this.filter_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -31,9 +41,18 @@ namespace BeatServerBrowser.Home.ViewModels
         private DelegateCommand serchCommand_;
         /// <summary>検索コマンド を取得、設定</summary>
         public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
+
+        /// <summary>リセットコマンド を取得、設定</summary>
+        private DelegateCommand resetCommand_;
+        /// <summary>リセットコマンド を取得、設定</summary>
+        public DelegateCommand ResetCommand => this.resetCommand_ ?? (this.resetCommand_ = new DelegateCommand(this.Reset));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
+        private void Reset()
+        {
+            this.domain_.Reset();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト
@@ -48,9 +67,7 @@ namespace BeatServerBrowser.Home.ViewModels
         #region // パブリックメソッド
         public void Serch()
         {
-            this.Beatmaps.Clear();
             this.domain_.Serch();
-            this.Beatmaps.AddRange(this.domain_.Beatmaps);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -62,7 +79,8 @@ namespace BeatServerBrowser.Home.ViewModels
         public GridListViewModel()
         {
             this.domain_ = new HomeDomain(this.beatSaver_);
-            this.Beatmaps = new MTObservableCollection<IBeatmapEntityable>();
+            this.Beatmaps = this.domain_.Beatmaps;
+            this.Filter = this.domain_.Filter;
         }
         #endregion
     }

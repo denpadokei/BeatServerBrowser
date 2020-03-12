@@ -10,7 +10,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <material:Card Grid.Row="0" Padding="15">
-            <Button Grid.Column="0" Content="検索" Width="75" Height="25" Margin="10" Command="{Binding SerchCommand}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <DockPanel>
+                    <TextBlock Text="検索"/>
+                    <TextBox Text="{Binding Filter.SerchText}" Width="100"/>
+                    <Button Content="検索" Width="75" Height="25" Margin="10" Command="{Binding SerchCommand}"/>
+                    <Button Content="リセット" Width="75" Height="25" Margin="10" Command="{Binding ResetCommand}"/>
+                </DockPanel>
+            </Grid>
         </material:Card>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="False" CanUserReorderColumns="False" IsReadOnly="True" RowHeight="40">
             <DataGrid.Columns>
@@ -21,6 +32,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn Header="作者" Binding="{Binding UploaderName}"/>
                 <DataGridTextColumn Width="*" Header="曲名" Binding="{Binding SongTitle}"/>
             </DataGrid.Columns>
         </DataGrid>

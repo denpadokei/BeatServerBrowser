@@ -5,20 +5,39 @@ using System.Text;
 
 namespace BeatServerBrowser.Static.Enums
 {
-    public enum SerchType
+    public enum PageType
     {
+        [Description("最新")]
+        Latest,
         [Description("HOT！")]
         Hot,
         [Description("Upvoteレーティング")]
         Raiting,
-        [Description("最新")]
-        Latest,
         [Description("ダウンロード数")]
         Downloads,
         [Description("プレイカウント数")]
         Plays,
+        [Description("アップロード譜面")]
+        Uploder,
+        [Description("検索")]
+        Serch
     }
 
+    public enum Sigletype
+    {
+        [Description("detail")]
+        Key,
+        [Description("by-hash")]
+        Hash
+    }
+
+    public enum SerchType
+    {
+        [Description("text")]
+        Text,
+        [Description("advanced")]
+        Advanced
+    }
     public enum ListType
     {
         [Description("グリッド形式")]

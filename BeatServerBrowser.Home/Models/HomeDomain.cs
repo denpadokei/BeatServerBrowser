@@ -1,4 +1,5 @@
 ﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Interfaces;
 using BeatServerBrowser.Home.DataBases;
 using BeatServerBrowser.Home.ViewModels;
@@ -14,13 +15,23 @@ namespace BeatServerBrowser.Home.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
         /// <summary>ビートマップリスト を取得、設定</summary>
-        private List<IBeatmapEntityable> beatmaps_;
+        private MTObservableCollection<IBeatmapEntityable> beatmaps_;
         /// <summary>ビートマップリスト を取得、設定</summary>
-        public List<IBeatmapEntityable> Beatmaps
+        public MTObservableCollection<IBeatmapEntityable> Beatmaps
         {
             get => this.beatmaps_;
 
             set => this.SetProperty(ref this.beatmaps_, value);
+        }
+
+        /// <summary>フィルタ を取得、設定</summary>
+        private SerchFilter filter_;
+        /// <summary>フィルタ を取得、設定</summary>
+        public SerchFilter Filter
+        {
+            get => this.filter_;
+
+            set => this.SetProperty(ref this.filter_, value);
         }
 
         /// <summary>最小ページ を取得、設定</summary>
@@ -62,21 +73,32 @@ namespace BeatServerBrowser.Home.Models
         #region // パブリックメソッド
         public void Serch()
         {
-            this.Beatmaps.Clear();
-            var pagenums = new List<uint>();
-            for (var i = this.MinPageNumber; i < MaxPageNumber; i++) {
-                pagenums.Add(i);
+            var page = BeatServerDataBase.Serch(this.beatServer_, this.Filter.SerchText, this.Filter.PageCount);
+            foreach (var beatmap in page.Docs) {
+                this.Beatmaps.Add(new BeatmapEntity(beatmap));
             }
-            var pages = BeatServerDataBase.GetPage(this.beatServer_, pagenums);
+            this.Filter.PageCount++;
+            //var pagenums = new List<uint>();
+            //for (var i = this.MinPageNumber; i < MaxPageNumber; i++) {
+            //    pagenums.Add(i);
+            //}
+            //var pages = BeatServerDataBase.GetPage(this.beatServer_, pagenums);
 
-            foreach (var page in pages) {
-                foreach (var beatmap in page.Docs) {
-                    if (page.Docs == null) {
-                        return;
-                    }
-                    this.Beatmaps.Add(new BeatmapEntity(beatmap));
-                }
-            }
+            //foreach (var page in pages) {
+            //    foreach (var beatmap in page.Docs) {
+            //        if (page.Docs == null) {
+            //            return;
+            //        }
+            //        this.Beatmaps.Add(new BeatmapEntity(beatmap));
+            //    }
+            //}
+        }
+
+        public void Reset()
+        {
+            this.Beatmaps.Clear();
+            this.Filter.SerchText = "";
+            this.Filter.PageCount = 0;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -88,7 +110,8 @@ namespace BeatServerBrowser.Home.Models
         public HomeDomain(BeatSaver beatSaver)
         {
             this.beatServer_ = beatSaver;
-            this.Beatmaps = new List<IBeatmapEntityable>();
+            this.Filter = new SerchFilter();
+            this.Beatmaps = new MTObservableCollection<IBeatmapEntityable>();
             this.MinPageNumber = 0;
             this.MaxPageNumber = 10;
         }

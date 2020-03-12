@@ -1,44 +1,27 @@
-﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Classes;
-using BeatServerBrowser.Core.Interfaces;
-using NLog;
-using Prism.Commands;
+﻿using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.Configuration;
 using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using Unity;
+using System.Configuration;
+using System.IO;
+using System.Text;
 
-namespace BeatServerBrowser.Core.Bases
+namespace BeatServerBrowser.Core.Classes
 {
-    public class ViewModelBase : BindableBase, IWindowPanel
+    public class ConfigMaster : BindableBase
     {
-
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        public ConfigMaster Config { get; set; }
-        protected virtual Logger Logger => LogManager.GetCurrentClassLogger();
-
-        /// <summary>タイトル を取得、設定</summary>
-        private string title_;
-        /// <summary>タイトル を取得、設定</summary>
-        public string Title
+        /// <summary>ダークモードフラグ を取得、設定</summary>
+        private bool isDark_;
+        /// <summary>ダークモードフラグ を取得、設定</summary>
+        public bool IsDark
         {
-            get => this.title_;
+            get => this.isDark_;
 
-            set => this.SetProperty(ref this.title_, value);
-        }
-        /// <summary>選択中のリストビューのデータコンテキスト を取得、設定</summary>
-        private Object currentListViewContext_;
-        /// <summary>選択中のリストビューのデータコンテキスト を取得、設定</summary>
-        public Object CurrentListViewContext
-        {
-            get => this.currentListViewContext_;
-
-            set => this.SetProperty(ref this.currentListViewContext_, value);
+            set => this.SetProperty(ref this.isDark_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -55,8 +38,17 @@ namespace BeatServerBrowser.Core.Bases
         protected override void OnPropertyChanged(PropertyChangedEventArgs args)
         {
             base.OnPropertyChanged(args);
-            Debug.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.ffffff}|{args.PropertyName}値が変更されました。");
-            this.Logger.Debug($"{args.PropertyName}値が変更されました。");
+            if (args.PropertyName == nameof(this.IsDark)) {
+                var paletteHelper = new PaletteHelper();
+                var theme = paletteHelper.GetTheme();
+                var baseTheme = this.IsDark ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
+                theme.SetBaseTheme(baseTheme);
+                paletteHelper.SetTheme(theme);
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["Theme:IsDark"].Value = this.IsDark.ToString();
+
+                config.Save();
+            }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -67,25 +59,33 @@ namespace BeatServerBrowser.Core.Bases
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        [Dependency]
-        protected IRegionManager regionManager_;
-
-        protected readonly BeatSaver beatSaver_;
-
-        private readonly HttpOptions options_ = new HttpOptions()
-        {
-            ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 0, 1),
-        };
-
-        
+        private readonly IConfigurationRoot configuration_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public ViewModelBase()
+        private static readonly ConfigMaster current_ = new ConfigMaster();
+        public static ConfigMaster Current => current_;
+        private ConfigMaster()
         {
-            this.Config = ConfigMaster.Current;
-            this.beatSaver_ = new BeatSaver(this.options_);
+            var paletteHelper = new PaletteHelper();
+            var theme = paletteHelper.GetTheme();
+
+            var configration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("config.json", optional: true);
+            this.configuration_ = configration.Build();
+            IBaseTheme baseTheme;
+            if (this.configuration_["Thema:IsDark"] == "True") {
+                this.IsDark = true;
+                baseTheme = new MaterialDesignDarkTheme();
+            }
+            else {
+                this.IsDark = false;
+                baseTheme = new MaterialDesignLightTheme();
+            }
+
+            theme.SetBaseTheme(baseTheme);
+            paletteHelper.SetTheme(theme);
         }
         #endregion
     }

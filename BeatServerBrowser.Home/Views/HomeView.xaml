@@ -22,8 +22,15 @@
     </UserControl.Resources>
 
     <Grid>
-        
-        <control:ListNavigateControl CurrentListViewContext="{Binding CurrentListViewContext}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <TextBlock Text="モード"/>
+            <ToggleButton IsChecked="{Binding Config.IsDark}"/>
+        </DockPanel>
+        <control:ListNavigateControl Grid.Row="1" CurrentListViewContext="{Binding CurrentListViewContext}">
             <TabItem Header="リスト形式">
                 <ContentControl x:Name="Panel" prism:RegionManager.RegionName="PanelList" prism:RegionManager.RegionContext="{x:Type viewmodel:PanelListViewModel}" />
             </TabItem>

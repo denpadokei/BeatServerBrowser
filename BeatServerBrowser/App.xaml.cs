@@ -9,6 +9,7 @@ using NLog.Targets;
 using NLog.Config;
 using System.Diagnostics;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace BeatServerBrowser
 {
@@ -19,19 +20,9 @@ namespace BeatServerBrowser
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            //var logconfig = new LoggingConfiguration();
+            var builder = new ConfigurationBuilder();
+            var configration = builder.Build();
             
-            //var file = new FileTarget("log.txt") { FileName = "log.txt", ConcurrentWrites = true };
-            //var console = new ConsoleTarget("logconsole");
-
-            //logconfig.AddRule(LogLevel.Trace, LogLevel.Fatal, file);
-            //logconfig.AddRule(LogLevel.Trace, LogLevel.Fatal, console);
-
-            ////logconfig.AddTarget(console);
-            ////logconfig.AddTarget(file);
-
-            //LogManager.Configuration = logconfig;
-
             base.OnStartup(e);
         }
 

@@ -14,5 +14,13 @@ namespace BeatServerBrowser.Home.DataBases
                 yield return page;
             }
         }
+
+        public static Page Serch(BeatSaver beatSaver, string quary, uint pagenum)
+        {
+            if (string.IsNullOrWhiteSpace(quary)) {
+                return new Page();
+            }
+            return beatSaver.Search(quary, pagenum).Result;
+        }
     }
 }
