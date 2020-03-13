@@ -34,5 +34,17 @@ namespace BeatServerBrowser.Core.Properties {
                 this["IsDark"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InstallFolder {
+            get {
+                return ((string)(this["InstallFolder"]));
+            }
+            set {
+                this["InstallFolder"] = value;
+            }
+        }
     }
 }

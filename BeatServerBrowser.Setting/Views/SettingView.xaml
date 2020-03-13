@@ -6,7 +6,7 @@
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True" >
     <material:Card Padding="20">
@@ -21,8 +21,9 @@
                 <TextBlock Text="Dark"/>
             </DockPanel>
             <DockPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="インストールフォルダ"/>
-                <TextBox Text="{Binding Config.InstallFolder}" Width="300"/>
+                <TextBlock Text="インストールフォルダ" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Config.InstallFolder}" Width="500"/>
+                <Button Content="..." Command="{Binding SelectInstallFolderCommand}" Width="40"/>
             </DockPanel>
         </Grid>
     </material:Card>
