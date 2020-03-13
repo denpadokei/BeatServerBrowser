@@ -1,38 +1,17 @@
-﻿using MaterialDesignThemes.Wpf;
-using Microsoft.Extensions.Configuration;
-using Prism.Mvvm;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.IO;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 
-namespace BeatServerBrowser.Core.Classes
+namespace BeatServerBrowser.Style.Controls
 {
-    public class ConfigMaster : BindableBase
+    public class SerchScrollViewer : ScrollViewer
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>ダークモードフラグ を取得、設定</summary>
-        private bool isDark_;
-        /// <summary>ダークモードフラグ を取得、設定</summary>
-        public bool IsDark
-        {
-            get => this.isDark_;
 
-            set => this.SetProperty(ref this.isDark_, value);
-        }
 
-        /// <summary>インストールフォルダのパス を取得、設定</summary>
-        private int installFolder__;
-        /// <summary>インストールフォルダのパス を取得、設定</summary>
-        public int InstallFolder
-        {
-            get => this.installFolder__;
-
-            set => this.SetProperty(ref this.installFolder__, value);
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -54,15 +33,12 @@ namespace BeatServerBrowser.Core.Classes
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        private static readonly ConfigMaster current_ = new ConfigMaster();
-        public static ConfigMaster Current => current_;
-        private ConfigMaster()
+        static SerchScrollViewer()
         {
-            
+            OverridesDefaultStyleProperty.OverrideMetadata(typeof(SerchScrollViewer), new FrameworkPropertyMetadata(typeof(ScrollViewer)));
         }
         #endregion
     }

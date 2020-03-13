@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.1.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
   </ItemGroup>

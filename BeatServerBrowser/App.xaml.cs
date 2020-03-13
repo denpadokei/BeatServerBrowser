@@ -10,6 +10,11 @@ using NLog.Config;
 using System.Diagnostics;
 using System;
 using Microsoft.Extensions.Configuration;
+using MaterialDesignThemes.Wpf;
+using System.Configuration;
+using System.IO;
+using BeatServerBrowser.Core.Classes;
+using BeatServerBrowser.Setting;
 
 namespace BeatServerBrowser
 {
@@ -18,14 +23,6 @@ namespace BeatServerBrowser
     /// </summary>
     public partial class App
     {
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            var builder = new ConfigurationBuilder();
-            var configration = builder.Build();
-            
-            base.OnStartup(e);
-        }
-
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
@@ -44,13 +41,14 @@ namespace BeatServerBrowser
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            //containerRegistry.RegisterForNavigation<Main>("MainView");
+            
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             base.ConfigureModuleCatalog(moduleCatalog);
             moduleCatalog.AddModule<HomeModule>();
+            moduleCatalog.AddModule<SettingModule>();
         }
     }
 }
