@@ -1,9 +1,17 @@
 ﻿<UserControl x:Class="BeatServerBrowser.List.Views.ListMain"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
-            
+        <dragablz:TabablzControl>
+            <TabItem Header="リスト形式">
+                <ContentControl x:Name="Panel" prism:RegionManager.RegionName="ListPanelRegion"/>
+            </TabItem>
+            <TabItem Header="グリッド形式">
+                <ContentControl x:Name="List" prism:RegionManager.RegionName="ListListRegion"/>
+            </TabItem>
+        </dragablz:TabablzControl>
     </Grid>
 </UserControl>

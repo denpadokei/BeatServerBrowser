@@ -1,16 +1,17 @@
 ﻿<UserControl x:Class="BeatServerBrowser.Serch.Views.SerchMain"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
     <ContentControl>
-        <TabControl Grid.Row="1">
+        <dragablz:TabablzControl Grid.Row="1" SelectedItem="{Binding CurrentView}">
             <TabItem Name="Panel" Header="リスト形式">
-                <ContentControl prism:RegionManager.RegionName="PanelRegion"/>
+                <ContentControl prism:RegionManager.RegionName="SerchPanelRegion"/>
             </TabItem>
             <TabItem Name="Grid" Header="グリッド形式" >
-                <ContentControl prism:RegionManager.RegionName="ListRegion"/>
+                <ContentControl prism:RegionManager.RegionName="SerchListRegion"/>
             </TabItem>
-        </TabControl>
+        </dragablz:TabablzControl>
     </ContentControl>
 </UserControl>

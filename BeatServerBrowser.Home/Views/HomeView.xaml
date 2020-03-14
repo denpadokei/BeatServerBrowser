@@ -17,13 +17,13 @@
         </Grid.ColumnDefinitions>
         <material:Card Grid.Row="0" Padding="10" Margin="5">
             <StackPanel>
-                <Button Content="オンライン一覧" Command="{Binding ?}" VerticalAlignment="Center" Margin="20" />
+                <Button Content="オンライン一覧" Command="{Binding NavigateListCommand}" VerticalAlignment="Center" Margin="20" />
                 <Button Content="オンライン検索" Command="{Binding NavigateSerchCommand}" VerticalAlignment="Center" Margin="20" />
                 <Button Content="ローカルライブラリ" Command="{Binding ?}" VerticalAlignment="Center" Margin="20" />
                 <Button Content="設定" Command="{Binding ShowSettingWindowCommand}" VerticalAlignment="Center" Margin="20" />
             </StackPanel>
         </material:Card>
 
-        <material:Card Grid.Column="1" prism:RegionManager.RegionName="MainRegion" Padding="10" Margin="5" />
+        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="MainRegion" Margin="5" />
     </Grid>
 </UserControl>

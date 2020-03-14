@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BeatServerBrowser.Serch.UserControls
+namespace BeatServerBrowser.Core.UserControls
 {
     /// <summary>
-    /// BeatMapPreview.xaml の相互作用ロジック
+    /// BeatmapPreview.xaml の相互作用ロジック
     /// </summary>
-    public partial class BeatMapPreview : UserControl
+    public partial class BeatmapPreview : UserControl
     {
-        public BeatMapPreview()
+        public BeatmapPreview()
         {
             InitializeComponent();
         }

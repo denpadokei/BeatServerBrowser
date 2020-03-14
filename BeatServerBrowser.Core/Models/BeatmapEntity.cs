@@ -1,84 +1,89 @@
-﻿using BeatServerBrowser.Core.Bases;
+﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.Interfaces;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+using System.Text;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
-namespace BeatServerBrowser.Serch.ViewModels
+namespace BeatServerBrowser.Core.Models
 {
-    public class SerchMainViewModel : ViewModelBase, INavigationAware
+    public class BeatmapEntity : BindableBase, IBeatmapEntityable
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>選択中のタブアイテム を取得、設定</summary>
-        private object currentView_;
-        /// <summary>選択中のタブアイテム を取得、設定</summary>
-        public object CurrentView
+        /// <summary>譜面 を取得、設定</summary>
+        private Beatmap beatmap_;
+        /// <summary>譜面 を取得、設定</summary>
+        public Beatmap Beatmap
         {
-            get => this.currentView_;
+            get => this.beatmap_;
 
-            set => this.SetProperty(ref this.currentView_, value);
+            set => this.SetProperty(ref this.beatmap_, value);
         }
+
+        /// <summary>画像 を取得、設定</summary>
+        private ImageSource cover_;
+        /// <summary>画像 を取得、設定</summary>
+        public ImageSource Cover
+        {
+            get => this.cover_;
+
+            set => this.SetProperty(ref this.cover_, value);
+        }
+        /// <summary>曲名 を取得、設定</summary>
+        public string SongTitle => this.Beatmap.Name;
+        public string UploaderName => this.Beatmap.Uploader.Username;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
+        /// <summary>ダウンロードコマンド を取得、設定</summary>
+        private DelegateCommand downloadCommand_;
+        /// <summary>ダウンロードコマンド を取得、設定</summary>
+        public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download));
+
+        /// <summary>コピー を取得、設定</summary>
+        private DelegateCommand copyCommand_;
+        /// <summary>コピー を取得、設定</summary>
+        public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
+        private void Download()
+        {
+
+        }
+
+        private void Copy()
+        {
+
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            base.OnPropertyChanged(args);
-            if (args.PropertyName == nameof(this.CurrentView)) {
-                if (this.CurrentView is TabItem tab && tab.Content is ContentControl content && content.Content is FrameworkElement tabView) {
-                    var type = tabView.DataContext.GetType();
-                    Debug.WriteLine(type.ToString());
-                }
-            }
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public SerchMainViewModel()
+        public BeatmapEntity(Beatmap beatmap)
         {
-
+            this.Beatmap = beatmap;
+            this.Cover = new BitmapImage(new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}"));
         }
-
-        
         #endregion
     }
 }

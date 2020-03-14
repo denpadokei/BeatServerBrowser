@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls"
+                    xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:BeatServerBrowser.Style.Styles">
     <ResourceDictionary.MergedDictionaries>
@@ -17,6 +18,8 @@
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Grey.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+        <!--Dragablz Material Design-->
+        <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 
@@ -44,6 +47,10 @@
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBoxBase}">
         <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
     </Style>
+
+    <!-- Dragablz Material Design -->
+    <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}"/>
+
     <Style TargetType="{x:Type control:ListNavigateControl}" BasedOn="{StaticResource {x:Type TabControl}}"/>
 
 </ResourceDictionary>

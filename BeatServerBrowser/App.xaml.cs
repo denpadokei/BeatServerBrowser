@@ -13,9 +13,10 @@ using Microsoft.Extensions.Configuration;
 using MaterialDesignThemes.Wpf;
 using System.Configuration;
 using System.IO;
-using BeatServerBrowser.Core.Classes;
+using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Setting;
 using BeatServerBrowser.Serch;
+using BeatServerBrowser.List;
 
 namespace BeatServerBrowser
 {
@@ -49,6 +50,7 @@ namespace BeatServerBrowser
         {
             base.ConfigureModuleCatalog(moduleCatalog);
             moduleCatalog.AddModule<HomeModule>();
+            moduleCatalog.AddModule<ListModule>();
             moduleCatalog.AddModule<SerchModule>();
             moduleCatalog.AddModule<SettingModule>();
         }

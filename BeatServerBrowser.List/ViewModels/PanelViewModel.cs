@@ -1,64 +1,62 @@
-﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Interfaces;
+﻿using BeatServerBrowser.Core.Collections;
+using BeatServerBrowser.Core.Models;
+using BeatServerBrowser.List.Models;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
 
-namespace BeatServerBrowser.Serch.Models
+namespace BeatServerBrowser.List.ViewModels
 {
-    public class BeatmapEntity : BindableBase, IBeatmapEntityable
+    public class PanelViewModel : BindableBase
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>譜面 を取得、設定</summary>
-        private Beatmap beatmap_;
-        /// <summary>譜面 を取得、設定</summary>
-        public Beatmap Beatmap
+        /// <summary>譜面コレクション を取得、設定</summary>
+        private MTObservableCollection<BeatmapEntity> beatmaps_;
+        /// <summary>譜面コレクション を取得、設定</summary>
+        public MTObservableCollection<BeatmapEntity> Beatmaps
         {
-            get => this.beatmap_;
+            get => this.beatmaps_;
 
-            set => this.SetProperty(ref this.beatmap_, value);
+            set => this.SetProperty(ref this.beatmaps_, value);
         }
 
-        /// <summary>画像 を取得、設定</summary>
-        private ImageSource cover_;
-        /// <summary>画像 を取得、設定</summary>
-        public ImageSource Cover
+        /// <summary>検索条件 を取得、設定</summary>
+        private ListFilter filter_;
+        /// <summary>検索条件 を取得、設定</summary>
+        public ListFilter Filter
         {
-            get => this.cover_;
+            get => this.filter_;
 
-            set => this.SetProperty(ref this.cover_, value);
+            set => this.SetProperty(ref this.filter_, value);
         }
-        /// <summary>曲名 を取得、設定</summary>
-        public string SongTitle => this.Beatmap.Name;
-        public string UploaderName => this.Beatmap.Uploader.Username;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
-        /// <summary>ダウンロードコマンド を取得、設定</summary>
-        private DelegateCommand downloadCommand_;
-        /// <summary>ダウンロードコマンド を取得、設定</summary>
-        public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download));
+        /// <summary>検索コマンド を取得、設定</summary>
+        private DelegateCommand serchCommand_;
+        /// <summary>検索コマンド を取得、設定</summary>
+        public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
 
-        /// <summary>コピー を取得、設定</summary>
-        private DelegateCommand copyCommand_;
-        /// <summary>コピー を取得、設定</summary>
-        public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy));
+        /// <summary>リセットコマンド を取得、設定</summary>
+        private DelegateCommand resetcommand_;
+        /// <summary>リセットコマンド を取得、設定</summary>
+        public DelegateCommand ResetCommand => this.resetcommand_ ?? (this.resetcommand_ = new DelegateCommand(this.Reset));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private void Download()
+        private void Serch()
         {
-
+            this.domain_.Serch();
         }
 
-        private void Copy()
+        private void Reset()
         {
-
+            this.domain_.Reset();
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -69,21 +67,34 @@ namespace BeatServerBrowser.Serch.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
+
+
+        private void OnFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ListFilter && e.PropertyName == nameof(this.Filter.CurrentPageType)) {
+                this.domain_.Reset();
+                this.SerchCommand?.Execute();
+            }
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
+        private readonly ListDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public BeatmapEntity(Beatmap beatmap)
+        public PanelViewModel()
         {
-            this.Beatmap = beatmap;
-            this.Cover = new BitmapImage(new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}"));
+            this.domain_ = new ListDomain();
+            this.Beatmaps = this.domain_.Beatmaps;
+            this.Filter = this.domain_.Filter;
+            WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
+                this.Filter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnFilterPropertyChanged);
         }
         #endregion
+
     }
 }

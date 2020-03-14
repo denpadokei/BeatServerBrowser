@@ -1,5 +1,5 @@
 ﻿using BeatServerBrowser.Core.Bases;
-using BeatServerBrowser.Core.Classes;
+using BeatServerBrowser.Core.Models;
 using MaterialDesignThemes.Wpf;
 using Prism.Mvvm;
 using System.ComponentModel;

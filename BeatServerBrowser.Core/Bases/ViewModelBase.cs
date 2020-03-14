@@ -1,5 +1,5 @@
 ﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Classes;
+using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Core.Interfaces;
 using NLog;
 using Prism.Commands;

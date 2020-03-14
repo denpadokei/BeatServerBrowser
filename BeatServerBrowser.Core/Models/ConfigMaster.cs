@@ -1,29 +1,48 @@
-﻿using BeatServerBrowser.Core.Bases;
-using Prism.Commands;
+﻿using BeatSaverSharp;
+using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.Configuration;
 using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+using System.Configuration;
+using System.IO;
+using System.Text;
 
-namespace BeatServerBrowser.Serch.ViewModels
+namespace BeatServerBrowser.Core.Models
 {
-    public class SerchMainViewModel : ViewModelBase, INavigationAware
+    public class ConfigMaster : BindableBase
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>選択中のタブアイテム を取得、設定</summary>
-        private object currentView_;
-        /// <summary>選択中のタブアイテム を取得、設定</summary>
-        public object CurrentView
+        /// <summary>ダークモードフラグ を取得、設定</summary>
+        private bool isDark_;
+        /// <summary>ダークモードフラグ を取得、設定</summary>
+        public bool IsDark
         {
-            get => this.currentView_;
+            get => this.isDark_;
 
-            set => this.SetProperty(ref this.currentView_, value);
+            set => this.SetProperty(ref this.isDark_, value);
+        }
+
+        /// <summary>インストールフォルダのパス を取得、設定</summary>
+        private string installFolder__;
+        /// <summary>インストールフォルダのパス を取得、設定</summary>
+        public string InstallFolder
+        {
+            get => this.installFolder__;
+
+            set => this.SetProperty(ref this.installFolder__, value);
+        }
+
+        /// <summary>アクセス用のBeatServer を取得、設定</summary>
+        private BeatSaver beatSarver_;
+        /// <summary>アクセス用のBeatServer を取得、設定</summary>
+        public BeatSaver BeatSaver
+        {
+            get => this.beatSarver_;
+
+            set => this.SetProperty(ref this.beatSarver_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -40,12 +59,14 @@ namespace BeatServerBrowser.Serch.ViewModels
         protected override void OnPropertyChanged(PropertyChangedEventArgs args)
         {
             base.OnPropertyChanged(args);
-            if (args.PropertyName == nameof(this.CurrentView)) {
-                if (this.CurrentView is TabItem tab && tab.Content is ContentControl content && content.Content is FrameworkElement tabView) {
-                    var type = tabView.DataContext.GetType();
-                    Debug.WriteLine(type.ToString());
-                }
+            if (args.PropertyName == nameof(this.IsDark)) {
+                Properties.Settings.Default.IsDark = this.IsDark;
             }
+            if (args.PropertyName == nameof(this.InstallFolder)) {
+                Properties.Settings.Default.InstallFolder = this.InstallFolder;
+            }
+
+            Properties.Settings.Default.Save();
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -53,32 +74,24 @@ namespace BeatServerBrowser.Serch.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
+        private readonly HttpOptions options_ = new HttpOptions()
+        {
+            ApplicationName = "BeatServerBrowser",
+            Version = new Version(0, 0, 1),
+        };
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public SerchMainViewModel()
+        private static readonly ConfigMaster current_ = new ConfigMaster();
+        public static ConfigMaster Current => current_;
+        private ConfigMaster()
         {
-
+            this.InstallFolder = Properties.Settings.Default.InstallFolder;
+            this.BeatSaver = new BeatSaver(this.options_);
         }
-
-        
         #endregion
     }
 }

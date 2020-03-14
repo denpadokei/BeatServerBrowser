@@ -18,6 +18,12 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
+        /// <summary>リストコマンド を取得、設定</summary>
+        private DelegateCommand navigateListCommand_;
+        /// <summary>リストコマンド を取得、設定</summary>
+        public DelegateCommand NavigateListCommand => this.navigateListCommand_ ?? (this.navigateListCommand_ = new DelegateCommand(this.NavigateList));
+
+
         /// <summary>検索コマンド を取得、設定</summary>
         private DelegateCommand navigateSerchCommand_;
         /// <summary>検索コマンド を取得、設定</summary>
@@ -30,7 +36,12 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        public void NavigateSerch()
+        private void NavigateList()
+        {
+            this.regionManager_?.RequestNavigate("MainRegion", "ListMain");
+        }
+
+        private void NavigateSerch()
         {
             this.regionManager_?.RequestNavigate("MainRegion", "SerchMain");
         }

@@ -1,5 +1,6 @@
 ﻿using BeatSaverSharp;
 using BeatServerBrowser.Core.Collections;
+using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Serch.Models;
 using Prism.Commands;
 using Prism.Mvvm;
