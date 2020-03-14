@@ -3,7 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid>
-            
-    </Grid>
+    <ContentControl>
+        <TabControl Grid.Row="1">
+            <TabItem Name="Panel" Header="リスト形式">
+                <ContentControl prism:RegionManager.RegionName="PanelRegion"/>
+            </TabItem>
+            <TabItem Name="Grid" Header="グリッド形式" >
+                <ContentControl prism:RegionManager.RegionName="ListRegion"/>
+            </TabItem>
+        </TabControl>
+    </ContentControl>
 </UserControl>

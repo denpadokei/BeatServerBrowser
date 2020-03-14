@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using BeatSaverSharp;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Configuration;
 using Prism.Mvvm;
 using System;
@@ -33,6 +34,16 @@ namespace BeatServerBrowser.Core.Classes
 
             set => this.SetProperty(ref this.installFolder__, value);
         }
+
+        /// <summary>アクセス用のBeatServer を取得、設定</summary>
+        private BeatSaver beatSarver_;
+        /// <summary>アクセス用のBeatServer を取得、設定</summary>
+        public BeatSaver BeatSaver
+        {
+            get => this.beatSarver_;
+
+            set => this.SetProperty(ref this.beatSarver_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -66,7 +77,11 @@ namespace BeatServerBrowser.Core.Classes
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-
+        private readonly HttpOptions options_ = new HttpOptions()
+        {
+            ApplicationName = "BeatServerBrowser",
+            Version = new Version(0, 0, 1),
+        };
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
@@ -75,6 +90,7 @@ namespace BeatServerBrowser.Core.Classes
         private ConfigMaster()
         {
             this.InstallFolder = Properties.Settings.Default.InstallFolder;
+            this.BeatSaver = new BeatSaver(this.options_);
         }
         #endregion
     }

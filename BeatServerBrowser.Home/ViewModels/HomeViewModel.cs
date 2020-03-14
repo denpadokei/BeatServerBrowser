@@ -1,10 +1,4 @@
-﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Bases;
-using BeatServerBrowser.Core.Collections;
-using BeatServerBrowser.Core.Extentions;
-using BeatServerBrowser.Core.Interfaces;
-using BeatServerBrowser.Home.Models;
-using BeatServerBrowser.Static.Enums;
+﻿using BeatServerBrowser.Core.Bases;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -25,9 +19,9 @@ namespace BeatServerBrowser.Home.ViewModels
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
         /// <summary>検索コマンド を取得、設定</summary>
-        private DelegateCommand serchCommand_;
+        private DelegateCommand navigateSerchCommand_;
         /// <summary>検索コマンド を取得、設定</summary>
-        public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
+        public DelegateCommand NavigateSerchCommand => this.navigateSerchCommand_ ?? (this.navigateSerchCommand_ = new DelegateCommand(this.NavigateSerch));
 
         /// <summary>設定コマンド を取得、設定</summary>
         private DelegateCommand showSettingWindowCommand_;
@@ -36,11 +30,9 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        public void Serch()
+        public void NavigateSerch()
         {
-            if (this.CurrentListViewContext is IBeatmapable beatmapable) {
-                beatmapable.Serch();
-            }
+            this.regionManager_?.RequestNavigate("MainRegion", "SerchMain");
         }
 
         private void ShowSettingWindow()
@@ -62,13 +54,12 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private readonly HomeDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
         public HomeViewModel()
         {
-            this.domain_ = new HomeDomain(this.beatSaver_);
+            
         }
         #endregion
     }

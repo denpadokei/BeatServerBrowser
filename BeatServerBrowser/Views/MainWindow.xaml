@@ -6,7 +6,7 @@
         xmlns:prism="http://prismlibrary.com/"
         WindowStartupLocation="CenterScreen"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="720" Width="1020" >
+        Title="{Binding Title}" Height="720" Width="1349" >
     <b:Interaction.Triggers>
         <b:EventTrigger x:Name="Loaded">
             <action:DataContextInitialize/>

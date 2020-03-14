@@ -1,21 +1,20 @@
-﻿using BeatServerBrowser.Home.ViewModels;
-using BeatServerBrowser.Home.Views;
+﻿using BeatServerBrowser.List.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 
-namespace BeatServerBrowser.Home
+namespace BeatServerBrowser.List
 {
-    public class HomeModule : IModule
+    public class ListModule : IModule
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            
+
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<HomeView>("HomeRegion");
+
         }
     }
 }

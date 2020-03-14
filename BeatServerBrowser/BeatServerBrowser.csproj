@@ -7,6 +7,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaverSharp" Version="1.5.2" />
+    <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
@@ -19,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeatServerBrowser.Home\BeatServerBrowser.Home.csproj" />
+    <ProjectReference Include="..\BeatServerBrowser.Serch\BeatServerBrowser.Serch.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Setting\BeatServerBrowser.Setting.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Style\BeatServerBrowser.Style.csproj" />
   </ItemGroup>

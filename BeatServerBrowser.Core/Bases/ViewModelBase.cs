@@ -80,18 +80,13 @@ namespace BeatServerBrowser.Core.Bases
 
         protected readonly BeatSaver beatSaver_;
 
-        private readonly HttpOptions options_ = new HttpOptions()
-        {
-            ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 0, 1),
-        };
+        
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
         public ViewModelBase()
         {
             this.Config = ConfigMaster.Current;
-            this.beatSaver_ = new BeatSaver(this.options_);
         }
         #endregion
     }

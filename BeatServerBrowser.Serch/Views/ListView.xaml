@@ -1,9 +1,34 @@
 ﻿<UserControl x:Class="BeatServerBrowser.Serch.Views.ListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:control="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <material:Card Grid.Row="0">
+            <DockPanel HorizontalAlignment="Left">
+                <TextBox Margin="10" control:TextBoxHelper.AutoWatermark="True" control:TextBoxHelper.Watermark="検索" Text="{Binding Filter.Filter}" Width="100"/>
+                <Button Margin="10" Width="75" Height="25" Content="検索" Command="{Binding SerchCommand}"/>
+                <Button Content="リセット" Width="75" Height="25" Margin="10" Command="{Binding ResetCommand}"/>
+            </DockPanel>
+        </material:Card>
+        <DataGrid Grid.Row="1" RowHeight="40" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Cover}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="曲名" Binding="{Binding SongTitle}"/>
+                <DataGridTextColumn Header="譜面製作者" Binding="{Binding UploaderName}"/>
+            </DataGrid.Columns>
+        </DataGrid>  
     </Grid>
 </UserControl>

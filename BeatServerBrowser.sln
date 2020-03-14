@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatServerBrowser.Style", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatServerBrowser.Serch", "BeatServerBrowser.Serch\BeatServerBrowser.Serch.csproj", "{1D140ECB-4CD6-4622-B422-D7400D4A3222}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatServerBrowser.Setting", "BeatServerBrowser.Setting\BeatServerBrowser.Setting.csproj", "{76B55B71-E68A-49EB-8A80-8E78DA63713F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatServerBrowser.Setting", "BeatServerBrowser.Setting\BeatServerBrowser.Setting.csproj", "{76B55B71-E68A-49EB-8A80-8E78DA63713F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatServerBrowser.List", "BeatServerBrowser.List\BeatServerBrowser.List.csproj", "{AD33CA13-0DFC-41D6-A292-D2E5C3F013AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{76B55B71-E68A-49EB-8A80-8E78DA63713F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76B55B71-E68A-49EB-8A80-8E78DA63713F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76B55B71-E68A-49EB-8A80-8E78DA63713F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD33CA13-0DFC-41D6-A292-D2E5C3F013AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD33CA13-0DFC-41D6-A292-D2E5C3F013AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD33CA13-0DFC-41D6-A292-D2E5C3F013AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD33CA13-0DFC-41D6-A292-D2E5C3F013AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

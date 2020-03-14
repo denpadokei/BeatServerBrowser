@@ -1,15 +1,16 @@
 ﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.Interfaces;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace BeatServerBrowser.Home.ViewModels
+namespace BeatServerBrowser.Serch.Models
 {
-    public class BeatMapViewModel : BindableBase
+    public class BeatmapEntity : BindableBase, IBeatmapEntityable
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
@@ -23,12 +24,6 @@ namespace BeatServerBrowser.Home.ViewModels
             set => this.SetProperty(ref this.beatmap_, value);
         }
 
-        /// <summary>曲名 を取得、設定</summary>
-        public string SongTitle
-        {
-            get => this.Beatmap.Name;
-        }
-
         /// <summary>画像 を取得、設定</summary>
         private ImageSource cover_;
         /// <summary>画像 を取得、設定</summary>
@@ -38,19 +33,21 @@ namespace BeatServerBrowser.Home.ViewModels
 
             set => this.SetProperty(ref this.cover_, value);
         }
+        /// <summary>曲名 を取得、設定</summary>
+        public string SongTitle => this.Beatmap.Name;
+        public string UploaderName => this.Beatmap.Uploader.Username;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
-        /// <summary>ワンクリックインストールコマンド を取得、設定</summary>
+        /// <summary>ダウンロードコマンド を取得、設定</summary>
         private DelegateCommand downloadCommand_;
-        /// <summary>ワンクリックインストールコマンド を取得、設定</summary>
+        /// <summary>ダウンロードコマンド を取得、設定</summary>
         public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download));
 
-        /// <summary>コピーコマンド を取得、設定</summary>
+        /// <summary>コピー を取得、設定</summary>
         private DelegateCommand copyCommand_;
-        /// <summary>コピーコマンド を取得、設定</summary>
+        /// <summary>コピー を取得、設定</summary>
         public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy));
-
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -75,13 +72,14 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public BeatMapViewModel(Beatmap beatmap)
+        public BeatmapEntity(Beatmap beatmap)
         {
             this.Beatmap = beatmap;
             this.Cover = new BitmapImage(new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}"));

@@ -9,14 +9,14 @@ namespace BeatServerBrowser.Serch
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-
+            var regionManger = containerProvider.Resolve<IRegionManager>();
+            regionManger.RegisterViewWithRegion("ListRegion", typeof(ListView));
+            regionManger.RegisterViewWithRegion("PanelRegion", typeof(PanelView));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<SerchMain>("SerchMainView");
-            containerRegistry.Register<ListView>("ListView");
-            containerRegistry.Register<PanelView>("PanelView");
+            containerRegistry.RegisterForNavigation(typeof(SerchMain), "SerchMain");
         }
     }
 }
