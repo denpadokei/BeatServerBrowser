@@ -16,7 +16,7 @@ namespace BeatServerBrowser.List
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation(typeof(ListMain), nameof(ListMain));
+            containerRegistry.RegisterForNavigation(typeof(ListMain), "ListMain");
         }
     }
 }

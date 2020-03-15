@@ -36,6 +36,34 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>曲名 を取得、設定</summary>
         public string SongTitle => this.Beatmap.Name;
         public string UploaderName => this.Beatmap.Uploader.Username;
+
+        public string Hash => this.Beatmap.Hash;
+
+        public string CoverURL => this.Beatmap.CoverURL;
+
+        public string DownloadURL => this.Beatmap.DownloadURL;
+
+        public string DirectDownload => this.Beatmap.DirectDownload;
+
+        public Stats Stats => this.Beatmap.Stats;
+
+        public Metadata Metadata => this.Beatmap.Metadata;
+
+        public DateTime Uploaded => this.Beatmap.Uploaded;
+
+        public User Uploader => this.Beatmap.Uploader;
+
+        public string Description => this.Beatmap.Description;
+
+        public string Name => this.Beatmap.Name;
+
+        public string Key => this.Beatmap.Key;
+
+        public string ID => this.Beatmap.ID;
+
+        public string CoverFilename => this.Beatmap.CoverFilename;
+
+        public bool Partial => this.Beatmap.Partial;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド

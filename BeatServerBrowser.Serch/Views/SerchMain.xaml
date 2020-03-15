@@ -5,7 +5,7 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
     <ContentControl>
-        <dragablz:TabablzControl Grid.Row="1" SelectedItem="{Binding CurrentView}">
+        <dragablz:TabablzControl Grid.Row="1">
             <TabItem Name="Panel" Header="リスト形式">
                 <ContentControl prism:RegionManager.RegionName="SerchPanelRegion"/>
             </TabItem>

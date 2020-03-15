@@ -1,4 +1,6 @@
 ﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.ScoreSaber;
+using BeatServerBrowser.Core.ScoreSaber.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,6 +36,12 @@ namespace BeatServerBrowser.List.DataBases
         public static Page GetPlaysPage(BeatSaver beatSaver, uint count)
         {
             var page = beatSaver.Plays(count).Result;
+            return page;
+        }
+
+        public static Scores GetRankPage(ScoreSaberSharp scoreSaber, uint count)
+        {
+            var page = scoreSaber.Rank(count).Result;
             return page;
         }
     }

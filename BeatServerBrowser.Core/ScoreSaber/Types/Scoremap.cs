@@ -1,50 +1,66 @@
-﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Models;
-using BeatServerBrowser.Core.Interfaces;
-using NLog;
-using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Regions;
-using Prism.Services.Dialogs;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using Unity;
-using BeatServerBrowser.Core.Services;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Windows.Threading;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
-namespace BeatServerBrowser.Core.Bases
+namespace BeatServerBrowser.Core.ScoreSaber.Types
 {
-    public class ViewModelBase : BindableBase, IWindowPanel
-    {
-
+    public class Scoremap : IEquatable<Scoremap>
+    { 
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // プロパティ
-        public ConfigMaster Config { get; set; }
-        protected virtual Logger Logger => LogManager.GetCurrentClassLogger();
+        #region // JSONプロパティ
+        [JsonProperty("scoreId")]
+        public long ScoreID { get; set; }
 
-        /// <summary>タイトル を取得、設定</summary>
-        private string title_;
-        /// <summary>タイトル を取得、設定</summary>
-        public string Title
-        {
-            get => this.title_;
+        [JsonProperty("leaderboardId")]
+        public int LeaderboardId { get; set; }
 
-            set => this.SetProperty(ref this.title_, value);
-        }
-        /// <summary>選択中のリストビューのデータコンテキスト を取得、設定</summary>
-        private Object currentListViewContext_;
-        /// <summary>選択中のリストビューのデータコンテキスト を取得、設定</summary>
-        public Object CurrentListViewContext
-        {
-            get => this.currentListViewContext_;
+        [JsonProperty("score")]
+        public int Score { get; set; }
 
-            set => this.SetProperty(ref this.currentListViewContext_, value);
-        }
+        [JsonProperty("uScoreId")]
+        public int UScore { get; set; }
+
+        [JsonProperty("mods")]
+        public string Mods { get; set; }
+
+        [JsonProperty("playerId")]
+        public string PlayerID { get; set; }
+
+        [JsonProperty("timeset")]
+        public DateTime Timeset { get; set; }
+
+        [JsonProperty("pp")]
+        public double PP { get; set; }
+
+        [JsonProperty("weight")]
+        public double Weight { get; set; }
+
+        [JsonProperty("id")]
+        public string ID { get; set; }
+
+        [JsonProperty("songSubName")]
+        public string SongSubName { get; set; }
+
+        [JsonProperty("songAuthorName")]
+        public string SongAuthorName { get; set; }
+
+        [JsonProperty("levelAuthorName")]
+        public string LevelAuthorName { get; set; }
+
+        [JsonProperty("diff")]
+        public string Diff { get; set; }
+
+        [JsonProperty("maxScoreEx")]
+        public string maxScoreEx { get; set; }
+
+        [JsonProperty("rank")]
+        public bool Rank { get; set; }
+
+
+        [JsonIgnore]
+        internal ScoreSaberSharp Client { get; set; }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -57,45 +73,24 @@ namespace BeatServerBrowser.Core.Bases
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            base.OnPropertyChanged(args);
-            Debug.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.ffffff}|{args.PropertyName}値が変更されました。");
-            this.Logger.Debug($"{args.PropertyName}値が変更されました。");
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public virtual void OnInitialize()
+        public bool Equals([AllowNull] Scoremap other)
         {
-
+            throw new NotImplementedException();
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        [Dependency]
-        public IRegionManager regionManager_;
-
-        [Dependency]
-        public IDialogService dialogService_;
-
-        //[Dependency]
-        //public ILoadingService loadingService_;
-
-        protected readonly BeatSaver beatSaver_;
-
-        protected Dispatcher dispatcher_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public ViewModelBase()
-        {
-            this.Config = ConfigMaster.Current;
-            //this.loadingService_ = new LoadingService();
-        }
+        [JsonConstructor]
+        public Scoremap() { }
         #endregion
     }
 }

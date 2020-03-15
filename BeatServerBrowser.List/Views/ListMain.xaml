@@ -4,14 +4,14 @@
              xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid>
+    <ContentControl>
         <dragablz:TabablzControl>
-            <TabItem Header="リスト形式">
-                <ContentControl x:Name="Panel" prism:RegionManager.RegionName="ListPanelRegion"/>
+            <TabItem Name="List" Header="リスト形式">
+                <ContentControl prism:RegionManager.RegionName="ListPanelRegion"/>
             </TabItem>
-            <TabItem Header="グリッド形式">
-                <ContentControl x:Name="List" prism:RegionManager.RegionName="ListListRegion"/>
+            <TabItem Name="Grid" Header="グリッド形式">
+                <ContentControl prism:RegionManager.RegionName="ListListRegion"/>
             </TabItem>
         </dragablz:TabablzControl>
-    </Grid>
+    </ContentControl>
 </UserControl>

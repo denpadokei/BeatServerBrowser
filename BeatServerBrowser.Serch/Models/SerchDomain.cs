@@ -57,7 +57,7 @@ namespace BeatServerBrowser.Serch.Models
                 return;
             }
 
-            var page = SerchDataBase.Serch(ConfigMaster.Current.BeatSaver, this.Filter.Filter, this.Filter.Count);
+            var page = SerchDataBase.Serch(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Filter, this.Filter.Count);
             foreach (var beatmap in page.Docs) {
                 this.Beatmaps.Add(new BeatmapEntity(beatmap));
             }

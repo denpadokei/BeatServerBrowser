@@ -1,4 +1,5 @@
 ﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.ScoreSaber;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Configuration;
 using Prism.Mvvm;
@@ -36,13 +37,23 @@ namespace BeatServerBrowser.Core.Models
         }
 
         /// <summary>アクセス用のBeatServer を取得、設定</summary>
-        private BeatSaver beatSarver_;
+        private BeatSaver currentBeatSarver_;
         /// <summary>アクセス用のBeatServer を取得、設定</summary>
-        public BeatSaver BeatSaver
+        public BeatSaver CurrentBeatSaver
         {
-            get => this.beatSarver_;
+            get => this.currentBeatSarver_;
 
-            set => this.SetProperty(ref this.beatSarver_, value);
+            set => this.SetProperty(ref this.currentBeatSarver_, value);
+        }
+
+        /// <summary>アクセス用スコアセイバー を取得、設定</summary>
+        private ScoreSaberSharp currentScoreSaber_;
+        /// <summary>アクセス用スコアセイバー を取得、設定</summary>
+        public ScoreSaberSharp CurrentScoreSaber
+        {
+            get => this.currentScoreSaber_;
+
+            set => this.SetProperty(ref this.currentScoreSaber_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -90,7 +101,8 @@ namespace BeatServerBrowser.Core.Models
         private ConfigMaster()
         {
             this.InstallFolder = Properties.Settings.Default.InstallFolder;
-            this.BeatSaver = new BeatSaver(this.options_);
+            this.CurrentBeatSaver = new BeatSaver(this.options_);
+            this.CurrentScoreSaber = new ScoreSaberSharp();
         }
         #endregion
     }

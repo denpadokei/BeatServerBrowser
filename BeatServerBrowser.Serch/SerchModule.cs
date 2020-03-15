@@ -9,9 +9,9 @@ namespace BeatServerBrowser.Serch
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            var regionManger = containerProvider.Resolve<IRegionManager>();
-            regionManger.RegisterViewWithRegion("SerchListRegion", typeof(ListView));
-            regionManger.RegisterViewWithRegion("SerchPanelRegion", typeof(PanelView));
+            var regionManager = containerProvider.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion("SerchListRegion", typeof(ListView));
+            regionManager.RegisterViewWithRegion("SerchPanelRegion", typeof(PanelView));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

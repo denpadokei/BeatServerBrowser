@@ -16,7 +16,9 @@ namespace BeatServerBrowser.Static.Enums
         [Description("ダウンロード数")]
         Downloads,
         [Description("プレイカウント数")]
-        Plays
+        Plays,
+        [Description("ランク")]
+        Rank
     }
 
     public enum Sigletype

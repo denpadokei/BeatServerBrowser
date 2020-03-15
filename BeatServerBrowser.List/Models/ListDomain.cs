@@ -50,25 +50,33 @@ namespace BeatServerBrowser.List.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public void Serch()
+        public async void Serch()
         {
             var page = new Page();
             switch (this.Filter.CurrentPageType) {
                 case Static.Enums.PageType.Latest:
-                    page = ListDataBase.GetLatestPage(ConfigMaster.Current.BeatSaver, this.Filter.Count);
+                    page = ListDataBase.GetLatestPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Hot:
-                    page = ListDataBase.GetHotPage(ConfigMaster.Current.BeatSaver, this.Filter.Count);
+                    page = ListDataBase.GetHotPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Raiting:
-                    page = ListDataBase.GetRatingPage(ConfigMaster.Current.BeatSaver, this.Filter.Count);
+                    page = ListDataBase.GetRatingPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Downloads:
-                    page = ListDataBase.GetDownloadsPage(ConfigMaster.Current.BeatSaver, this.Filter.Count);
+                    page = ListDataBase.GetDownloadsPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Plays:
-                    page = ListDataBase.GetPlaysPage(ConfigMaster.Current.BeatSaver, this.Filter.Count);
+                    page = ListDataBase.GetPlaysPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
+                case Static.Enums.PageType.Rank:
+                    var scores = ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, (this.Filter.Count + 1));
+                    foreach(var scoremap in scores.Scoremaps) {
+                        var scorebeatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(scoremap.ID).Result;
+                        this.Beatmaps.Add(new BeatmapEntity(scorebeatmap));
+                    }
+                    this.Filter.Count++;
+                    return;
                 default:
                     break;
             }

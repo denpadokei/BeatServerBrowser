@@ -33,12 +33,18 @@ namespace BeatServerBrowser
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            var reagionManager = this.Container.Resolve<IRegionManager>();
-            reagionManager.RequestNavigate("ContentRegion", "HomeRegion");
-
             var logger = LogManager.GetCurrentClassLogger();
             logger.Info("BeatServerBrowserを起動します。");
             Debug.WriteLine("BeatServerBrowserを起動します。");
+
+            try {
+                this.Container.Resolve<IRegionManager>()?.RequestNavigate("ContentRegion", "HomeView");
+            }
+            catch (Exception e) {
+                Debug.WriteLine(e);
+                logger.Error(e);
+            }
+            
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -48,11 +54,11 @@ namespace BeatServerBrowser
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
-            base.ConfigureModuleCatalog(moduleCatalog);
             moduleCatalog.AddModule<HomeModule>();
             moduleCatalog.AddModule<ListModule>();
             moduleCatalog.AddModule<SerchModule>();
             moduleCatalog.AddModule<SettingModule>();
+            base.ConfigureModuleCatalog(moduleCatalog);
         }
     }
 }

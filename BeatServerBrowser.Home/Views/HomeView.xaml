@@ -5,11 +5,18 @@
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewmodel="clr-namespace:BeatServerBrowser.Home.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:action="clr-namespace:BeatServerBrowser.Core.Actions;assembly=BeatServerBrowser.Core"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignWidth="1200" d:DesignHeight="800"
              d:DataContext="{d:DesignInstance {x:Type viewmodel:HomeViewModel}, IsDesignTimeCreatable=True}"
              prism:ViewModelLocator.AutoWireViewModel="True">
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <action:DataContextInitialize/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -17,13 +24,13 @@
         </Grid.ColumnDefinitions>
         <material:Card Grid.Row="0" Padding="10" Margin="5">
             <StackPanel>
-                <Button Content="オンライン一覧" Command="{Binding NavigateListCommand}" VerticalAlignment="Center" Margin="20" />
+                <Button Content="オンライン一覧" Command="{Binding NavigateListCommand}" VerticalAlignment="Center" Margin="20" Cursor="Hand" />
                 <Button Content="オンライン検索" Command="{Binding NavigateSerchCommand}" VerticalAlignment="Center" Margin="20" />
                 <Button Content="ローカルライブラリ" Command="{Binding ?}" VerticalAlignment="Center" Margin="20" />
                 <Button Content="設定" Command="{Binding ShowSettingWindowCommand}" VerticalAlignment="Center" Margin="20" />
             </StackPanel>
         </material:Card>
 
-        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="MainRegion" Margin="5" />
+        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="MainRegion" Margin="0" />
     </Grid>
 </UserControl>
