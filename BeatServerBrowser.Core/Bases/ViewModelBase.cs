@@ -16,6 +16,7 @@ using BeatServerBrowser.Core.Services;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Threading;
+using Prism.Ioc;
 
 namespace BeatServerBrowser.Core.Bases
 {
@@ -45,6 +46,18 @@ namespace BeatServerBrowser.Core.Bases
 
             set => this.SetProperty(ref this.currentListViewContext_, value);
         }
+
+        /// <summary>読み込み中かどうか を取得、設定</summary>
+        private bool isLoading_;
+        /// <summary>読み込み中かどうか を取得、設定</summary>
+        public bool IsLoading
+        {
+            get => this.isLoading_;
+
+            set => this.SetProperty(ref this.isLoading_, value);
+        }
+
+        public bool IsEnable => !this.IsLoading;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -66,24 +79,34 @@ namespace BeatServerBrowser.Core.Bases
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
+        private void OnLoadingServicePropertyChanged(Object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ILoadingService loadingService && e.PropertyName == nameof(ILoadingService.IsLoading)) {
+                this.IsLoading = loadingService.IsLoading;
+            }
+        }
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
         public virtual void OnInitialize()
         {
-
+            
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
+        //[Dependency]
+        //public IContainerProvider containerProvider_;
+
         [Dependency]
         public IRegionManager regionManager_;
 
         [Dependency]
         public IDialogService dialogService_;
 
-        //[Dependency]
-        //public ILoadingService loadingService_;
+        [Dependency]
+        public ILoadingService loadingService_;
 
         protected readonly BeatSaver beatSaver_;
 
@@ -94,7 +117,6 @@ namespace BeatServerBrowser.Core.Bases
         public ViewModelBase()
         {
             this.Config = ConfigMaster.Current;
-            //this.loadingService_ = new LoadingService();
         }
         #endregion
     }

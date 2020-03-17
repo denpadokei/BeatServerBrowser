@@ -13,13 +13,6 @@ namespace BeatServerBrowser.Home
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            try {
-                containerProvider.Resolve<IRegionManager>().RegisterViewWithRegion("ContentRegion", typeof(HomeView));
-            }
-            catch (Exception e) {
-                Debug.WriteLine(e);
-                LogManager.GetCurrentClassLogger().Error(e);
-            }
             
         }
 

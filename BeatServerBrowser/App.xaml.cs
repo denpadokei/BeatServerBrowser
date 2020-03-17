@@ -17,6 +17,7 @@ using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Setting;
 using BeatServerBrowser.Serch;
 using BeatServerBrowser.List;
+using BeatServerBrowser.Core;
 
 namespace BeatServerBrowser
 {
@@ -56,6 +57,7 @@ namespace BeatServerBrowser
         {
             moduleCatalog.AddModule<HomeModule>();
             moduleCatalog.AddModule<ListModule>();
+            moduleCatalog.AddModule<CoreModule>();
             moduleCatalog.AddModule<SerchModule>();
             moduleCatalog.AddModule<SettingModule>();
             base.ConfigureModuleCatalog(moduleCatalog);

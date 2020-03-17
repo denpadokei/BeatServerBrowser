@@ -1,7 +1,11 @@
 ﻿using BeatServerBrowser.List.Views;
+using NLog;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
+using System;
+using System.Diagnostics;
+using Unity.Exceptions;
 
 namespace BeatServerBrowser.List
 {
@@ -16,7 +20,19 @@ namespace BeatServerBrowser.List
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation(typeof(ListMain), "ListMain");
+            var logger = LogManager.GetCurrentClassLogger();
+
+            try {
+                containerRegistry.RegisterForNavigation(typeof(ListMain), "ListMain");
+            }
+            catch (ViewRegistrationException e) {
+                Debug.WriteLine(e);
+                logger.Error(e);
+            }
+            catch (Exception e) {
+                Debug.WriteLine(e);
+                logger.Error(e);
+            }
         }
     }
 }

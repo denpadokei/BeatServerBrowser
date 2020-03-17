@@ -6,7 +6,7 @@ namespace BeatServerBrowser.Core.Interfaces
 {
     public interface ILoadingService
     {
-        public bool IsLoading { get; set; }
-        public void Load(Action action);
+        bool IsLoading { get; set; }
+        void Load(Action action);
     }
 }

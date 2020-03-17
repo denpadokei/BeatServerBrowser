@@ -1,22 +1,29 @@
 ﻿using BeatServerBrowser.Core.Bases;
+using BeatServerBrowser.Core.Interfaces;
 using BeatServerBrowser.Core.Models;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using Unity;
 
 namespace BeatServerBrowser.Home.ViewModels
 {
-    public class HomeViewModel : ViewModelBase
+    public class HomeViewModel : ViewModelBase, INavigationAware
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
+        public int LocalSongCount => this.Config.LocalBeatmaps.Count;
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -60,7 +67,6 @@ namespace BeatServerBrowser.Home.ViewModels
         #region // オーバーライドメソッド
         public override void OnInitialize()
         {
-            base.OnInitialize();
             ConfigMaster.Current.IsDark = Core.Properties.Settings.Default.IsDark;
 
             var paletteHelper = new PaletteHelper();
@@ -73,6 +79,9 @@ namespace BeatServerBrowser.Home.ViewModels
 
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 ConfigMaster.Current, nameof(INotifyPropertyChanged.PropertyChanged), this.OnPropertyChangeConfigMaster);
+            this.Config.LocalBeatmaps.CollectionChanged += this.OnCollectionChanged;
+
+            //this.loadingService_.Load(() => this.Config.CreateLocalBeatmaps());
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -88,13 +97,34 @@ namespace BeatServerBrowser.Home.ViewModels
                 theme.SetBaseTheme(baseTheme);
                 paletteHelper.SetTheme(theme);
 
-                Core.Properties.Settings.Default.IsDark = this.Config.IsDark;
+                Core.Properties.Settings.Default.IsDark = ConfigMaster.Current.IsDark;
                 Core.Properties.Settings.Default.Save();
             }
         }
+
+        private void OnCollectionChanged(object sendor, NotifyCollectionChangedEventArgs e)
+        {
+            this.RaisePropertyChanged(nameof(this.LocalSongCount));
+        }
+
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数

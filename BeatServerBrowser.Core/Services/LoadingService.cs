@@ -1,6 +1,7 @@
 ﻿using BeatServerBrowser.Core.Interfaces;
 using NLog;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,11 +9,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Unity;
 
 namespace BeatServerBrowser.Core.Services
 {
     public class LoadingService : BindableBase, ILoadingService
     {
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // プロパティ
+        [Dependency]
+        public IDialogService DialogService { get; set; }
+
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
         /// <summary>読み込み中かどうか を取得、設定</summary>
@@ -24,6 +31,47 @@ namespace BeatServerBrowser.Core.Services
 
             set => this.SetProperty(ref this.isLoading_, value);
         }
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // コマンド
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // コマンド用メソッド
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // リクエスト
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // オーバーライドメソッド
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // プライベートメソッド
+        private void StartLoading()
+        {
+            lock (this.lockObject_) {
+                Debug.WriteLine("読み込みを開始します。");
+                this.lockCounter_++;
+                this.IsLoading = true;
+            }
+        }
+
+        private void EndLoading()
+        {
+            lock (this.lockObject_) {
+                Debug.WriteLine("読み込みを終了します。");
+                this.lockCounter_--;
+                if (this.lockCounter_ == 0) {
+                    this.IsLoading = false;
+                }
+            }
+        }
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // パブリックメソッド
+        /// <summary>
+        /// 非同期で読み込みます。
+        /// </summary>
+        /// <param name="action"></param>
         public async void Load(Action action)
         {
             try {
@@ -38,34 +86,19 @@ namespace BeatServerBrowser.Core.Services
                 this.EndLoading();
             }
         }
-
-        private void StartLoading()
-        {
-            lock (this.lockObject_) {
-                this.lockCounter_++;
-                this.IsLoading = true;
-            }
-        }
-
-        private void EndLoading()
-        {
-            lock (this.lockObject_) {
-                this.lockCounter_--;
-                if (this.lockCounter_ == 0) {
-                    this.IsLoading = false;
-                }
-            }
-        }
-
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // メンバ変数
         private readonly Dispatcher dispatcher_;
 
-        private readonly Object lockObject_ = new object();
+        private readonly Object lockObject_ = new Object();
 
         private int lockCounter_;
-
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // 構築・破棄
         public LoadingService()
         {
-            this.lockObject_ = new Object();
             // スレッドを起動して、そこで dispatcher を実行する
             var dispatcherSource = new TaskCompletionSource<Dispatcher>();
             var thread = new Thread(new ThreadStart(() =>
@@ -79,5 +112,6 @@ namespace BeatServerBrowser.Core.Services
             // 表のディスパッチャーが終了するタイミングで、こちらのディスパッチャーも終了する
             Dispatcher.CurrentDispatcher.ShutdownStarted += (s, e) => this.dispatcher_.BeginInvokeShutdown(DispatcherPriority.Normal);
         }
+        #endregion
     }
 }

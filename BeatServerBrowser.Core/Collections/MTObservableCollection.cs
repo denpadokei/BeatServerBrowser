@@ -36,6 +36,10 @@ namespace BeatServerBrowser.Core.Collections
         public override event NotifyCollectionChangedEventHandler CollectionChanged;
         private static object _syncLock = new object();
 
+        public MTObservableCollection(IEnumerable<T> enamble) : base(enamble)
+        {
+            enableCollectionSynchronization(this, _syncLock);
+        }
         public MTObservableCollection()
         {
             enableCollectionSynchronization(this, _syncLock);

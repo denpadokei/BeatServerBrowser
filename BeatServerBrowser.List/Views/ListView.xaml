@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:extention="clr-namespace:BeatServerBrowser.Core.Extentions;assembly=BeatServerBrowser.Core"
+             xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls;assembly=BeatServerBrowser.Style"
+             xmlns:dp="clr-namespace:BeatServerBrowser.Core.DependencyPropaties;assembly=BeatServerBrowser.Core"
              xmlns:enum="clr-namespace:BeatServerBrowser.Static.Enums;assembly=BeatServerBrowser.Static"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
@@ -12,7 +14,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <material:Card Grid.Row="0" Padding="15">
-            <Grid>
+            <Grid IsEnabled="{Binding IsEnable}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
@@ -24,18 +26,18 @@
                 </DockPanel>
             </Grid>
         </material:Card>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="True" RowHeight="40">
+        <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="True" RowHeight="40">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Cover}"/>
+                            <Image dp:LazyImageBehavior.LazySource="{Binding CoverUri}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="曲名" Binding="{Binding SongTitle}"/>
                 <DataGridTextColumn Header="譜面作者" Binding="{Binding UploaderName}"/>
             </DataGrid.Columns>
-        </DataGrid>
+        </control:CustomDataGrid>
     </Grid>
 </UserControl>

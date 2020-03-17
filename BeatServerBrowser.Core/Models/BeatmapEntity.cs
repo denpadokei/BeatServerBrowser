@@ -1,19 +1,24 @@
 ﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Interfaces;
+using NLog;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Windows;
 
 namespace BeatServerBrowser.Core.Models
 {
-    public class BeatmapEntity : BindableBase, IBeatmapEntityable
+    public class BeatmapEntity : BindableBase
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
+        private Logger Logger => LogManager.GetCurrentClassLogger();
+
         /// <summary>譜面 を取得、設定</summary>
         private Beatmap beatmap_;
         /// <summary>譜面 を取得、設定</summary>
@@ -24,15 +29,16 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.beatmap_, value);
         }
 
-        /// <summary>画像 を取得、設定</summary>
-        private ImageSource cover_;
-        /// <summary>画像 を取得、設定</summary>
-        public ImageSource Cover
+        /// <summary>カバーURI を取得、設定</summary>
+        private Uri coverUri_;
+        /// <summary>カバーURI を取得、設定</summary>
+        public Uri CoverUri
         {
-            get => this.cover_;
+            get => this.coverUri_;
 
-            set => this.SetProperty(ref this.cover_, value);
+            set => this.SetProperty(ref this.coverUri_, value);
         }
+
         /// <summary>曲名 を取得、設定</summary>
         public string SongTitle => this.Beatmap.Name;
         public string UploaderName => this.Beatmap.Uploader.Username;
@@ -70,7 +76,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>ダウンロードコマンド を取得、設定</summary>
         private DelegateCommand downloadCommand_;
         /// <summary>ダウンロードコマンド を取得、設定</summary>
-        public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download));
+        public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download, this.IsInstalled));
 
         /// <summary>コピー を取得、設定</summary>
         private DelegateCommand copyCommand_;
@@ -79,18 +85,61 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private void Download()
+        private async void Download()
         {
-
+            try {
+                if (!Directory.Exists(@$"{ConfigMaster.Current.InstallFolder}\Beat Saber_Data\CustomLevels")) {
+                    Debug.WriteLine("インストールフォルダが正しくありません。");
+                    this.Logger.Info("インストールフォルダが正しくありません。");
+                    return;
+                }
+                var path = $@"{ConfigMaster.Current.InstallFolder}\Beat Saber_Data\CustomLevels\{this.Key} ({this.Name})";
+                if (Directory.Exists(path)) {
+                    Debug.WriteLine("取得済みです。");
+                    this.Logger.Info("取得済みです。");
+                    return;
+                }
+                var directoryInfo = Directory.CreateDirectory(path);
+                var body = await Application.Current.Dispatcher.Invoke(() => this.Beatmap.DownloadZip());
+                using (var stream = new MemoryStream(body)) {
+                    using (var aricive = new ZipArchive(stream)) {
+                        foreach (var entry in aricive.Entries) {
+                            entry.ExtractToFile(Path.Combine(path, entry.FullName), false);
+                            this.Logger.Info($"{entry.Name}を展開しました。");
+                            Debug.WriteLine($"{entry.Name}を展開しました。");
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                Debug.WriteLine(e);
+                this.Logger.Error(e);
+            }
+            //ConfigMaster.Current.CreateLocalBeatmaps();
         }
 
         private void Copy()
         {
+            Clipboard.SetText($"!bsr{this.Key}");
+            this.CopyKey?.Invoke();
+            this.Logger.Info($"{this.Key}をクリップボードに送りました。");
+            Debug.WriteLine($"{this.Key}をクリップボードに送りました。");
+        }
 
+        private bool IsInstalled()
+        {
+            var localmap = new LocalBeatmapInfo()
+            {
+                SongTitle = this.Beatmap.Metadata.SongName,
+                SongSubTitle = this.Beatmap.Metadata.SongSubName,
+                LevelAuthorName = this.Beatmap.Metadata.LevelAuthorName,
+            };
+            return !ConfigMaster.Current.LocalBeatmaps.Any(x => x.Equals(localmap));
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // リクエスト
+        #region // パブリックイベント
+        public Action CopyKey;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
@@ -100,7 +149,6 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
@@ -110,7 +158,7 @@ namespace BeatServerBrowser.Core.Models
         public BeatmapEntity(Beatmap beatmap)
         {
             this.Beatmap = beatmap;
-            this.Cover = new BitmapImage(new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}"));
+            this.CoverUri = new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}");
         }
         #endregion
     }

@@ -52,5 +52,7 @@
     <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}"/>
 
     <Style TargetType="{x:Type control:ListNavigateControl}" BasedOn="{StaticResource {x:Type TabControl}}"/>
+    <Style TargetType="{x:Type control:SerchScrollViewer}" BasedOn="{StaticResource {x:Type ScrollViewer}}"/>
+    <Style TargetType="{x:Type control:CustomDataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}"/>
 
 </ResourceDictionary>

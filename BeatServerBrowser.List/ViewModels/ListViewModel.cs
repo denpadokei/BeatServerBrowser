@@ -52,7 +52,10 @@ namespace BeatServerBrowser.List.ViewModels
         #region // コマンド用メソッド
         private void Serch()
         {
-            this.domain_.Serch();
+            if (this.loadingService_.IsLoading == true) {
+                return;
+            }
+            this.loadingService_?.Load(() => this.domain_.Serch());
         }
 
         private void Reset()
