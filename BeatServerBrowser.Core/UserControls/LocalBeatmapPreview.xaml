@@ -27,7 +27,7 @@
                         <TextBlock Text=" - " Height="30"/>
                         <TextBlock Text="{Binding SongSubTitle}" Height="30"/>
                     </DockPanel>
-                    <TextBlock Grid.Row="1" Text="{Binding UploaderName}" Margin="2" Height="30"/>
+                    <TextBlock Grid.Row="1" Text="{Binding LevelAuthorName}" Margin="2" Height="30"/>
                 </Grid>
                 <Image Grid.Row="1" dp:LazyImageBehavior.LazySource="{Binding CoverUri}" />
             </Grid>
