@@ -102,24 +102,17 @@ namespace BeatServerBrowser.Core.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
         public void CreateLocalBeatmaps()
-        {
-            
+        {   
             this.LocalBeatmaps.Clear();
-            
-            //var beatmaps = new List<LocalBeatmapInfo>();
             var path = $@"{this.InstallFolder}\Beat Saber_Data\CustomLevels";
             var info = new DirectoryInfo(path);
+            if (!Directory.Exists(info.FullName)) {
+                return;
+            }
 
             foreach (var folder in info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly)) {
                 this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
             }
-            //Parallel.ForEach(info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).ToList(), new ParallelOptions() { MaxDegreeOfParallelism = 4 }, folder =>
-            //{
-            //    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
-            //});
-
-            //var temp = beatmaps.OrderBy(x => x.SongTitle);
-            //this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(temp);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
