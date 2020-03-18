@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Unity;
 
@@ -32,6 +33,10 @@ namespace BeatServerBrowser.Home.ViewModels
         /// <summary>リストコマンド を取得、設定</summary>
         public DelegateCommand NavigateListCommand => this.navigateListCommand_ ?? (this.navigateListCommand_ = new DelegateCommand(this.NavigateList));
 
+        /// <summary>ローカルライブラリコマンド を取得、設定</summary>
+        private DelegateCommand navigateLocalCommand_;
+        /// <summary>ローカルライブラリコマンド を取得、設定</summary>
+        public DelegateCommand NavigateLocalCommand => this.navigateLocalCommand_ ?? (this.navigateLocalCommand_ = new DelegateCommand(this.NavigateLocal));
 
         /// <summary>検索コマンド を取得、設定</summary>
         private DelegateCommand navigateSerchCommand_;
@@ -55,6 +60,11 @@ namespace BeatServerBrowser.Home.ViewModels
             this.regionManager_?.RequestNavigate("MainRegion", "SerchMain");
         }
 
+        private void NavigateLocal()
+        {
+            this.regionManager_?.RequestNavigate("MainRegion", "LocalMain");
+        }
+
         private void ShowSettingWindow()
         {
             this.dialogService_?.ShowDialog("SettingView", new DialogParameters(), _ => { });
@@ -65,7 +75,7 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        public override void OnInitialize()
+        public async override void OnInitialize()
         {
             ConfigMaster.Current.IsDark = Core.Properties.Settings.Default.IsDark;
 
@@ -79,9 +89,14 @@ namespace BeatServerBrowser.Home.ViewModels
 
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 ConfigMaster.Current, nameof(INotifyPropertyChanged.PropertyChanged), this.OnPropertyChangeConfigMaster);
+            await Task.Run(() => this.loadingService_.Load(() => this.Config.CreateLocalBeatmaps()));
             this.Config.LocalBeatmaps.CollectionChanged += this.OnCollectionChanged;
-
-            //this.loadingService_.Load(() => this.Config.CreateLocalBeatmaps());
+            this.RaisePropertyChanged(nameof(this.LocalSongCount));
+            await Task.Run(() => {
+                foreach (var item in this.Config.LocalBeatmaps) {
+                    item.CreateCommand?.Execute();
+                }
+            });
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

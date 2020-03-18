@@ -9,7 +9,6 @@ using NLog.Targets;
 using NLog.Config;
 using System.Diagnostics;
 using System;
-using Microsoft.Extensions.Configuration;
 using MaterialDesignThemes.Wpf;
 using System.Configuration;
 using System.IO;
@@ -18,6 +17,7 @@ using BeatServerBrowser.Setting;
 using BeatServerBrowser.Serch;
 using BeatServerBrowser.List;
 using BeatServerBrowser.Core;
+using BeatServerBrowser.Local;
 
 namespace BeatServerBrowser
 {
@@ -58,6 +58,7 @@ namespace BeatServerBrowser
             moduleCatalog.AddModule<HomeModule>();
             moduleCatalog.AddModule<ListModule>();
             moduleCatalog.AddModule<CoreModule>();
+            moduleCatalog.AddModule<LocalModule>();
             moduleCatalog.AddModule<SerchModule>();
             moduleCatalog.AddModule<SettingModule>();
             base.ConfigureModuleCatalog(moduleCatalog);

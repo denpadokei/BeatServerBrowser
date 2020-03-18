@@ -71,8 +71,14 @@ namespace BeatServerBrowser.List.Models
                     break;
                 case Static.Enums.PageType.Rank:
                     var scores = ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, (this.Filter.Count + 1));
+                    if (scores == null) {
+                        return;
+                    }
                     foreach(var scoremap in scores.Scoremaps) {
                         var scorebeatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(scoremap.ID).Result;
+                        if (scorebeatmap == null) {
+                            break;
+                        }
                         this.Beatmaps.Add(new BeatmapEntity(scorebeatmap));
                     }
                     this.Filter.Count++;

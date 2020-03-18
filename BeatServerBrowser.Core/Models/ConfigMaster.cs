@@ -1,9 +1,6 @@
 ﻿using BeatSaverSharp;
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.ScoreSaber;
-using MaterialDesignThemes.Wpf;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using NLog;
 using Prism.Mvvm;
 using System;
@@ -106,33 +103,23 @@ namespace BeatServerBrowser.Core.Models
         #region // パブリックメソッド
         public void CreateLocalBeatmaps()
         {
-            var sirializer = new JsonSerializer();
+            
             this.LocalBeatmaps.Clear();
+            
+            //var beatmaps = new List<LocalBeatmapInfo>();
             var path = $@"{this.InstallFolder}\Beat Saber_Data\CustomLevels";
             var info = new DirectoryInfo(path);
-            var files = info.GetDirectories();
-            var beatmaps = new List<LocalBeatmapInfo>();
-            
-            foreach (var folder in files) {
-                foreach (var file in folder.GetFiles()) {
-                    Debug.WriteLine($"ファイルを読み込みます。[{file.Name}][{file.FullName}]");
-                    this.Logger.Info($"ファイルを読み込みます。[{file.Name}][{file.FullName}]");
-                    if (file.Name == "info.dat") {
-                        using (var steram = new StreamReader(file.FullName)) {
-                            using (var reader = new StringReader(steram.ReadToEnd())) {
-                                using (var jsonText = new JsonTextReader(reader)) {
-                                    var beatmap = sirializer.Deserialize<LocalBeatmapInfo>(jsonText);
-                                    this.LocalBeatmaps.Add(beatmap);
-                                    Debug.WriteLine($"{beatmap.SongTitle}を読み込みました。");
-                                    this.Logger.Info($"{beatmap.SongTitle}を読み込みました。");
-                                }
-                            }
-                        }
-                    }
-                }
+
+            foreach (var folder in info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly)) {
+                this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
             }
-            var temp = this.LocalBeatmaps.OrderBy(x => x.SongTitle);
-            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(temp);
+            //Parallel.ForEach(info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).ToList(), new ParallelOptions() { MaxDegreeOfParallelism = 4 }, folder =>
+            //{
+            //    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
+            //});
+
+            //var temp = beatmaps.OrderBy(x => x.SongTitle);
+            //this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(temp);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

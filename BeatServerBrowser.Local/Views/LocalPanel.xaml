@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="BeatServerBrowser.Local.Views.LocalPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls;assembly=BeatServerBrowser.Style"
+             xmlns:model="clr-namespace:BeatServerBrowser.Core.Models;assembly=BeatServerBrowser.Core"
+             xmlns:usercontrol="clr-namespace:BeatServerBrowser.Core.UserControls;assembly=BeatServerBrowser.Core"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type model:LocalBeatmapInfo}">
+            <usercontrol:LocalBeatmapPreview />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <DockPanel>
+            <ItemsControl ItemsSource="{Binding LocalBeatmaps}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}" Margin="5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+    </ScrollViewer>
+</UserControl>

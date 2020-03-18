@@ -8,8 +8,6 @@
   <ItemGroup>
     <PackageReference Include="BeatSaverSharp" Version="1.5.2" />
     <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="NLog.Config" Version="4.6.8" />
@@ -22,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BeatServerBrowser.Home\BeatServerBrowser.Home.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.List\BeatServerBrowser.List.csproj" />
+    <ProjectReference Include="..\BeatServerBrowser.Local\BeatServerBrowser.Local.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Serch\BeatServerBrowser.Serch.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Setting\BeatServerBrowser.Setting.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Style\BeatServerBrowser.Style.csproj" />

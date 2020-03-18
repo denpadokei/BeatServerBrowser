@@ -26,9 +26,13 @@
             <StackPanel>
                 <Button Content="オンライン一覧" Command="{Binding NavigateListCommand}" VerticalAlignment="Center" Margin="20" Cursor="Hand" />
                 <Button Content="オンライン検索" Command="{Binding NavigateSerchCommand}" VerticalAlignment="Center" Margin="20" />
-                <Button Content="ローカルライブラリ" Command="{Binding ?}" VerticalAlignment="Center" Margin="20" />
+                <Button Content="ローカルライブラリ" Command="{Binding NavigateLocalCommand}" VerticalAlignment="Center" Margin="20" />
                 <Button Content="設定" Command="{Binding ShowSettingWindowCommand}" VerticalAlignment="Center" Margin="20" />
-                <TextBlock Text="{Binding LocalSongCount}" Margin="20"/>
+                <DockPanel>
+                    <TextBlock Text="ローカル曲数" Margin="20"/>
+                    <TextBlock Text="{Binding LocalSongCount}" Margin="20"/>
+                    <TextBlock Text="曲" Margin="5,20,0,20"/>
+                </DockPanel>
             </StackPanel>
         </material:Card>
 

@@ -2,12 +2,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <AssemblyName>BeatServerBrowser.List</AssemblyName>
+    <AssemblyName>BeatServerBrowser.Local</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dragablz" Version="0.0.3.203" />
     <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="Prism.Unity" Version="7.2.0.1367" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
