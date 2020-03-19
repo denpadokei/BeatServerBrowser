@@ -29,6 +29,26 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.songTitle_, value);
         }
 
+        /// <summary>曲名 を取得、設定</summary>
+        private string songName_;
+        /// <summary>曲名 を取得、設定</summary>
+        public string SongName
+        {
+            get => this.songName_;
+
+            set => this.SetProperty(ref this.songName_, value);
+        }
+
+        /// <summary>サブタイトル を取得、設定</summary>
+        private string songSubName_;
+        /// <summary>サブタイトル を取得、設定</summary>
+        public string SongSubName
+        {
+            get => this.songSubName_;
+
+            set => this.SetProperty(ref this.songSubName_, value);
+        }
+
         /// <summary>マッパー を取得、設定</summary>
         private string levelAuthorName_;
         /// <summary>マッパー を取得、設定</summary>
@@ -59,6 +79,15 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.cover_, value);
         }
 
+        /// <summary>ディレクトリ名 を取得、設定</summary>
+        private string directoryPath_;
+        /// <summary>ディレクトリ名 を取得、設定</summary>
+        public string DirectoryPath
+        {
+            get => this.directoryPath_;
+
+            set => this.SetProperty(ref this.directoryPath_, value);
+        }
         
         public DelegateCommand CreateCommand { get; set; }
 
@@ -73,7 +102,7 @@ namespace BeatServerBrowser.Core.Models
             if (ReferenceEquals(this, b)) return true;
             if (this.GetType() != b.GetType()) return false;
 
-            return (this.SongTitle == b.SongTitle) && (this.LevelAuthorName == b.LevelAuthorName);
+            return (this.SongName == b.SongName) && (this.SongSubName == b.SongSubName) && (this.LevelAuthorName == b.LevelAuthorName);
         }
 
         private void Create()
@@ -90,7 +119,7 @@ namespace BeatServerBrowser.Core.Models
                 var beatmap = JsonConvert.DeserializeObject<LocalSongJsonEntity>(text);
                 Debug.WriteLine($"{beatmap.SongName}を読み込みました。");
                 this.Logger.Info($"{beatmap.SongName}を読み込みました。");
-                this.SongTitle = $"{beatmap.SongName} - {beatmap.SongSubName}";
+                this.SongTitle = $"{beatmap.SongName} - {beatmap.SongAuthorName}";
                 this.CoverFileName = beatmap.CoverImageFilename;
                 this.LevelAuthorName = beatmap.LevelAuthorName;
             }
@@ -108,6 +137,7 @@ namespace BeatServerBrowser.Core.Models
                     this.Logger.Error(e);
                 }
             }
+            this.DirectoryPath = this.Directory.Name;
         }
 
         public LocalBeatmapInfo(DirectoryInfo directory)

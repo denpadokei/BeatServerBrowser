@@ -4,6 +4,7 @@
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:usercontrol="clr-namespace:BeatServerBrowser.Core.UserControls;assembly=BeatServerBrowser.Core"
              xmlns:model="clr-namespace:BeatServerBrowser.Core.Models;assembly=BeatServerBrowser.Core"
+             xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls;assembly=BeatServerBrowser.Style"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
@@ -30,7 +31,7 @@
             </Grid>
         </material:Card>
         <material:Card Grid.Row="1" Padding="20">
-            <ScrollViewer>
+            <control:SerchScrollViewer UnderCommand="{Binding SerchCommand}">
                 <DockPanel>
                     <ItemsControl ItemsSource="{Binding Beatmaps}">
                         <ItemsControl.ItemsPanel>
@@ -45,7 +46,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </DockPanel>
-            </ScrollViewer>
+            </control:SerchScrollViewer>
         </material:Card>
     </Grid>
 </UserControl>

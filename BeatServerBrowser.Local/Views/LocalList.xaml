@@ -25,6 +25,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="曲名" Binding="{Binding SongTitle}"/>
                 <DataGridTextColumn Header="譜面作者" Binding="{Binding LevelAuthorName}"/>
+                <DataGridTextColumn Header="フォルダ名" Binding="{Binding DirectoryPath}"/>
             </DataGrid.Columns>
         </control:CustomDataGrid>
     </Grid>

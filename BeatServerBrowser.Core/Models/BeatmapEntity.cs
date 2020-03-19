@@ -39,8 +39,9 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.coverUri_, value);
         }
 
-        /// <summary>曲名 を取得、設定</summary>
+        
         public string SongTitle => this.Beatmap.Name;
+
         public string UploaderName => this.Beatmap.Uploader.Username;
 
         public string Hash => this.Beatmap.Hash;
@@ -130,7 +131,8 @@ namespace BeatServerBrowser.Core.Models
         {
             var localmap = new LocalBeatmapInfo()
             {
-                SongTitle = $"{this.Beatmap.Metadata.SongName} - {this.Beatmap.Metadata.SongSubName}",
+                SongName = this.Metadata.SongName,
+                SongSubName = this.Metadata.SongSubName,
                 LevelAuthorName = this.Beatmap.Metadata.LevelAuthorName,
             };
             return !ConfigMaster.Current.LocalBeatmaps.Any(x => x.Equals(localmap));

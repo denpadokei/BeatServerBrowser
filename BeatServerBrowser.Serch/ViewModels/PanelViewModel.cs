@@ -1,4 +1,5 @@
 ﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.Bases;
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Serch.Models;
@@ -10,7 +11,7 @@ using System.Linq;
 
 namespace BeatServerBrowser.Serch.ViewModels
 {
-    public class PanelViewModel : BindableBase
+    public class PanelViewModel : ViewModelBase
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
@@ -50,7 +51,10 @@ namespace BeatServerBrowser.Serch.ViewModels
         #region // コマンド用メソッド
         private void Serch()
         {
-            this.serchDomain_.Serch();
+            if (this.IsLoading == true) {
+                return;
+            }
+            this.loadingService_?.Load(this.serchDomain_.Serch);
         }
 
         private void Reset()

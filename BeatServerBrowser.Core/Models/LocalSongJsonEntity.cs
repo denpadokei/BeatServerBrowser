@@ -13,6 +13,9 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>曲のサブタイトル を取得、設定</summary>
         [JsonProperty("_songSubName")]
         public string SongSubName { get; set; }
+        /// <summary>曲のサブタイトル を取得、設定</summary>
+        [JsonProperty("_songAuthorName")]
+        public string SongAuthorName { get; set; }
         /// <summary>マッパー を取得、設定</summary>
         [JsonProperty("_levelAuthorName")]
         public string LevelAuthorName { get; set; }
