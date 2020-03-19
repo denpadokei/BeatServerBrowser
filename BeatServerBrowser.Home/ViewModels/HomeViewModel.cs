@@ -75,7 +75,7 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        public async override void OnInitialize()
+        public override void OnInitialize()
         {
             ConfigMaster.Current.IsDark = Core.Properties.Settings.Default.IsDark;
 
@@ -89,14 +89,12 @@ namespace BeatServerBrowser.Home.ViewModels
 
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 ConfigMaster.Current, nameof(INotifyPropertyChanged.PropertyChanged), this.OnPropertyChangeConfigMaster);
-            await Task.Run(() => this.loadingService_.Load(() => this.Config.CreateLocalBeatmaps()));
+            if (this.loadingService_ is INotifyPropertyChanged service) {
+                WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
+                    service, nameof(INotifyPropertyChanged.PropertyChanged), this.OnLoadingServicePropertyChanged);
+            }
             this.Config.LocalBeatmaps.CollectionChanged += this.OnCollectionChanged;
-            this.RaisePropertyChanged(nameof(this.LocalSongCount));
-            await Task.Run(() => {
-                foreach (var item in this.Config.LocalBeatmaps) {
-                    item.CreateCommand?.Execute();
-                }
-            });
+            this.loadingService_.Load(() => this.Config.CreateLocalBeatmaps());
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -122,7 +120,12 @@ namespace BeatServerBrowser.Home.ViewModels
             this.RaisePropertyChanged(nameof(this.LocalSongCount));
         }
 
-
+        private void OnLoadingServicePropertyChanged(Object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ILoadingService && e.PropertyName == nameof(ILoadingService.IsLoading)) {
+                this.IsLoading = this.loadingService_.IsLoading;
+            }
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド

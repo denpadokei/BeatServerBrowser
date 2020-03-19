@@ -1,36 +1,69 @@
-﻿using BeatServerBrowser.Core.Bases;
-using BeatServerBrowser.Core.Collections;
-using BeatServerBrowser.Core.Models;
-using Prism.Commands;
-using Prism.Mvvm;
-using BeatServerBrowser.Core.Collections;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
-namespace BeatServerBrowser.Local.ViewModels
+namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
 {
-    public class LocalListViewModel : ViewModelBase
-    {
+    public class Scoremap : IEquatable<Scoremap>
+    { 
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // プロパティ
-        /// <summary>ローカルライブラリコレクション を取得、設定</summary>
-        private MTObservableCollection<LocalBeatmapInfo> localBeatmaps_;
-        /// <summary>ローカルライブラリコレクション を取得、設定</summary>
-        public MTObservableCollection<LocalBeatmapInfo> LocalBeatmaps
-        {
-            get => this.localBeatmaps_;
+        #region // JSONプロパティ
+        [JsonProperty("scoreId")]
+        public long ScoreID { get; set; }
 
-            set => this.SetProperty(ref this.localBeatmaps_, value);
-        }
+        [JsonProperty("leaderboardId")]
+        public int LeaderboardId { get; set; }
+
+        [JsonProperty("score")]
+        public int Score { get; set; }
+
+        [JsonProperty("uScoreId")]
+        public int UScore { get; set; }
+
+        [JsonProperty("mods")]
+        public string Mods { get; set; }
+
+        [JsonProperty("playerId")]
+        public string PlayerID { get; set; }
+
+        [JsonProperty("timeset")]
+        public DateTime Timeset { get; set; }
+
+        [JsonProperty("pp")]
+        public double PP { get; set; }
+
+        [JsonProperty("weight")]
+        public double Weight { get; set; }
+
+        [JsonProperty("id")]
+        public string ID { get; set; }
+
+        [JsonProperty("songSubName")]
+        public string SongSubName { get; set; }
+
+        [JsonProperty("songAuthorName")]
+        public string SongAuthorName { get; set; }
+
+        [JsonProperty("levelAuthorName")]
+        public string LevelAuthorName { get; set; }
+
+        [JsonProperty("diff")]
+        public string Diff { get; set; }
+
+        [JsonProperty("maxScoreEx")]
+        public string maxScoreEx { get; set; }
+
+        [JsonProperty("rank")]
+        public bool Rank { get; set; }
+
+
+        [JsonIgnore]
+        internal ScoreSaber Client { get; set; }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
-        /// <summary>表示コマンド を取得、設定</summary>
-        private DelegateCommand showCommand_;
-        /// <summary>表示コマンド を取得、設定</summary>
-        public DelegateCommand ShowCommand => this.showCommand_ ?? (this.showCommand_ = new DelegateCommand(this.Show));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -43,31 +76,21 @@ namespace BeatServerBrowser.Local.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        private void Show()
-        {
-            if (!this.LocalBeatmaps.Any()) {
-                foreach (var beatmap in this.Config.LocalBeatmaps) {
-                    this.LocalBeatmaps.Add(beatmap);
-                }
-            }
-            else {
-                this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
-            }
-
-        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
+        public bool Equals([AllowNull] Scoremap other)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public LocalListViewModel()
-        {
-            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
-        }
+        [JsonConstructor]
+        public Scoremap() { }
         #endregion
     }
 }

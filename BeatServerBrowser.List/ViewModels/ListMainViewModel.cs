@@ -1,5 +1,4 @@
-﻿using BeatServerBrowser.Core.Collections;
-using BeatServerBrowser.Core.Models;
+﻿using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.List.Models;
 using Prism.Commands;
 using Prism.Mvvm;

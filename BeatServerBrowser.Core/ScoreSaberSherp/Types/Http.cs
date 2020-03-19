@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BeatServerBrowser.Core.ScoreSaber.Types
+namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
 {
     internal sealed class Http
     {
@@ -102,7 +102,7 @@ namespace BeatServerBrowser.Core.ScoreSaber.Types
 
             Client = new HttpClient(handler)
             {
-                BaseAddress = new Uri($"{ScoreSaberSharp.BaseURL}/api/"),
+                BaseAddress = new Uri($"{ScoreSaber.BaseURL}/api/"),
                 Timeout = TimeSpan.FromSeconds(30),
             };
         }

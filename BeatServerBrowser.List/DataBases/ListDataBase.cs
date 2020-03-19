@@ -1,6 +1,6 @@
 ﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.ScoreSaber;
-using BeatServerBrowser.Core.ScoreSaber.Types;
+using BeatServerBrowser.Core.ScoreSaberSherp;
+using BeatServerBrowser.Core.ScoreSaberSherp.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,10 +39,10 @@ namespace BeatServerBrowser.List.DataBases
             return page;
         }
 
-        public static Scores GetRankPage(ScoreSaberSharp scoreSaber, uint count)
+        public static Scores GetRankPage(ScoreSaber scoreSaber, uint count)
         {
-            var page = scoreSaber.Rank(count).Result;
-            return page;
+            var songs = scoreSaber.Rank(count).Result;
+            return songs;
         }
     }
 }

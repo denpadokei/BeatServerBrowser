@@ -3,9 +3,12 @@ using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using Prism.Commands;
 using Prism.Mvvm;
+using BeatServerBrowser.Core.Collections;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using BeatServerBrowser.Local.Models;
 
 namespace BeatServerBrowser.Local.ViewModels
 {
@@ -29,18 +32,29 @@ namespace BeatServerBrowser.Local.ViewModels
         private DelegateCommand showCommand_;
         /// <summary>表示コマンド を取得、設定</summary>
         public DelegateCommand ShowCommand => this.showCommand_ ?? (this.showCommand_ = new DelegateCommand(this.Show));
+
+        /// <summary>検索コマンド を取得、設定</summary>
+        private DelegateCommand serchCommand_;
+        /// <summary>検索コマンド を取得、設定</summary>
+        public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
         private void Show()
         {
             if (!this.LocalBeatmaps.Any()) {
-                this.LocalBeatmaps = this.Config.LocalBeatmaps;
+                this.loadingService_?.Load(this.domain_.Serch);
             }
             else {
-                this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
+                this.domain_.LocalBeatmaps.Clear();
+                this.domain_.Count = 0;
             }
             
+        }
+
+        private void Serch()
+        {
+            this.loadingService_?.Load(this.domain_.Serch);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -57,12 +71,14 @@ namespace BeatServerBrowser.Local.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
+        private readonly LocalPanelDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
         public LocalPanelViewModel()
         {
-            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
+            this.domain_ = new LocalPanelDomain();
+            this.LocalBeatmaps = this.domain_.LocalBeatmaps;
         }
         #endregion
     }

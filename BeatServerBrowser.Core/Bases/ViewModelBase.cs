@@ -54,10 +54,14 @@ namespace BeatServerBrowser.Core.Bases
         {
             get => this.isLoading_;
 
-            set => this.SetProperty(ref this.isLoading_, value);
+            set
+            {
+                this.SetProperty(ref this.isLoading_, value);
+                this.RaisePropertyChanged(nameof(this.IsEnable));
+            }
         }
 
-        public bool IsEnable => !this.IsLoading;
+        public bool IsEnable { get { return !this.IsLoading; } set { } }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -82,7 +86,7 @@ namespace BeatServerBrowser.Core.Bases
         private void OnLoadingServicePropertyChanged(Object sender, PropertyChangedEventArgs e)
         {
             if (sender is ILoadingService loadingService && e.PropertyName == nameof(ILoadingService.IsLoading)) {
-                this.IsLoading = loadingService.IsLoading;
+                this.IsLoading = !this.loadingService_.IsLoading;
             }
         }
 

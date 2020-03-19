@@ -130,8 +130,7 @@ namespace BeatServerBrowser.Core.Models
         {
             var localmap = new LocalBeatmapInfo()
             {
-                SongTitle = this.Beatmap.Metadata.SongName,
-                SongSubTitle = this.Beatmap.Metadata.SongSubName,
+                SongTitle = $"{this.Beatmap.Metadata.SongName} - {this.Beatmap.Metadata.SongSubName}",
                 LevelAuthorName = this.Beatmap.Metadata.LevelAuthorName,
             };
             return !ConfigMaster.Current.LocalBeatmaps.Any(x => x.Equals(localmap));

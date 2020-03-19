@@ -1,66 +1,35 @@
-﻿using Newtonsoft.Json;
+﻿using BeatServerBrowser.Core.Models;
+using Prism.Mvvm;
+using BeatServerBrowser.Core.Collections;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace BeatServerBrowser.Core.ScoreSaber.Types
+namespace BeatServerBrowser.Local.Models
 {
-    public class Scoremap : IEquatable<Scoremap>
-    { 
+    public abstract class LocalDomainBase : BindableBase
+    {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // JSONプロパティ
-        [JsonProperty("scoreId")]
-        public long ScoreID { get; set; }
+        #region // プロパティ
+        /// <summary>ローカルライブラリコレクション を取得、設定</summary>
+        private MTObservableCollection<LocalBeatmapInfo> localBeatmaps_;
+        /// <summary>ローカルライブラリコレクション を取得、設定</summary>
+        public MTObservableCollection<LocalBeatmapInfo> LocalBeatmaps
+        {
+            get => this.localBeatmaps_;
 
-        [JsonProperty("leaderboardId")]
-        public int LeaderboardId { get; set; }
+            set => this.SetProperty(ref this.localBeatmaps_, value);
+        }
 
-        [JsonProperty("score")]
-        public int Score { get; set; }
+        /// <summary>カウンター を取得、設定</summary>
+        private int count_;
+        /// <summary>カウンター を取得、設定</summary>
+        public int Count
+        {
+            get => this.count_;
 
-        [JsonProperty("uScoreId")]
-        public int UScore { get; set; }
-
-        [JsonProperty("mods")]
-        public string Mods { get; set; }
-
-        [JsonProperty("playerId")]
-        public string PlayerID { get; set; }
-
-        [JsonProperty("timeset")]
-        public DateTime Timeset { get; set; }
-
-        [JsonProperty("pp")]
-        public double PP { get; set; }
-
-        [JsonProperty("weight")]
-        public double Weight { get; set; }
-
-        [JsonProperty("id")]
-        public string ID { get; set; }
-
-        [JsonProperty("songSubName")]
-        public string SongSubName { get; set; }
-
-        [JsonProperty("songAuthorName")]
-        public string SongAuthorName { get; set; }
-
-        [JsonProperty("levelAuthorName")]
-        public string LevelAuthorName { get; set; }
-
-        [JsonProperty("diff")]
-        public string Diff { get; set; }
-
-        [JsonProperty("maxScoreEx")]
-        public string maxScoreEx { get; set; }
-
-        [JsonProperty("rank")]
-        public bool Rank { get; set; }
-
-
-        [JsonIgnore]
-        internal ScoreSaberSharp Client { get; set; }
+            set => this.SetProperty(ref this.count_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -79,18 +48,18 @@ namespace BeatServerBrowser.Core.ScoreSaber.Types
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public bool Equals([AllowNull] Scoremap other)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Serch();
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        [JsonConstructor]
-        public Scoremap() { }
+        public LocalDomainBase()
+        {
+            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
+            this.Count = 0;
+        }
         #endregion
     }
 }

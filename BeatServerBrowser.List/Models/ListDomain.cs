@@ -3,6 +3,7 @@ using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.List.DataBases;
 using Prism.Mvvm;
+using BeatServerBrowser.Core.Collections;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -70,11 +71,11 @@ namespace BeatServerBrowser.List.Models
                     page = ListDataBase.GetPlaysPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Rank:
-                    var scores = ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, (this.Filter.Count + 1));
-                    if (scores == null) {
+                    var songs = ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, this.Filter.Count + 1);
+                    if (songs == null) {
                         return;
                     }
-                    foreach(var scoremap in scores.Scoremaps) {
+                    foreach(var scoremap in songs.Scoremaps) {
                         var scorebeatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(scoremap.ID).Result;
                         if (scorebeatmap == null) {
                             break;

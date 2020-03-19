@@ -1,8 +1,9 @@
 ﻿using BeatSaverSharp;
 using BeatServerBrowser.Core.Collections;
-using BeatServerBrowser.Core.ScoreSaber;
+using BeatServerBrowser.Core.ScoreSaberSherp;
 using NLog;
 using Prism.Mvvm;
+using BeatServerBrowser.Core.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,9 +54,9 @@ namespace BeatServerBrowser.Core.Models
         }
 
         /// <summary>アクセス用スコアセイバー を取得、設定</summary>
-        private ScoreSaberSharp currentScoreSaber_;
+        private ScoreSaber currentScoreSaber_;
         /// <summary>アクセス用スコアセイバー を取得、設定</summary>
-        public ScoreSaberSharp CurrentScoreSaber
+        public ScoreSaber CurrentScoreSaber
         {
             get => this.currentScoreSaber_;
 
@@ -131,7 +132,7 @@ namespace BeatServerBrowser.Core.Models
         {
             this.InstallFolder = Properties.Settings.Default.InstallFolder;
             this.CurrentBeatSaver = new BeatSaver(this.options_);
-            this.CurrentScoreSaber = new ScoreSaberSharp();
+            this.CurrentScoreSaber = new ScoreSaber();
             this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
         }
         #endregion

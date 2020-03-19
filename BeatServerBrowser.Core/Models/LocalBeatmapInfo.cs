@@ -2,7 +2,6 @@
 using NLog;
 using Prism.Commands;
 using Prism.Mvvm;
-using SongCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,19 +10,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace BeatServerBrowser.Core.Models
 {
     public class LocalBeatmapInfo : BindableBase, IEquatable<LocalBeatmapInfo>
     {
-        [JsonIgnore]
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
         
         /// <summary>説明 を取得、設定</summary>
         private string songTitle_;
         /// <summary>説明 を取得、設定</summary>
-        [JsonProperty("_songName")]
         public string SongTitle
         {
             get => this.songTitle_;
@@ -31,26 +29,24 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.songTitle_, value);
         }
 
-        /// <summary>曲のサブタイトル を取得、設定</summary>
-        private string songSubTitle_;
-        /// <summary>曲のサブタイトル を取得、設定</summary>
-        [JsonProperty("_songSubName")]
-        public string SongSubTitle
-        {
-            get => this.songSubTitle_;
-
-            set => this.SetProperty(ref this.songSubTitle_, value);
-        }
-
         /// <summary>マッパー を取得、設定</summary>
         private string levelAuthorName_;
         /// <summary>マッパー を取得、設定</summary>
-        [JsonProperty("_levelAuthorName")]
         public string LevelAuthorName
         {
             get => this.levelAuthorName_;
 
             set => this.SetProperty(ref this.levelAuthorName_, value);
+        }
+
+        /// <summary>カバー画像ソース を取得、設定</summary>
+        private string coverSource_;
+        /// <summary>カバー画像ソース を取得、設定</summary>
+        public string CoverFileName
+        {
+            get => this.coverSource_;
+
+            set => this.SetProperty(ref this.coverSource_, value);
         }
 
         /// <summary>カバー画像URI を取得、設定</summary>
@@ -63,10 +59,10 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.cover_, value);
         }
 
-        [JsonIgnore]
+        
         public DelegateCommand CreateCommand { get; set; }
 
-        [JsonIgnore]
+        
         public DirectoryInfo Directory { get; set; }
 
         public override bool Equals(object obj) => this.Equals(obj as LocalBeatmapInfo);
@@ -77,7 +73,7 @@ namespace BeatServerBrowser.Core.Models
             if (ReferenceEquals(this, b)) return true;
             if (this.GetType() != b.GetType()) return false;
 
-            return (this.SongTitle == b.SongTitle) && (this.SongSubTitle == b.SongSubTitle) && (this.LevelAuthorName == b.LevelAuthorName);
+            return (this.SongTitle == b.SongTitle) && (this.LevelAuthorName == b.LevelAuthorName);
         }
 
         private void Create()
@@ -91,16 +87,26 @@ namespace BeatServerBrowser.Core.Models
                 this.Logger.Info($"ファイルを読み込みます。[{file.Name}][{file.FullName}]");
 
                 var text = File.ReadAllText(file.FullName);
-                var beatmap = JsonConvert.DeserializeObject<LocalBeatmapInfo>(text);
-                Debug.WriteLine($"{beatmap.SongTitle}を読み込みました。");
-                this.Logger.Info($"{beatmap.SongTitle}を読み込みました。");
-                this.SongTitle = beatmap.SongTitle;
-                this.SongSubTitle = beatmap.SongSubTitle;
+                var beatmap = JsonConvert.DeserializeObject<LocalSongJsonEntity>(text);
+                Debug.WriteLine($"{beatmap.SongName}を読み込みました。");
+                this.Logger.Info($"{beatmap.SongName}を読み込みました。");
+                this.SongTitle = $"{beatmap.SongName} - {beatmap.SongSubName}";
+                this.CoverFileName = beatmap.CoverImageFilename;
                 this.LevelAuthorName = beatmap.LevelAuthorName;
             }
-            var uristring = this.Directory.EnumerateFiles("*.jpg", SearchOption.TopDirectoryOnly).FirstOrDefault()?.FullName;
-            if (uristring != null) {
+            var uristring = this.Directory.EnumerateFileSystemInfos($@"{this.CoverFileName}", SearchOption.TopDirectoryOnly).FirstOrDefault()?.FullName;
+            if (uristring != null && !string.IsNullOrWhiteSpace(uristring)) {
+                this.CoverFileName = uristring;
                 this.CoverUri = new Uri(uristring);
+            }
+            else {
+                var local = new DirectoryInfo(@".\");
+                try {
+                    this.CoverUri = new Uri($@"{local.FullName}\Images\default.jpg");
+                }
+                catch (Exception e) {
+                    this.Logger.Error(e);
+                }
             }
         }
 
@@ -108,6 +114,7 @@ namespace BeatServerBrowser.Core.Models
         {
             this.Directory = directory;
             this.CreateCommand = new DelegateCommand(this.Create);
+            this.Create();
         }
 
         public LocalBeatmapInfo()

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace BeatServerBrowser.Core.ScoreSaber.Types
+namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
 {
     public sealed class Scores
     {
@@ -14,7 +14,7 @@ namespace BeatServerBrowser.Core.ScoreSaber.Types
         public ReadOnlyCollection<Scoremap> Scoremaps { get; private set; }
 
         [JsonIgnore]
-        internal ScoreSaberSharp Client { get; set; }
+        internal ScoreSaber Client { get; set; }
 
         [JsonIgnore]
         internal string PageURI { get; set; }

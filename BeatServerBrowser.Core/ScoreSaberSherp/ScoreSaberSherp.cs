@@ -1,4 +1,4 @@
-﻿using BeatServerBrowser.Core.ScoreSaber.Types;
+﻿using BeatServerBrowser.Core.ScoreSaberSherp.Types;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BeatServerBrowser.Core.ScoreSaber
+namespace BeatServerBrowser.Core.ScoreSaberSherp
 {
-    public class ScoreSaberSharp
+    public class ScoreSaber
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
@@ -84,7 +84,7 @@ namespace BeatServerBrowser.Core.ScoreSaber
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        public async Task<Scores> Rank(uint page = 0, IProgress<double> progress = null) => await FetchMapsPage("top", page, CancellationToken.None, progress).ConfigureAwait(false);
+        public async Task<Scores> Rank(uint page = 0, IProgress<double> progress = null) => await FetchMapsPage("top", page + 1, CancellationToken.None, progress).ConfigureAwait(false);
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
@@ -93,11 +93,11 @@ namespace BeatServerBrowser.Core.ScoreSaber
         #region // メンバ変数
         public static string BaseURL => "https://new.scoresaber.com";
 
-        public static readonly ScoreSaberSharp Client = new ScoreSaberSharp();
+        public static readonly ScoreSaber Client = new ScoreSaber();
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public ScoreSaberSharp()
+        public ScoreSaber()
         {
             this.HttpInstance = new Http();
         }

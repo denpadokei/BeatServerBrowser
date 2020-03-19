@@ -1,9 +1,9 @@
 ﻿using BeatServerBrowser.Core.Bases;
-using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.List.Models;
 using Prism.Commands;
 using Prism.Mvvm;
+using BeatServerBrowser.Core.Collections;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -55,7 +55,7 @@ namespace BeatServerBrowser.List.ViewModels
             if (this.loadingService_.IsLoading == true) {
                 return;
             }
-            this.loadingService_?.Load(() => this.domain_.Serch());
+            this.loadingService_?.Load(this.domain_.Serch);
         }
 
         private void Reset()
