@@ -19,6 +19,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="{Binding SongTitle}" Margin="2" Height="30"/>
                 <TextBlock Grid.Row="1" Text="{Binding UploaderName}" Margin="2" Height="30"/>

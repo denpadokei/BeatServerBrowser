@@ -55,7 +55,7 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp
 
         internal async Task<Scores> FetchMapsPage(string type, uint page, CancellationToken token, IProgress<double> progress = null)
         {
-            var p = await FetchPaged($"player/2429129807113296/scores/{type}/{page}", token, progress).ConfigureAwait(false);
+            var p = await FetchPaged($"player/2429129807113296/scores/{type}/{page + 1}", token, progress).ConfigureAwait(false);
             p.PageURI = $"player/2429129807113296/scores/{type}";
 
             return p;
@@ -84,7 +84,7 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        public async Task<Scores> Rank(uint page = 0, IProgress<double> progress = null) => await FetchMapsPage("top", page + 1, CancellationToken.None, progress).ConfigureAwait(false);
+        public async Task<Scores> Rank(uint page = 0, IProgress<double> progress = null) => await FetchMapsPage("top", page, CancellationToken.None, progress).ConfigureAwait(false);
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド

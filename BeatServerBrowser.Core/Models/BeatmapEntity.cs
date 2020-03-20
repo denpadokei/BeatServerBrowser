@@ -39,7 +39,7 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.coverUri_, value);
         }
 
-        
+
         public string SongTitle => this.Beatmap.Name;
 
         public string UploaderName => this.Beatmap.Uploader.Username;
@@ -71,13 +71,23 @@ namespace BeatServerBrowser.Core.Models
         public string CoverFilename => this.Beatmap.CoverFilename;
 
         public bool Partial => this.Beatmap.Partial;
+
+        /// <summary>インストール済みかどうか を取得、設定</summary>
+        private bool isInstalled_;
+        /// <summary>インストール済みかどうか を取得、設定</summary>
+        public bool IsInstalled
+        {
+            get => this.isInstalled_;
+
+            set => this.SetProperty(ref this.isInstalled_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
         /// <summary>ダウンロードコマンド を取得、設定</summary>
         private DelegateCommand downloadCommand_;
         /// <summary>ダウンロードコマンド を取得、設定</summary>
-        public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download, this.IsInstalled));
+        public DelegateCommand DownloadCommand => this.downloadCommand_ ?? (this.downloadCommand_ = new DelegateCommand(this.Download, this.CanInstalled)).ObservesProperty(() => this.IsInstalled);
 
         /// <summary>コピー を取得、設定</summary>
         private DelegateCommand copyCommand_;
@@ -111,6 +121,10 @@ namespace BeatServerBrowser.Core.Models
                         }
                     }
                 }
+                var newBeatmap = new LocalBeatmapInfo(directoryInfo);
+                newBeatmap.CreateCommand.Execute();
+                ConfigMaster.Current.LocalBeatmaps.Add(newBeatmap);
+                this.IsInstalled = true;
             }
             catch (Exception e) {
                 Debug.WriteLine(e);
@@ -127,15 +141,11 @@ namespace BeatServerBrowser.Core.Models
             Debug.WriteLine($"{this.Key}をクリップボードに送りました。");
         }
 
-        private bool IsInstalled()
+        private bool CanInstalled()
         {
-            var localmap = new LocalBeatmapInfo()
-            {
-                SongName = this.Metadata.SongName,
-                SongSubName = this.Metadata.SongSubName,
-                LevelAuthorName = this.Beatmap.Metadata.LevelAuthorName,
-            };
-            return !ConfigMaster.Current.LocalBeatmaps.Any(x => x.Equals(localmap));
+            this.IsInstalled = ConfigMaster.Current.LocalBeatmaps.Any(x => x.SongHash == this.Hash.ToUpper());
+
+            return !this.IsInstalled;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BeatServerBrowser.Core.Services;
+using Newtonsoft.Json;
 using NLog;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -88,11 +89,31 @@ namespace BeatServerBrowser.Core.Models
 
             set => this.SetProperty(ref this.directoryPath_, value);
         }
+
+        /// <summary>曲のハッシュ値 を取得、設定</summary>
+        private string songHash_;
+        /// <summary>曲のハッシュ値 を取得、設定</summary>
+        public string SongHash
+        {
+            get => this.songHash_;
+
+            set => this.SetProperty(ref this.songHash_, value);
+        }
         
         public DelegateCommand CreateCommand { get; set; }
 
         
         public DirectoryInfo Directory { get; set; }
+
+        /// <summary>ハッシュ生成用のディレクトリ文字列 を取得、設定</summary>
+        private string directoryHash_;
+        /// <summary>ハッシュ生成用のディレクトリ文字列 を取得、設定</summary>
+        public string DirectoryHash
+        {
+            get => this.directoryHash_;
+
+            set => this.SetProperty(ref this.directoryHash_, value);
+        }
 
         public override bool Equals(object obj) => this.Equals(obj as LocalBeatmapInfo);
 
@@ -102,7 +123,7 @@ namespace BeatServerBrowser.Core.Models
             if (ReferenceEquals(this, b)) return true;
             if (this.GetType() != b.GetType()) return false;
 
-            return (this.SongName == b.SongName) && (this.SongSubName == b.SongSubName) && (this.LevelAuthorName == b.LevelAuthorName);
+            return (this.SongHash == b.SongHash);
         }
 
         private void Create()
@@ -138,6 +159,7 @@ namespace BeatServerBrowser.Core.Models
                 }
             }
             this.DirectoryPath = this.Directory.Name;
+            this.SongHash = SongHashDataProviderService.GenerateHash(this.Directory.FullName, this.SongHash);
         }
 
         public LocalBeatmapInfo(DirectoryInfo directory)

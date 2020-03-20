@@ -71,7 +71,7 @@ namespace BeatServerBrowser.List.Models
                     page = ListDataBase.GetPlaysPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Rank:
-                    var songs = ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, this.Filter.Count + 1);
+                    var songs = ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, this.Filter.Count);
                     if (songs == null) {
                         return;
                     }

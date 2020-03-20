@@ -94,7 +94,7 @@ namespace BeatServerBrowser.Home.ViewModels
                     service, nameof(INotifyPropertyChanged.PropertyChanged), this.OnLoadingServicePropertyChanged);
             }
             this.Config.LocalBeatmaps.CollectionChanged += this.OnCollectionChanged;
-            this.loadingService_.Load(() => this.Config.CreateLocalBeatmaps());
+            this.loadingService_.Load(this.Config.CreateLocalBeatmaps);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
