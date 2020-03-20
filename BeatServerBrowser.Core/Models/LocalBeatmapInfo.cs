@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -17,9 +18,11 @@ namespace BeatServerBrowser.Core.Models
 {
     public class LocalBeatmapInfo : BindableBase, IEquatable<LocalBeatmapInfo>
     {
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // プロパティ
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
-        
+
         /// <summary>説明 を取得、設定</summary>
         private string songTitle_;
         /// <summary>説明 を取得、設定</summary>
@@ -99,11 +102,6 @@ namespace BeatServerBrowser.Core.Models
 
             set => this.SetProperty(ref this.songHash_, value);
         }
-        
-        public DelegateCommand CreateCommand { get; set; }
-
-        
-        public DirectoryInfo Directory { get; set; }
 
         /// <summary>ハッシュ生成用のディレクトリ文字列 を取得、設定</summary>
         private string directoryHash_;
@@ -115,17 +113,19 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.directoryHash_, value);
         }
 
-        public override bool Equals(object obj) => this.Equals(obj as LocalBeatmapInfo);
+        public DirectoryInfo Directory { get; set; }
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // コマンド
+        public DelegateCommand CreateCommand { get; set; }
 
-        public bool Equals(LocalBeatmapInfo b)
-        {
-            if (b is null) return false;
-            if (ReferenceEquals(this, b)) return true;
-            if (this.GetType() != b.GetType()) return false;
-
-            return (this.SongHash == b.SongHash);
-        }
-
+        /// <summary>キーコピーコマンド を取得、設定</summary>
+        private DelegateCommand CopyCommand_;
+        /// <summary>キーコピーコマンド を取得、設定</summary>
+        public DelegateCommand CopyCommand => this.CopyCommand_ ?? (this.CopyCommand_ = new DelegateCommand(this.KeyCopy));
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // コマンド用メソッド
         private void Create()
         {
             if (this.Directory == null) {
@@ -162,6 +162,45 @@ namespace BeatServerBrowser.Core.Models
             this.SongHash = SongHashDataProviderService.GenerateHash(this.Directory.FullName, this.SongHash);
         }
 
+        private async void KeyCopy()
+        {
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            if (beatmap == null) {
+                return;
+            }
+            Clipboard.SetText($"!bsr{beatmap.Key}");
+            this.CopyKey?.Invoke();
+            this.Logger.Info($"{beatmap.Key}をクリップボードに送りました。");
+            Debug.WriteLine($"{beatmap.Key}をクリップボードに送りました。");
+        }
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // パブリックイベント
+        public Action CopyKey;
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // オーバーライドメソッド
+        public override bool Equals(object obj) => this.Equals(obj as LocalBeatmapInfo);
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // プライベートメソッド
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // パブリックメソッド
+        public bool Equals(LocalBeatmapInfo b)
+        {
+            if (b is null) return false;
+            if (ReferenceEquals(this, b)) return true;
+            if (this.GetType() != b.GetType()) return false;
+
+            return (this.SongHash.ToUpper() == b.SongHash.ToUpper());
+        }
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // メンバ変数
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // 構築・破棄
         public LocalBeatmapInfo(DirectoryInfo directory)
         {
             this.Directory = directory;
@@ -171,7 +210,8 @@ namespace BeatServerBrowser.Core.Models
 
         public LocalBeatmapInfo()
         {
-
+            this.CreateCommand = new DelegateCommand(this.Create);
         }
+        #endregion
     }
 }
