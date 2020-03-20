@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>BeatServerBrowser</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Version>0.1.0.0</Version>
+    <Authors>denpadokei</Authors>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaverSharp" Version="1.5.2" />
