@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -94,6 +95,9 @@ namespace BeatServerBrowser.Home.ViewModels
                     service, nameof(INotifyPropertyChanged.PropertyChanged), this.OnLoadingServicePropertyChanged);
             }
             this.Config.LocalBeatmaps.CollectionChanged += this.OnCollectionChanged;
+            if (string.IsNullOrWhiteSpace(ConfigMaster.Current.InstallFolder) || !File.Exists(@$"{ConfigMaster.Current.InstallFolder}\Beat Saber.exe")) {
+                this.dialogService_.Show("SettingView", new DialogParameters(), _ => { });
+            }
             this.loadingService_.Load(this.Config.CreateLocalBeatmaps);
         }
         #endregion
@@ -101,17 +105,22 @@ namespace BeatServerBrowser.Home.ViewModels
         #region // プライベートメソッド
         private void OnPropertyChangeConfigMaster(object sender, PropertyChangedEventArgs e)
         {
-            if (sender is ConfigMaster && e.PropertyName == nameof(ConfigMaster.IsDark)) {
-                var paletteHelper = new PaletteHelper();
-                var theme = paletteHelper.GetTheme();
+            if (sender is ConfigMaster) {
+                if (e.PropertyName == nameof(ConfigMaster.IsDark)) {
+                    var paletteHelper = new PaletteHelper();
+                    var theme = paletteHelper.GetTheme();
 
-                var baseTheme = ConfigMaster.Current.IsDark ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
+                    var baseTheme = ConfigMaster.Current.IsDark ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
 
-                theme.SetBaseTheme(baseTheme);
-                paletteHelper.SetTheme(theme);
+                    theme.SetBaseTheme(baseTheme);
+                    paletteHelper.SetTheme(theme);
 
-                Core.Properties.Settings.Default.IsDark = ConfigMaster.Current.IsDark;
-                Core.Properties.Settings.Default.Save();
+                    Core.Properties.Settings.Default.IsDark = ConfigMaster.Current.IsDark;
+                    Core.Properties.Settings.Default.Save();
+                }
+                else if (e.PropertyName == nameof(ConfigMaster.IsLoading)) {
+                    this.IsLoading = this.Config.IsLoading;
+                }
             }
         }
 

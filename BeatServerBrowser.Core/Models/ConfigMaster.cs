@@ -71,6 +71,16 @@ namespace BeatServerBrowser.Core.Models
 
             set => this.SetProperty(ref this.localBeatmaps_, value);
         }
+
+        /// <summary>ロード中かどうか を取得、設定</summary>
+        private bool isLoading_;
+        /// <summary>ロード中かどうか を取得、設定</summary>
+        public bool IsLoading
+        {
+            get => this.isLoading_;
+
+            set => this.SetProperty(ref this.isLoading_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -102,16 +112,30 @@ namespace BeatServerBrowser.Core.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
         public void CreateLocalBeatmaps()
-        {   
-            this.LocalBeatmaps.Clear();
-            var path = $@"{this.InstallFolder}\Beat Saber_Data\CustomLevels";
-            var info = new DirectoryInfo(path);
-            if (!Directory.Exists(info.FullName)) {
-                return;
-            }
+        {
+            try
+            {
+                this.IsLoading = true;
+                this.LocalBeatmaps.Clear();
+                var path = $@"{this.InstallFolder}\Beat Saber_Data\CustomLevels";
+                var info = new DirectoryInfo(path);
+                if (!Directory.Exists(info.FullName))
+                {
+                    return;
+                }
 
-            foreach (var folder in info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly)) {
-                this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
+                foreach (var folder in info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
+                {
+                    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
+                }
+            }
+            catch (Exception e)
+            {
+                this.Logger.Error(e);
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
         }
         #endregion
@@ -120,7 +144,7 @@ namespace BeatServerBrowser.Core.Models
         private readonly HttpOptions options_ = new HttpOptions()
         {
             ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 0, 1),
+            Version = new Version(0, 1, 0),
         };
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

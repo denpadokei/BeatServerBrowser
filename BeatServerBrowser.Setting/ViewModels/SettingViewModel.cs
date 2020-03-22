@@ -1,4 +1,5 @@
 ﻿using BeatServerBrowser.Core.Bases;
+using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Setting.Models;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
@@ -27,6 +28,11 @@ namespace BeatServerBrowser.Setting.ViewModels
         private DelegateCommand selectInstallFolderCommand_;
         /// <summary>フォルダを開くコマンド を取得、設定</summary>
         public DelegateCommand SelectInstallFolderCommand => this.selectInstallFolderCommand_ ?? (this.selectInstallFolderCommand_ = new DelegateCommand(this.SelectInstallFolder));
+
+        /// <summary>ローカルライブラリ読み込み を取得、設定</summary>
+        private DelegateCommand loadLibralyCommand_;
+        /// <summary>ローカルライブラリ読み込み を取得、設定</summary>
+        public DelegateCommand LoadLiblralyCommand => this.loadLibralyCommand_ ?? (this.loadLibralyCommand_ = new DelegateCommand(this.LoadLibraly));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -34,6 +40,14 @@ namespace BeatServerBrowser.Setting.ViewModels
         {
             this.settingDomain_.ShowSelectFolder();
             Core.Properties.Settings.Default.Save();
+        }
+
+        private void LoadLibraly()
+        {
+            if (ConfigMaster.Current.IsLoading) {
+                return;
+            }
+            this.loadingService_?.Load(ConfigMaster.Current.CreateLocalBeatmaps);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

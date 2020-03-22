@@ -1,11 +1,13 @@
 ﻿using BeatServerBrowser.Core.Bases;
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
+using BeatServerBrowser.Local.Models;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace BeatServerBrowser.Local.ViewModels
@@ -23,6 +25,16 @@ namespace BeatServerBrowser.Local.ViewModels
 
             set => this.SetProperty(ref this.localBeatmaps_, value);
         }
+
+        /// <summary>フィルター を取得、設定</summary>
+        private ListFilter filter_;
+        /// <summary>フィルター を取得、設定</summary>
+        public ListFilter Filter
+        {
+            get => this.filter_;
+
+            set => this.SetProperty(ref this.filter_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -30,9 +42,15 @@ namespace BeatServerBrowser.Local.ViewModels
         private DelegateCommand showCommand_;
         /// <summary>表示コマンド を取得、設定</summary>
         public DelegateCommand ShowCommand => this.showCommand_ ?? (this.showCommand_ = new DelegateCommand(this.Show));
+
+        
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
+        private void Filtering()
+        {
+            
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト
@@ -52,6 +70,11 @@ namespace BeatServerBrowser.Local.ViewModels
             else {
                 this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
             }
+
+        }
+
+        private void OnFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
 
         }
         #endregion

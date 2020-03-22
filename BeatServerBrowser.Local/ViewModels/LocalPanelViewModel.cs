@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using BeatServerBrowser.Local.Models;
+using System.ComponentModel;
+using System.Windows;
 
 namespace BeatServerBrowser.Local.ViewModels
 {
@@ -23,6 +25,16 @@ namespace BeatServerBrowser.Local.ViewModels
             get => this.localBeatmaps_;
 
             set => this.SetProperty(ref this.localBeatmaps_, value);
+        }
+
+        /// <summary>フィルター を取得、設定</summary>
+        private ListFilter filter_;
+        /// <summary>フィルター を取得、設定</summary>
+        public ListFilter Filter
+        {
+            get => this.filter_;
+
+            set => this.SetProperty(ref this.filter_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -61,9 +73,25 @@ namespace BeatServerBrowser.Local.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
+        public override void OnInitialize()
+        {
+            base.OnInitialize();
+            this.domain_.Filtering();
+            this.SerchCommand?.Execute();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
+        private void OnFilterpropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ListFilter) {
+                this.domain_.Filtering();
+                if (this.domain_.FilteredMaps.Any() && !this.LocalBeatmaps.Any()) {
+                    this.domain_.Serch();
+                }
+            }
+        }
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
@@ -77,7 +105,10 @@ namespace BeatServerBrowser.Local.ViewModels
         public LocalPanelViewModel()
         {
             this.domain_ = new LocalPanelDomain();
+            this.Filter = this.domain_.Filter;
             this.LocalBeatmaps = this.domain_.LocalBeatmaps;
+            WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
+                this.Filter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnFilterpropertyChanged);
         }
         #endregion
     }

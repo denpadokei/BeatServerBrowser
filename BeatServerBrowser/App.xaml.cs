@@ -48,6 +48,20 @@ namespace BeatServerBrowser
             
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            var config = new LoggingConfiguration();
+
+            var file = new FileTarget("logfile") { FileName = "log.txt", ConcurrentWrites = true };
+            var consol = new ConsoleTarget("logconsole");
+
+            config.AddRule(LogLevel.Trace, LogLevel.Fatal, file);
+            config.AddRule(LogLevel.Trace, LogLevel.Fatal, consol);
+
+            LogManager.Configuration = config;
+        }
+
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             

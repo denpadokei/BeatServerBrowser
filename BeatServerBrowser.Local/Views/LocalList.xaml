@@ -11,8 +11,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <material:Card Grid.Row="0">
-            <Button  Command="{Binding ShowCommand}" Content="表示非表示切り替え" Width="200" Height="45" Margin="20"/>
+        <material:Card Grid.Row="0" Padding="10">
+            <DockPanel>
+                <TextBox material:HintAssist.Hint="検索" Width="300" Text="{Binding Filter.FilterText, UpdateSourceTrigger=PropertyChanged}" />
+            </DockPanel>
         </material:Card>
         <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding LocalBeatmaps}" IsReadOnly="True" AutoGenerateColumns="False" RowHeight="40">
             <DataGrid.Columns>

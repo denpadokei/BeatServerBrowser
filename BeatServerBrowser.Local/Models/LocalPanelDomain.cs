@@ -9,10 +9,20 @@ namespace BeatServerBrowser.Local.Models
     {
         public override void Serch()
         {
-            foreach (var beatmap in LocalSerch.LocalSerching(this.Count)) {
-                this.LocalBeatmaps.Add(beatmap);
+            try {
+                this.IsLoading = true;
+                foreach (var beatmap in LocalSerch.LocalSerching(this.Count, this.FilteredMaps)) {
+                    this.LocalBeatmaps.Add(beatmap);
+                }
+                this.Count++;
             }
-            this.Count++;
+            catch (Exception e) {
+                this.Logger.Error(e);
+            }
+            finally {
+                this.IsLoading = false;
+            }
+            
         }
     }
 }

@@ -16,17 +16,17 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <DockPanel Grid.Row="0" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="Light"/>
                 <ToggleButton IsChecked="{Binding Config.IsDark}" Width="70"/>
                 <TextBlock Text="Dark"/>
             </DockPanel>
-            <DockPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <DockPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
                 <TextBlock Text="インストールフォルダ" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Config.InstallFolder}" Width="500"/>
-                <Button Content="..." Command="{Binding SelectInstallFolderCommand}" Width="40"/>
+                <Button Content="..." Command="{Binding SelectInstallFolderCommand}" Width="80"/>
             </DockPanel>
-            <Button Grid.Row="2" Content="ローカルライブラリ読み込み" Cursor="Hand" />
+            <Button Grid.Row="2" Content="ローカルライブラリ読み込み" Command="{Binding LoadLiblralyCommand}" Cursor="Hand" Width="300" Margin="10"/>
         </Grid>
     </material:Card>
 </UserControl>
