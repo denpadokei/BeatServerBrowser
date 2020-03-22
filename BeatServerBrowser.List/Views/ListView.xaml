@@ -26,7 +26,7 @@
                 </DockPanel>
             </Grid>
         </material:Card>
-        <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="False" RowHeight="40">
+        <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="False" RowHeight="80">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
@@ -37,6 +37,16 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="曲名" Binding="{Binding SongTitle}"/>
                 <DataGridTextColumn Header="譜面作者" Binding="{Binding UploaderName}"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <Button Content="ワンクリックダウンロード" Command="{Binding DownloadCommand}" Margin="0,0,5,0" Cursor="Hand"/>
+                                <Button Content="!bsrコピー" Command="{Binding CopyCommand}" Margin="5,0,0,0" Cursor="Hand"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </control:CustomDataGrid>
     </Grid>

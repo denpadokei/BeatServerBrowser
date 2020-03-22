@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 namespace BeatServerBrowser.Local.ViewModels
 {
@@ -39,17 +40,21 @@ namespace BeatServerBrowser.Local.ViewModels
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
         /// <summary>表示コマンド を取得、設定</summary>
-        private DelegateCommand showCommand_;
+        private DelegateCommand serchCommand_;
         /// <summary>表示コマンド を取得、設定</summary>
-        public DelegateCommand ShowCommand => this.showCommand_ ?? (this.showCommand_ = new DelegateCommand(this.Show));
-
-        
+        public DelegateCommand SerchCommand => this.serchCommand_ ?? (this.serchCommand_ = new DelegateCommand(this.Serch));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
+        private void Serch()
+        {
+            this.loadingService_?.Load(this.domain_.Serch);
+        }
+
         private void Filtering()
         {
-            
+            this.domain_.Filtering();
+            this.SerchCommand?.Execute();
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -57,25 +62,21 @@ namespace BeatServerBrowser.Local.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
+        public override void OnInitialize()
+        {
+            base.OnInitialize();
+            this.Filtering();
+            this.SerchCommand?.Execute();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        private void Show()
-        {
-            if (!this.LocalBeatmaps.Any()) {
-                foreach (var beatmap in this.Config.LocalBeatmaps) {
-                    this.LocalBeatmaps.Add(beatmap);
-                }
-            }
-            else {
-                this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
-            }
-
-        }
 
         private void OnFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-
+            if (sender is ListFilter) {
+                this.Filtering();
+            }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -83,12 +84,18 @@ namespace BeatServerBrowser.Local.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
+        private LocalListDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
         public LocalListViewModel()
         {
-            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
+            this.domain_ = new LocalListDomain();
+            this.LocalBeatmaps = this.domain_.LocalBeatmaps;
+            this.Filter = this.domain_.Filter;
+            WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
+                this.Filter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnFilterPropertyChanged);
+
         }
         #endregion
     }

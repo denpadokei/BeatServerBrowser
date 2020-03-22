@@ -82,7 +82,7 @@ namespace BeatServerBrowser.Local.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        private void OnFilterpropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (sender is ListFilter) {
                 this.domain_.Filtering();
@@ -108,7 +108,7 @@ namespace BeatServerBrowser.Local.ViewModels
             this.Filter = this.domain_.Filter;
             this.LocalBeatmaps = this.domain_.LocalBeatmaps;
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
-                this.Filter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnFilterpropertyChanged);
+                this.Filter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnFilterPropertyChanged);
         }
         #endregion
     }
