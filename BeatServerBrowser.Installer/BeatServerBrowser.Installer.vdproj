@@ -85,6 +85,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -101,6 +117,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -149,6 +181,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_971A74E1302944CFB7818E2D6F5BFA8C"
+                    {
+                    "Name" = "8:BeatSaverBrowser"
+                    "AlwaysCreate" = "11:TRUE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_53496B7AE5194E9BB55CE6597233EE96"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_E726DE73A1E04206BF8D2A36B0B2E311"
@@ -178,15 +221,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BeatServerBrowser"
-        "ProductCode" = "8:{25F46504-41CD-43C4-B7E1-E06D529294F0}"
-        "PackageCode" = "8:{2BCEA488-2E71-4E77-B22D-7C97CF699803}"
+        "ProductCode" = "8:{97FF6D80-F897-4F9D-AEA4-1271520960CF}"
+        "PackageCode" = "8:{C49767C6-7BA5-412A-8E2C-4B6633743E46}"
         "UpgradeCode" = "8:{DCC2E04E-F2C5-4AE3-9037-2E6821DD3328}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.1.0"
+        "ProductVersion" = "8:0.1.1"
         "Manufacturer" = "8:BeatSaverBrowser"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -299,6 +342,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5C5E84886CC3423380D52AD8E68ED8F5"
+            {
+            "Name" = "8:BeatServerBrowser"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F6017C82E8324D968E4664D371E85269"
+            "Folder" = "8:_971A74E1302944CFB7818E2D6F5BFA8C"
+            "WorkingFolder" = "8:_47664DB4D50644BF870632F254879A4B"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B3ECD41C32C340B38279007E8C3B4842"
             {
             "Name" = "8:BeatSaverBrowser"
@@ -714,7 +771,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_25C6CC59EDA54024AFBBFF644A420B96"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.Serch\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.Serch.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.Serch\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.Serch.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -742,7 +799,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_55F0CD5A1AFF44709416CC3C8EDA656B"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.Style\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.Style.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.Style\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.Style.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -770,7 +827,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A50EA373B30A49988DBF40A1478C46FE"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.Home\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.Home.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.Home\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.Home.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -798,7 +855,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AF0BE3629257476085603E36073F7381"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.Static\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.Static.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.Static\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.Static.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -826,7 +883,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B2EE1C021DC74D578ED3E77585275D26"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.Setting\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.Setting.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.Setting\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.Setting.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -854,7 +911,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B613EBB78E654D9DA6A76BC0FA8BDF7A"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.Local\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.Local.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.Local\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.Local.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -882,7 +939,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CC23491525AB431996E0A222DE093B09"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.List\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.List.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.List\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.List.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -910,7 +967,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DF7DC51F04B14E37BC0B3EFEB8DC057C"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser.Core\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.Core.dll"
+            "SourcePath" = "8:..\\BeatServerBrowser.Core\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.Core.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
@@ -938,7 +995,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F6017C82E8324D968E4664D371E85269"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.exe"
+            "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"
