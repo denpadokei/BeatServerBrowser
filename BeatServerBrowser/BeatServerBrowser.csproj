@@ -8,7 +8,14 @@
     <FileVersion>0.1.0.0</FileVersion>
     <Version>0.1.0.0</Version>
     <Authors>denpadokei</Authors>
+    <StartupObject></StartupObject>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+    <Page Remove="Models\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaverSharp" Version="1.5.2" />
     <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
@@ -17,9 +24,6 @@
     <PackageReference Include="NLog.Config" Version="4.6.8" />
     <PackageReference Include="Prism.Unity" Version="7.2.0.1367" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeatServerBrowser.Home\BeatServerBrowser.Home.csproj" />

@@ -3,7 +3,6 @@ using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.List.DataBases;
 using Prism.Mvvm;
-using BeatServerBrowser.Core.Collections;
 using System;
 using System.Collections.Generic;
 using System.Text;
