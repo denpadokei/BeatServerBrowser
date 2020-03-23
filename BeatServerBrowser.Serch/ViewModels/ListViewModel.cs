@@ -82,7 +82,7 @@ namespace BeatServerBrowser.Serch.ViewModels
         public ListViewModel()
         {
             this.serchDomain_ = new SerchDomain();
-            this.Beatmaps = this.serchDomain_.Beatmaps;
+            this.Beatmaps = new MTObservableCollection<BeatmapEntity>(this.serchDomain_.Beatmaps);
             this.Filter = this.serchDomain_.Filter;
         }
         #endregion

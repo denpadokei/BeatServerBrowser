@@ -26,7 +26,7 @@
                 </DockPanel>
             </Grid>
         </material:Card>
-        <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="False" RowHeight="80">
+        <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding Beatmaps.Items}" AutoGenerateColumns="False" RowHeight="80">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>

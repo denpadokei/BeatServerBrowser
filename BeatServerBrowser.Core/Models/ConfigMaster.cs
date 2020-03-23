@@ -3,6 +3,7 @@ using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.ScoreSaberSherp;
 using NLog;
 using Prism.Mvvm;
+using StatefulModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -63,9 +64,9 @@ namespace BeatServerBrowser.Core.Models
         }
 
         /// <summary>ローカルライブラリリスト を取得、設定</summary>
-        private MTObservableCollection<LocalBeatmapInfo> localBeatmaps_;
+        private ObservableSynchronizedCollection<LocalBeatmapInfo> localBeatmaps_;
         /// <summary>ローカルライブラリリスト を取得、設定</summary>
-        public MTObservableCollection<LocalBeatmapInfo> LocalBeatmaps
+        public ObservableSynchronizedCollection<LocalBeatmapInfo> LocalBeatmaps
         {
             get => this.localBeatmaps_;
 
@@ -124,10 +125,14 @@ namespace BeatServerBrowser.Core.Models
                     return;
                 }
 
-                foreach (var folder in info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
-                {
+                info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).AsParallel().ForAll(folder => {
                     this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
-                }
+                });
+
+                //foreach (var folder in info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
+                //{
+                //    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
+                //}
             }
             catch (Exception e)
             {
@@ -156,7 +161,7 @@ namespace BeatServerBrowser.Core.Models
             this.InstallFolder = Properties.Settings.Default.InstallFolder;
             this.CurrentBeatSaver = new BeatSaver(this.options_);
             this.CurrentScoreSaber = new ScoreSaber();
-            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
+            this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
         }
         #endregion
     }

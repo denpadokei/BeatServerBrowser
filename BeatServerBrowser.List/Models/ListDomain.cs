@@ -6,6 +6,7 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using StatefulModel;
 
 namespace BeatServerBrowser.List.Models
 {
@@ -14,9 +15,9 @@ namespace BeatServerBrowser.List.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
         /// <summary>譜面コレクション を取得、設定</summary>
-        private MTObservableCollection<BeatmapEntity> beatmaps_;
+        private ObservableSynchronizedCollection<BeatmapEntity> beatmaps_;
         /// <summary>譜面コレクション を取得、設定</summary>
-        public MTObservableCollection<BeatmapEntity> Beatmaps
+        public ObservableSynchronizedCollection<BeatmapEntity> Beatmaps
         {
             get => this.beatmaps_;
 
@@ -109,7 +110,7 @@ namespace BeatServerBrowser.List.Models
         #region // 構築・破棄
         public ListDomain()
         {
-            this.Beatmaps = new MTObservableCollection<BeatmapEntity>();
+            this.Beatmaps = new ObservableSynchronizedCollection<BeatmapEntity>();
             this.Filter = new ListFilter();
         }
         #endregion

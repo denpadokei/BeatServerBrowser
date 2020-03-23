@@ -2,6 +2,7 @@
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using Prism.Commands;
+using StatefulModel;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,7 @@ namespace BeatServerBrowser.Local.ViewModels
         #region // コマンド用メソッド
         private void Show()
         {
-            if (!this.LocalBeatmaps.Any()) {
+            if (!this.LocalBeatmaps.Items.Any()) {
                 this.loadingService_?.Load(this.domain_.Serch);
             }
             else {
@@ -86,7 +87,7 @@ namespace BeatServerBrowser.Local.ViewModels
         {
             if (sender is ListFilter) {
                 this.domain_.Filtering();
-                if (this.domain_.FilteredMaps.Any() && !this.LocalBeatmaps.Any()) {
+                if (this.domain_.FilteredMaps.Any() && !this.LocalBeatmaps.Items.Any()) {
                     this.domain_.Serch();
                 }
             }
@@ -106,7 +107,7 @@ namespace BeatServerBrowser.Local.ViewModels
         {
             this.domain_ = new LocalPanelDomain();
             this.Filter = this.domain_.Filter;
-            this.LocalBeatmaps = this.domain_.LocalBeatmaps;
+            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(this.domain_.LocalBeatmaps);
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 this.Filter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnFilterPropertyChanged);
         }

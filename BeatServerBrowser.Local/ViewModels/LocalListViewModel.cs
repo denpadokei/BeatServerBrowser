@@ -2,6 +2,7 @@
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Local.Models;
+using StatefulModel;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -91,7 +92,7 @@ namespace BeatServerBrowser.Local.ViewModels
         public LocalListViewModel()
         {
             this.domain_ = new LocalListDomain();
-            this.LocalBeatmaps = this.domain_.LocalBeatmaps;
+            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(this.domain_.LocalBeatmaps);
             this.Filter = this.domain_.Filter;
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 this.Filter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnFilterPropertyChanged);

@@ -1,6 +1,7 @@
 ﻿using BeatServerBrowser.Core.Models;
 using Prism.Mvvm;
 using BeatServerBrowser.Core.Collections;
+using StatefulModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,9 +17,9 @@ namespace BeatServerBrowser.Local.Models
         protected virtual Logger Logger => LogManager.GetCurrentClassLogger();
 
         /// <summary>ローカルライブラリコレクション を取得、設定</summary>
-        private MTObservableCollection<LocalBeatmapInfo> localBeatmaps_;
+        private ObservableSynchronizedCollection<LocalBeatmapInfo> localBeatmaps_;
         /// <summary>ローカルライブラリコレクション を取得、設定</summary>
-        public MTObservableCollection<LocalBeatmapInfo> LocalBeatmaps
+        public ObservableSynchronizedCollection<LocalBeatmapInfo> LocalBeatmaps
         {
             get => this.localBeatmaps_;
 
@@ -110,7 +111,7 @@ namespace BeatServerBrowser.Local.Models
         #region // 構築・破棄
         public LocalDomainBase()
         {
-            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>();
+            this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
             this.FilteredMaps = new List<LocalBeatmapInfo>();
             this.Filter = new ListFilter();
             this.Count = 0;

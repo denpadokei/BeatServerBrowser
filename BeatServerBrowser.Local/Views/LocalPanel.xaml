@@ -31,7 +31,7 @@
         </material:Card>
         <control:SerchScrollViewer Grid.Row="1" UnderCommand="{Binding SerchCommand}">
             <DockPanel>
-                <ItemsControl ItemsSource="{Binding LocalBeatmaps}">
+                <ItemsControl ItemsSource="{Binding LocalBeatmaps.Items}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel/>

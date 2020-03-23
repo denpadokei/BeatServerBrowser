@@ -23,7 +23,7 @@
                 <TextBox material:HintAssist.Hint="検索" Width="300" Text="{Binding Filter.FilterText, UpdateSourceTrigger=PropertyChanged}" />
             </DockPanel>
         </material:Card>
-        <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding LocalBeatmaps}" IsReadOnly="True" AutoGenerateColumns="False" RowHeight="80">
+        <control:CustomDataGrid Grid.Row="1" ItemsSource="{Binding LocalBeatmaps.Items}" IsReadOnly="True" AutoGenerateColumns="False" RowHeight="80">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="カバー画像" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using StatefulModel;
 
 namespace BeatServerBrowser.Serch.Models
 {
@@ -15,9 +16,9 @@ namespace BeatServerBrowser.Serch.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
         /// <summary>譜面コレクション を取得、設定</summary>
-        private MTObservableCollection<BeatmapEntity> beatmaps_;
+        private ObservableSynchronizedCollection<BeatmapEntity> beatmaps_;
         /// <summary>譜面コレクション を取得、設定</summary>
-        public MTObservableCollection<BeatmapEntity> Beatmaps
+        public ObservableSynchronizedCollection<BeatmapEntity> Beatmaps
         {
             get => this.beatmaps_;
 
@@ -80,7 +81,7 @@ namespace BeatServerBrowser.Serch.Models
         public SerchDomain()
         {
             this.Filter = new SerchFilter();
-            this.Beatmaps = new MTObservableCollection<BeatmapEntity>();
+            this.Beatmaps = new ObservableSynchronizedCollection<BeatmapEntity>();
         }
         #endregion
     }

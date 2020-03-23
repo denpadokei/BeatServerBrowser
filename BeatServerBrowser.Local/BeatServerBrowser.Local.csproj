@@ -11,6 +11,7 @@
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="Prism.Unity" Version="7.2.0.1367" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
+    <PackageReference Include="StatefulModel" Version="0.6.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeatServerBrowser.Core\BeatServerBrowser.Core.csproj" />

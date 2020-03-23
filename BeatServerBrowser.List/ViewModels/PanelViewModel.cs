@@ -85,7 +85,7 @@ namespace BeatServerBrowser.List.ViewModels
         public PanelViewModel()
         {
             this.domain_ = new ListDomain();
-            this.Beatmaps = this.domain_.Beatmaps;
+            this.Beatmaps = new MTObservableCollection<BeatmapEntity>(this.domain_.Beatmaps);
             this.Filter = this.domain_.Filter;
         }
         #endregion

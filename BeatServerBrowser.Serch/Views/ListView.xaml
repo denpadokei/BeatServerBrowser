@@ -16,7 +16,7 @@
                 <Button Content="リセット" Width="75" Height="25" Margin="10" Command="{Binding ResetCommand}"/>
             </DockPanel>
         </material:Card>
-        <DataGrid Grid.Row="1" RowHeight="80" ItemsSource="{Binding Beatmaps}" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid Grid.Row="1" RowHeight="80" ItemsSource="{Binding Beatmaps.Items}" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
