@@ -1,6 +1,8 @@
 ﻿<UserControl x:Class="BeatServerBrowser.Serch.Views.ListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls;assembly=BeatServerBrowser.Style"
+             xmlns:dp="clr-namespace:BeatServerBrowser.Core.DependencyPropaties;assembly=BeatServerBrowser.Core"
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
@@ -16,12 +18,12 @@
                 <Button Content="リセット" Width="75" Height="25" Margin="10" Command="{Binding ResetCommand}"/>
             </DockPanel>
         </material:Card>
-        <DataGrid Grid.Row="1" RowHeight="80" ItemsSource="{Binding Beatmaps.Items}" AutoGenerateColumns="False" IsReadOnly="True">
+        <control:CustomDataGrid Grid.Row="1" RowHeight="80" ItemsSource="{Binding Beatmaps.Items}" AutoGenerateColumns="False" IsReadOnly="True" UnderCommand="{Binding SerchCommand}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Cover}"/>
+                            <Image dp:LazyImageBehavior.LazySource="{Binding CoverUri}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -38,6 +40,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-        </DataGrid>  
+        </control:CustomDataGrid>  
     </Grid>
 </UserControl>

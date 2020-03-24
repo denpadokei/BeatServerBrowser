@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_3A4AFF034BA744EB82C48B31D6AC8AA5"
+        "MsmKey" = "8:_33B4537AAEBC410F9209FC8782773B8A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -721,9 +721,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_3A4AFF034BA744EB82C48B31D6AC8AA5"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_33B4537AAEBC410F9209FC8782773B8A"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Debug\\netcoreapp3.0\\BeatServerBrowser.exe"
+            "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"

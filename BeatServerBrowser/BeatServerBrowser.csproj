@@ -30,6 +30,7 @@
     <ProjectReference Include="..\BeatServerBrowser.Home\BeatServerBrowser.Home.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.List\BeatServerBrowser.List.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Local\BeatServerBrowser.Local.csproj" />
+    <ProjectReference Include="..\BeatServerBrowser.PlayList\BeatServerBrowser.PlayList.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Serch\BeatServerBrowser.Serch.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Setting\BeatServerBrowser.Setting.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Style\BeatServerBrowser.Style.csproj" />
