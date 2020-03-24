@@ -48,6 +48,11 @@ namespace BeatServerBrowser.Home.ViewModels
         private DelegateCommand showSettingWindowCommand_;
         /// <summary>設定コマンド を取得、設定</summary>
         public DelegateCommand ShowSettingWindowCommand => this.showSettingWindowCommand_ ?? (this.showSettingWindowCommand_ = new DelegateCommand(this.ShowSettingWindow));
+
+        /// <summary>プレイリストコマンド を取得、設定</summary>
+        private DelegateCommand navigatePlaylistCommand_;
+        /// <summary>プレイリストコマンド を取得、設定</summary>
+        public DelegateCommand NavigatePlaylistCommand => this.navigatePlaylistCommand_ ?? (this.navigatePlaylistCommand_ = new DelegateCommand(this.NavigatePlaylist));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -64,6 +69,11 @@ namespace BeatServerBrowser.Home.ViewModels
         private void NavigateLocal()
         {
             this.regionManager_?.RequestNavigate("MainRegion", "LocalMain");
+        }
+
+        private void NavigatePlaylist()
+        {
+            this.regionManager_?.RequestNavigate("MainRegion", "PlaylistMain");
         }
 
         private void ShowSettingWindow()

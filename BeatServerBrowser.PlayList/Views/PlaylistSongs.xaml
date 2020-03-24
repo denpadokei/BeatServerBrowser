@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="BeatServerBrowser.PlayList.Views.PlaylistSongs"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls;assembly=BeatServerBrowser.Style"
+             xmlns:dp="clr-namespace:BeatServerBrowser.Core.DependencyPropaties;assembly=BeatServerBrowser.Core"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <control:CustomDataGrid Grid.Column="0" ItemsSource="{Binding LocalBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80">
+            <control:CustomDataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image dp:LazyImageBehavior.LazySource="{Binding CoverUri}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="曲名" />
+                <DataGridTextColumn Header="譜面作者"/>
+            </control:CustomDataGrid.Columns>
+        </control:CustomDataGrid>
+        <StackPanel Grid.Column="1">
+            <Button Content="＞＞" Margin="10"/>
+            <Button Content="＜＜" Margin="10"/>
+        </StackPanel>
+        <control:CustomDataGrid Grid.Column="2" ItemsSource="{Binding PlaylistBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80">
+            <control:CustomDataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image dp:LazyImageBehavior.LazySource="{Binding CoverUri}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="曲名" />
+                <DataGridTextColumn Header="譜面作者"/>
+            </control:CustomDataGrid.Columns>
+        </control:CustomDataGrid>
+    </Grid>
+</UserControl>

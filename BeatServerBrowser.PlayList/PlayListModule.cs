@@ -9,12 +9,13 @@ namespace BeatServerBrowser.PlayList
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-
+            var rm = containerProvider.Resolve<IRegionManager>();
+            rm.RegisterViewWithRegion("PlaylistRegion", typeof(CreatePlaylist));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            containerRegistry.RegisterForNavigation(typeof(PlaylistMain), "PlaylistMain");
         }
     }
 }

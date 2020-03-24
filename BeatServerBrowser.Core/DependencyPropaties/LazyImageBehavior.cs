@@ -27,6 +27,22 @@ namespace BeatServerBrowser.Core.DependencyPropaties
         public static readonly DependencyProperty LazySourceProperty =
             DependencyProperty.RegisterAttached("LazySource", typeof(Uri), typeof(LazyImageBehavior), new PropertyMetadata(null, LazySource_Changed));
 
+        [AttachedPropertyBrowsableForType(typeof(Image))]
+        public static string GetBase64Source(Image element)
+        {
+            return (string)element.GetValue(Base64SourceProperty);
+        }
+
+        [AttachedPropertyBrowsableForType(typeof(Image))]
+        public static void SetBase64Source(Image element, string value)
+        {
+            element.SetValue(Base64SourceProperty, value);
+        }
+
+        public static readonly DependencyProperty Base64SourceProperty =
+            DependencyProperty.RegisterAttached("Base64Source", typeof(string), typeof(LazyImageBehavior), new PropertyMetadata("", Base64Source_Changed));
+
+
         #endregion
 
         #region LazyImageSource 添付プロパティ
@@ -59,6 +75,19 @@ namespace BeatServerBrowser.Core.DependencyPropaties
                 element.Source = image;
             }
         }
+
+        private static async void Base64Source_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var element = sender as Image;
+            if (element == null) {
+                return;
+            }
+            var image = await LazyBitmapImage.ConvertImage(e.NewValue as string);
+            if (image != null) {
+                element.Source = image;
+            }
+        }
+
 
         private static async void LazyImageSource_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {

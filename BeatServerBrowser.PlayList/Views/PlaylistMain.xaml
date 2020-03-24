@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="BeatServerBrowser.PlayList.Views.PlaylistMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:drgablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <drgablz:TabablzControl>
+            <TabItem Header="プレイリスト">
+                <ContentControl prism:RegionManager.RegionName="PlaylistRegion" />
+            </TabItem>
+        </drgablz:TabablzControl>
+    </Grid>
+</UserControl>

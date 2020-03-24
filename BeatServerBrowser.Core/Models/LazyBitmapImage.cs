@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Cache;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace BeatServerBrowser.Core.Models
@@ -42,6 +44,27 @@ namespace BeatServerBrowser.Core.Models
                 finally {
                     wc.Dispose();
                 }
+                return null;
+            });
+        }
+
+        public static Task<BitmapImage> ConvertImage(string base64string)
+        {
+            return Task.Run(() => {
+                try {
+                    var coverbyte = Convert.FromBase64String(base64string);
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.StreamSource = new MemoryStream(coverbyte);
+                    image.EndInit();
+                    image.Freeze();
+                    return image;
+                }
+                catch (Exception e) {
+                    var logger = LogManager.GetCurrentClassLogger();
+                    logger.Error(e);
+                }
+
                 return null;
             });
         }

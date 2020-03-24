@@ -1,24 +1,27 @@
-﻿using System;
+﻿using BeatServerBrowser.Core.Bases;
+using BeatServerBrowser.Core.Collections;
+using BeatServerBrowser.Core.Models;
+using BeatServerBrowser.PlayList.Models;
+using Prism.Commands;
+using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
+using System.Linq;
 
-namespace BeatServerBrowser.Style.Controls
+namespace BeatServerBrowser.PlayList.ViewModels
 {
-    public class CustomDataGrid : DataGrid
+    public class CreatePlaylistViewModel : ViewModelBase
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>スクロールが0になったときに実行 を取得、設定</summary>
-        public ICommand UnderCommand
+        /// <summary>プレイリストコレクション を取得、設定</summary>
+        private MTObservableCollection<PlaylistPreviewEntity> playlists_;
+        /// <summary>プレイリストコレクション を取得、設定</summary>
+        public MTObservableCollection<PlaylistPreviewEntity> Playlists
         {
-            get => (ICommand)this.GetValue(UnderCommandProperty);
+            get => this.playlists_;
 
-            set => this.SetValue(UnderCommandProperty, value);
+            set => this.SetProperty(ref this.playlists_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -28,56 +31,30 @@ namespace BeatServerBrowser.Style.Controls
         #region // コマンド用メソッド
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // リクエスト
-        #endregion
-        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        public override void OnApplyTemplate()
+        public override void OnInitialize()
         {
-            base.OnApplyTemplate();
-            Decorator child = VisualTreeHelper.GetChild(this, 0) as Decorator;
-            ScrollViewer childSV = child.Child as ScrollViewer;
-            childSV.ScrollChanged += new ScrollChangedEventHandler(this.OnScrollChanged);
-        }
-
-        protected override void OnSorting(DataGridSortingEventArgs eventArgs)
-        {
-            if (eventArgs.Column.SortDirection == ListSortDirection.Descending) {
-                eventArgs.Handled = true;
-                eventArgs.Column.SortDirection = null;
-                this.Items.SortDescriptions.Clear();
-                return;
-            }
-            base.OnSorting(eventArgs);
-        }
-
-
-        #endregion
-        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // プライベートメソッド
-        private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if (sender is ScrollViewer view) {
-                if (view.ScrollableHeight - view.VerticalOffset == 0) {
-                    this.UnderCommand?.Execute(new object());
-                }
-            }
+            base.OnInitialize();
+            this.loadingService_?.Load(this.domain_.LoadPlaylists);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
+        #region // プライベートメソッド
+        #endregion
+        //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        public static DependencyProperty UnderCommandProperty = DependencyProperty.Register("UnderCommand", typeof(ICommand), typeof(CustomDataGrid));
+        private PlaylistDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        static CustomDataGrid()
+        public CreatePlaylistViewModel()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomDataGrid), new FrameworkPropertyMetadata(typeof(CustomDataGrid)));
+            this.domain_ = new PlaylistDomain();
+            this.Playlists = new MTObservableCollection<PlaylistPreviewEntity>(this.domain_.Playlists);
         }
         #endregion
-
     }
 }
