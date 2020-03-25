@@ -37,7 +37,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>説明 を取得、設定</summary>
         private string dependencyText_;
         /// <summary>説明 を取得、設定</summary>
-        public string DependencyText
+        public string DesctiptionText
         {
             get => this.dependencyText_;
 
@@ -55,9 +55,9 @@ namespace BeatServerBrowser.Core.Models
         }
 
         /// <summary>JSONオブジェクト を取得、設定</summary>
-        private PlayListJsonEntity entity_;
+        private PlaylistJsonEntity entity_;
         /// <summary>JSONオブジェクト を取得、設定</summary>
-        public PlayListJsonEntity Entity
+        public PlaylistJsonEntity Entity
         {
             get => this.entity_;
 
@@ -84,6 +84,16 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.coverPath_, value);
         }
 
+        /// <summary>JSONファイル情報 を取得、設定</summary>
+        private FileInfo json_;
+        /// <summary>JSONファイル情報 を取得、設定</summary>
+        public FileInfo Json
+        {
+            get => this.json_;
+
+            set => this.SetProperty(ref this.json_, value);
+        }
+
         public bool IsLock => this.Entity.FileLock == null;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -102,7 +112,7 @@ namespace BeatServerBrowser.Core.Models
         #region // コマンド用メソッド
         private void Edit()
         {
-            this.EditEvent?.Invoke();
+            this.EditEvent?.Invoke(this);
         }
 
         private void Delete()
@@ -118,7 +128,7 @@ namespace BeatServerBrowser.Core.Models
             if (args.PropertyName == nameof(this.Entity)) {
                 this.PlaylistName = this.Entity.PlayListTytle;
                 this.Author = this.Entity.PlayListAuthor;
-                this.DependencyText = this.Entity.PlayListDescription;
+                this.DesctiptionText = this.Entity.PlayListDescription;
                 try {
                     var stringArray = this.Entity.Image.Split(',');
                     this.CoverImage = stringArray[1];
@@ -146,7 +156,7 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
-        public Action EditEvent;
+        public Action<PlaylistPreviewEntity> EditEvent;
         public Action DeleteEvent;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

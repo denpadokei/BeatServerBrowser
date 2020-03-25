@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -103,16 +104,6 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.songHash_, value);
         }
 
-        /// <summary>ハッシュ生成用のディレクトリ文字列 を取得、設定</summary>
-        private string directoryHash_;
-        /// <summary>ハッシュ生成用のディレクトリ文字列 を取得、設定</summary>
-        public string DirectoryHash
-        {
-            get => this.directoryHash_;
-
-            set => this.SetProperty(ref this.directoryHash_, value);
-        }
-
         public DirectoryInfo Directory { get; set; }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -194,6 +185,12 @@ namespace BeatServerBrowser.Core.Models
             if (this.GetType() != b.GetType()) return false;
 
             return (this.SongHash.ToUpper() == b.SongHash.ToUpper());
+        }
+
+        public async Task<string> GetKey()
+        {
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash).ConfigureAwait(false);
+            return beatmap.Key;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

@@ -31,7 +31,8 @@ namespace BeatServerBrowser.PlayList.Models
         #region // コマンド用メソッド
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // オーバーライドメソッド
+        #region // パブリックイベント
+        public Action<PlaylistPreviewEntity> EditEvent;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
@@ -41,14 +42,21 @@ namespace BeatServerBrowser.PlayList.Models
             var info = new DirectoryInfo(this.playlistPath);
             foreach (var json in info.EnumerateFiles("*.json", SearchOption.TopDirectoryOnly)) {
                 var jsontext = File.ReadAllText(json.FullName);
-                var playlist = JsonConvert.DeserializeObject<PlayListJsonEntity>(jsontext);
+                var playlist = JsonConvert.DeserializeObject<PlaylistJsonEntity>(jsontext);
                 var playlistpreview = new PlaylistPreviewEntity()
                 {
                     Entity = playlist
                 };
-
+                playlistpreview.EditEvent += this.EditEvent;
                 this.Playlists.Add(playlistpreview);
             }
+        }
+
+        public StreamWriter CreateJsonFile(string filename = "MyPlaylist")
+        {
+            var info = new DirectoryInfo(this.playlistPath);
+            return File.CreateText($@"{info.FullName}\{filename}.json");
+            
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

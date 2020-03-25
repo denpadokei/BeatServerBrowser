@@ -16,6 +16,7 @@ namespace BeatServerBrowser.PlayList
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation(typeof(PlaylistMain), "PlaylistMain");
+            containerRegistry.RegisterDialog<PlaylistSongs>(nameof(PlaylistSongs));
         }
     }
 }
