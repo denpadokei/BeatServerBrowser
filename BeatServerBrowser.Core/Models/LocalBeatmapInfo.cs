@@ -34,26 +34,6 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.songTitle_, value);
         }
 
-        /// <summary>曲名 を取得、設定</summary>
-        private string songName_;
-        /// <summary>曲名 を取得、設定</summary>
-        public string SongName
-        {
-            get => this.songName_;
-
-            set => this.SetProperty(ref this.songName_, value);
-        }
-
-        /// <summary>サブタイトル を取得、設定</summary>
-        private string songSubName_;
-        /// <summary>サブタイトル を取得、設定</summary>
-        public string SongSubName
-        {
-            get => this.songSubName_;
-
-            set => this.SetProperty(ref this.songSubName_, value);
-        }
-
         /// <summary>マッパー を取得、設定</summary>
         private string levelAuthorName_;
         /// <summary>マッパー を取得、設定</summary>
@@ -187,9 +167,9 @@ namespace BeatServerBrowser.Core.Models
             return (this.SongHash.ToUpper() == b.SongHash.ToUpper());
         }
 
-        public async Task<string> GetKey()
+        public string GetKey()
         {
-            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash).ConfigureAwait(false);
+            var beatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash).Result;
             return beatmap.Key;
         }
         #endregion

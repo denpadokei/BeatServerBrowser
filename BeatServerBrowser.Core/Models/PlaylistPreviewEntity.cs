@@ -35,13 +35,13 @@ namespace BeatServerBrowser.Core.Models
         }
 
         /// <summary>説明 を取得、設定</summary>
-        private string dependencyText_;
+        private string descriptionText_;
         /// <summary>説明 を取得、設定</summary>
-        public string DesctiptionText
+        public string DescriptionText
         {
-            get => this.dependencyText_;
+            get => this.descriptionText_;
 
-            set => this.SetProperty(ref this.dependencyText_, value);
+            set => this.SetProperty(ref this.descriptionText_, value);
         }
 
         /// <summary>カバー画像(base64) を取得、設定</summary>
@@ -59,7 +59,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>JSONオブジェクト を取得、設定</summary>
         public PlaylistJsonEntity Entity
         {
-            get => this.entity_;
+            get => this.entity_ ?? new PlaylistJsonEntity();
 
             set => this.SetProperty(ref this.entity_, value);
         }
@@ -84,6 +84,16 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.coverPath_, value);
         }
 
+        /// <summary>Base64の情報 を取得、設定</summary>
+        private string base64Info_;
+        /// <summary>Base64の情報 を取得、設定</summary>
+        public string Base64Info
+        {
+            get => this.base64Info_;
+
+            set => this.SetProperty(ref this.base64Info_, value);
+        }
+
         /// <summary>JSONファイル情報 を取得、設定</summary>
         private FileInfo json_;
         /// <summary>JSONファイル情報 を取得、設定</summary>
@@ -94,7 +104,7 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.json_, value);
         }
 
-        public bool IsLock => this.Entity.FileLock == null;
+        public bool IsLock => this.Entity?.FileLock == null;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -117,7 +127,7 @@ namespace BeatServerBrowser.Core.Models
 
         private void Delete()
         {
-            this.DeleteEvent?.Invoke();
+            this.DeleteEvent?.Invoke(this);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -128,13 +138,22 @@ namespace BeatServerBrowser.Core.Models
             if (args.PropertyName == nameof(this.Entity)) {
                 this.PlaylistName = this.Entity.PlayListTytle;
                 this.Author = this.Entity.PlayListAuthor;
-                this.DesctiptionText = this.Entity.PlayListDescription;
+                this.DescriptionText = this.Entity.PlayListDescription;
                 try {
                     var stringArray = this.Entity.Image.Split(',');
+                    this.Base64Info = stringArray[0];
                     this.CoverImage = stringArray[1];
                 }
                 catch (Exception e) {
                     Debug.WriteLine(e);
+                }
+            }
+            else if (args.PropertyName == nameof(this.CoverPath)) {
+                using (var stream = new FileStream(this.CoverPath, FileMode.Open, FileAccess.Read)) {
+                    var body = new byte[stream.Length];
+                    var readByte = stream.Read(body, 0, (int)stream.Length);
+                    this.CoverImage = Convert.ToBase64String(body);
+                    stream.Close();
                 }
             }
         }
@@ -157,13 +176,18 @@ namespace BeatServerBrowser.Core.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
         public Action<PlaylistPreviewEntity> EditEvent;
-        public Action DeleteEvent;
+        public Action<PlaylistPreviewEntity> DeleteEvent;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
         public PlaylistPreviewEntity()
         {
             
+        }
+
+        public PlaylistPreviewEntity(FileInfo info)
+        {
+            this.Json = info;
         }
         #endregion
     }

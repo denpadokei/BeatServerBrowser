@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="BeatServerBrowser.Core.Views.ConfimationDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="{StaticResource MaterialDesignBackground}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Margin="20" Content="{Binding Message}"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Margin="20" Content="いいえ" Command="{Binding NoCommand}"/>
+            <Button Grid.Column="1" Margin="20" Content="はい" Command="{Binding YesCommand}"/>
+        </Grid>
+    </Grid>
+</UserControl>

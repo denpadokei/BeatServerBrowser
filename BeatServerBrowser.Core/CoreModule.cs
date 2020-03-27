@@ -18,6 +18,8 @@ namespace BeatServerBrowser.Core
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<ILoadingService, LoadingService>();
+            containerRegistry.Register<ICustomDialogService, CustomDialogService>();
+            containerRegistry.RegisterDialog<ConfimationDialog>(nameof(ConfimationDialog));
         }
     }
 }

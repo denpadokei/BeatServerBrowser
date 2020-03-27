@@ -5,8 +5,15 @@
              xmlns:dp="clr-namespace:BeatServerBrowser.Core.DependencyPropaties;assembly=BeatServerBrowser.Core"
              xmlns:control="clr-namespace:BeatServerBrowser.Style.Controls;assembly=BeatServerBrowser.Style"
              xmlns:prism="http://prismlibrary.com/"
-             Height="720" Width="1280"
-             prism:ViewModelLocator.AutoWireViewModel="True">
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             IsEnabled="{Binding IsEnable}"
+             Background="{StaticResource MaterialDesignBackground}">
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="Height" Value="720"/>
+            <Setter Property="Width" Value="1280"/>
+        </Style>
+    </prism:Dialog.WindowStyle>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
@@ -19,19 +26,19 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Margin="5" dp:LazyImageBehavior.Base64Source="{Binding PlaylistPreview.CoverImage}"/>
+                <Button Grid.Column="0" Command="{Binding SelectCoverCommand}" Height="Auto" Width="Auto" Background="Transparent" Cursor="Hand">
+                    <Image Margin="0" dp:LazyImageBehavior.Base64Source="{Binding PlaylistPreview.CoverImage}"/>
+                </Button>
                 <Grid Grid.Column="1" Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="5">
-                        <Label Content="{Binding PlaylistPreview.PlaylistName}"/>
-                        <Label Content="{Binding PlaylistPreview.Author}"/>
+                        <TextBox Text="{Binding PlaylistPreview.PlaylistName, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Text="{Binding PlaylistPreview.Author, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                    <ScrollViewer Grid.Column="1">
-                        <Label Content="{Binding DescriptionText}"/>
-                    </ScrollViewer>
+                    <TextBox Grid.Column="1" AcceptsReturn="True" Text="{Binding PlaylistPreview.DescriptionText, UpdateSourceTrigger=PropertyChanged}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="2"/>
                 </Grid>
             </Grid>
         </material:Card>
@@ -47,7 +54,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <material:Card Grid.Row="0">
-                    <TextBox material:HintAssist.Hint="検索" Margin="5" Text="{Binding LocalBeatmapFilter.FilterText}"/>
+                    <TextBox material:HintAssist.Hint="検索" Margin="5" Text="{Binding LocalBeatmapFilter.FilterText, UpdateSourceTrigger=PropertyChanged}"/>
                 </material:Card>
                 <control:CustomDataGrid x:Name="Localmaps" Grid.Row="1" ItemsSource="{Binding LocalBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80" IsReadOnly="True">
                     <control:CustomDataGrid.Columns>
@@ -74,7 +81,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <material:Card Grid.Row="0">
-                    <TextBox material:HintAssist.Hint="検索" Margin="5" Text="{Binding PlaylistBeatmapFilter.FilterText}"/>
+                    <TextBox material:HintAssist.Hint="検索" Margin="5" Text="{Binding PlaylistFilter.FilterText, UpdateSourceTrigger=PropertyChanged}"/>
                 </material:Card>
                 <control:CustomDataGrid x:Name="Playlistmaps" Grid.Row="1" ItemsSource="{Binding PlaylistBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80" IsReadOnly="True">
                     <control:CustomDataGrid.Columns>

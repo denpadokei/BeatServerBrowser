@@ -33,6 +33,7 @@ namespace BeatServerBrowser.PlayList.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
         public Action<PlaylistPreviewEntity> EditEvent;
+        public Action<PlaylistPreviewEntity> DeleteEvent;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
@@ -43,18 +44,25 @@ namespace BeatServerBrowser.PlayList.Models
             foreach (var json in info.EnumerateFiles("*.json", SearchOption.TopDirectoryOnly)) {
                 var jsontext = File.ReadAllText(json.FullName);
                 var playlist = JsonConvert.DeserializeObject<PlaylistJsonEntity>(jsontext);
-                var playlistpreview = new PlaylistPreviewEntity()
+                var playlistpreview = new PlaylistPreviewEntity(json)
                 {
                     Entity = playlist
                 };
                 playlistpreview.EditEvent += this.EditEvent;
+                playlistpreview.DeleteEvent += this.DeleteEvent;
                 this.Playlists.Add(playlistpreview);
             }
         }
 
-        public StreamWriter CreateJsonFile(string filename = "MyPlaylist")
+        public StreamWriter CreateJsonFile(PlaylistPreviewEntity entity)
         {
             var info = new DirectoryInfo(this.playlistPath);
+            var filename = "MyPlaylist";
+            if (entity?.Json != null) {
+                var deletejson = new FileInfo(entity.Json.FullName);
+                deletejson.Delete();
+            }
+            filename = entity.PlaylistName;
             return File.CreateText($@"{info.FullName}\{filename}.json");
             
         }

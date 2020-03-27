@@ -4,6 +4,7 @@
              xmlns:action="clr-namespace:BeatServerBrowser.Core.Actions;assembly=BeatServerBrowser.Core"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:usercontrol="clr-namespace:BeatServerBrowser.Core.UserControls;assembly=BeatServerBrowser.Core"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:model="clr-namespace:BeatServerBrowser.Core.Models;assembly=BeatServerBrowser.Core"
              xmlns:dp="clr-namespace:BeatServerBrowser.Core.DependencyPropaties;assembly=BeatServerBrowser.Core"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -34,5 +35,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+        <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" ToolTip="MaterialDesignFloatingActionMiniDarkButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40" Command="{Binding AddCommand}" Cursor="Hand">
+            <material:PackIcon Kind="AddThick" Height="24" Width="24" />
+        </Button>
     </Grid>
 </UserControl>

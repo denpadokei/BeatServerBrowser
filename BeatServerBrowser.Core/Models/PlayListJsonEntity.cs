@@ -24,8 +24,15 @@ namespace BeatServerBrowser.Core.Models
         [JsonProperty("image")]
         public string Image { get; set; }
 
+
+        private ObservableSynchronizedCollection<PlaylistSongEntity> songs_;
         [JsonProperty("songs")]
-        public ObservableSynchronizedCollection<PlaylistSongEntity> Songs { get; set; }
+        public ObservableSynchronizedCollection<PlaylistSongEntity> Songs
+        {
+            get => this.songs_ ?? new ObservableSynchronizedCollection<PlaylistSongEntity>();
+
+            set => this.songs_ = value;
+        }
 
         [JsonProperty("fileLoc")]
         public string FileLock { get; set; }
@@ -50,6 +57,10 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
+        public PlaylistJsonEntity()
+        {
+            this.Songs = new ObservableSynchronizedCollection<PlaylistSongEntity>();
+        }
         #endregion
     }
 }

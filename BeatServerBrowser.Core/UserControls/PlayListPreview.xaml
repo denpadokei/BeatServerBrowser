@@ -19,7 +19,7 @@
                 <StackPanel Grid.Column="1">
                     <Label Content="{Binding PlaylistName}"/>
                     <Label Content="{Binding Author}"/>
-                    <Label Content="{Binding DependencyText}" Height="120"/>
+                    <Label Content="{Binding DescriptionText}" Height="120"/>
                     <WrapPanel>
                         <Button Content="編集" Margin="10" Command="{Binding EditCommand}"/>
                         <Button Content="削除" Margin="10" Command="{Binding DeleteCommand}"/>

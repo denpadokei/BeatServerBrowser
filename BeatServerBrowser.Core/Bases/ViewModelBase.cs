@@ -110,6 +110,9 @@ namespace BeatServerBrowser.Core.Bases
         public IDialogService dialogService_;
 
         [Dependency]
+        public ICustomDialogService customDialogService_;
+
+        [Dependency]
         public ILoadingService loadingService_;
 
         protected readonly BeatSaver beatSaver_;
