@@ -24,16 +24,6 @@ namespace BeatServerBrowser.PlayList.ViewModels
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        /// <summary>タイトル を取得、設定</summary>
-        private string title_;
-        /// <summary>タイトル を取得、設定</summary>
-        public string Title
-        {
-            get => this.title_;
-
-            set => this.SetProperty(ref this.title_, value);
-        }
-
         /// <summary>ローカルライブラリ を取得、設定</summary>
         private MTObservableCollection<LocalBeatmapInfo> localBeatmaps_;
         /// <summary>ローカルライブラリ を取得、設定</summary>

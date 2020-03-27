@@ -13,12 +13,6 @@
 "SccProvider" = "8:"
     "Hierarchy"
     {
-        "Entry"
-        {
-        "MsmKey" = "8:_33B4537AAEBC410F9209FC8782773B8A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -173,15 +167,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BeatServerBrowser"
-        "ProductCode" = "8:{97FF6D80-F897-4F9D-AEA4-1271520960CF}"
-        "PackageCode" = "8:{C49767C6-7BA5-412A-8E2C-4B6633743E46}"
+        "ProductCode" = "8:{E22A16E9-AD0E-4543-99CA-5BD3BA89E768}"
+        "PackageCode" = "8:{1249248D-8034-470F-A71C-1E46FD62E64C}"
         "UpgradeCode" = "8:{DCC2E04E-F2C5-4AE3-9037-2E6821DD3328}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.1.1"
+        "InstallAllUsers" = "11:TRUE"
+        "ProductVersion" = "8:0.1.2"
         "Manufacturer" = "8:BeatSaverBrowser"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -294,21 +288,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5C5E84886CC3423380D52AD8E68ED8F5"
-            {
-            "Name" = "8:BeatServerBrowser"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:"
-            "Folder" = "8:_971A74E1302944CFB7818E2D6F5BFA8C"
-            "WorkingFolder" = "8:_47664DB4D50644BF870632F254879A4B"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B3ECD41C32C340B38279007E8C3B4842"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2CC7AFF65D02405797B4878777E9F369"
             {
             "Name" = "8:BeatSaverBrowser"
             "Arguments" = "8:"
@@ -316,8 +296,22 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:"
+            "Target" = "8:_FD793A5C554445A1AB2C28353D301E7B"
             "Folder" = "8:_E726DE73A1E04206BF8D2A36B0B2E311"
+            "WorkingFolder" = "8:_47664DB4D50644BF870632F254879A4B"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_46D450CC0A4740979B9A8F4C20CF15C0"
+            {
+            "Name" = "8:BeatSaverBrowser"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_FD793A5C554445A1AB2C28353D301E7B"
+            "Folder" = "8:_971A74E1302944CFB7818E2D6F5BFA8C"
             "WorkingFolder" = "8:_47664DB4D50644BF870632F254879A4B"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -721,7 +715,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_33B4537AAEBC410F9209FC8782773B8A"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FD793A5C554445A1AB2C28353D301E7B"
             {
             "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Release\\netcoreapp3.0\\BeatServerBrowser.exe"
             "TargetName" = "8:"

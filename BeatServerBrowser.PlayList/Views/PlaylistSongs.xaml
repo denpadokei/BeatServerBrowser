@@ -35,10 +35,10 @@
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="5">
-                        <TextBox Text="{Binding PlaylistPreview.PlaylistName, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBox Text="{Binding PlaylistPreview.Author, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Text="{Binding PlaylistPreview.PlaylistName, UpdateSourceTrigger=PropertyChanged}" material:HintAssist.Hint="プレイリスト名"/>
+                        <TextBox Text="{Binding PlaylistPreview.Author, UpdateSourceTrigger=PropertyChanged}" material:HintAssist.Hint="プレイリスト作者"/>
                     </StackPanel>
-                    <TextBox Grid.Column="1" AcceptsReturn="True" Text="{Binding PlaylistPreview.DescriptionText, UpdateSourceTrigger=PropertyChanged}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="2"/>
+                    <TextBox Grid.Column="1" AcceptsReturn="True" Text="{Binding PlaylistPreview.DescriptionText, UpdateSourceTrigger=PropertyChanged}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="2" material:HintAssist.Hint="プレイリスト詳細"/>
                 </Grid>
             </Grid>
         </material:Card>
