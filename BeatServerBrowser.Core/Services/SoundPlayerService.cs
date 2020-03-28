@@ -8,6 +8,7 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -31,7 +32,7 @@ namespace BeatServerBrowser.Core.Services
         /// <summary>再生中の譜面情報 を取得、設定</summary>
         public LocalBeatmapInfo Beatmap
         {
-            get => this.beatmap_;
+            get => this.beatmap_ ?? new LocalBeatmapInfo();
 
             set => this.SetProperty(ref this.beatmap_, value);
         }
@@ -62,14 +63,19 @@ namespace BeatServerBrowser.Core.Services
             try {
                 this.IsPreview = true;
                 this.Beatmap = info;
+                this.Player.Stop();
                 using (var vr = new VorbisWaveReader(soundFileInfo.FullName))
                 using (var pcm = new WaveOutEvent()) {
                     this.Player.Init(vr);
-                    this.Player.Stop();
                     this.Player.Play();
-                    while (this.Player.PlaybackState == PlaybackState.Playing) {
-                        await Task.Delay(10);
-                    }
+                    await Task.Run(() =>
+                    {
+                        while (this.Player.PlaybackState == PlaybackState.Playing) ;
+                        Debug.WriteLine($"{this.Player.PlaybackState}:曲が停止しました。");
+                    });
+                    //while (this.Player.PlaybackState == PlaybackState.Playing) {
+                    //    await Task.Delay(10);
+                    //}
                 }
             }
             catch (Exception e) {
@@ -133,19 +139,24 @@ namespace BeatServerBrowser.Core.Services
         }
 
         // TODO: 上の Dispose(bool disposing) にアンマネージ リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします。
-        // ~SoundPlayerService()
-        // {
-        //   // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-        //   Dispose(false);
-        // }
+        ~SoundPlayerService()
+        {
+            // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
+            Dispose(false);
+        }
 
         // このコードは、破棄可能なパターンを正しく実装できるように追加されました。
         public void Dispose()
         {
+            // 謎Disposeが走るので曲の再生中はDisposeさせない
+            if (this.Player.PlaybackState == PlaybackState.Playing) {
+                return;
+            }
+
             // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
             Dispose(true);
             // TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
         #endregion

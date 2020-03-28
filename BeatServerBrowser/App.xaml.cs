@@ -85,7 +85,7 @@ namespace BeatServerBrowser
         {
             base.OnExit(e);
             SoundPlayerService.CurrentPlayer.Stop();
-            
+            SoundPlayerService.CurrentPlayer.Dispose();
         }
     }
 }

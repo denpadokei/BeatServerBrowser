@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using NLog;
+using BeatServerBrowser.Core.Extentions;
 
 namespace BeatServerBrowser.Local.Models
 {
@@ -27,9 +28,9 @@ namespace BeatServerBrowser.Local.Models
         }
 
         /// <summary>絞り込み済みのリスト を取得、設定</summary>
-        private List<LocalBeatmapInfo> filterdmaps_;
+        private ObservableSynchronizedCollection<LocalBeatmapInfo> filterdmaps_;
         /// <summary>絞り込み済みのリスト を取得、設定</summary>
-        public List<LocalBeatmapInfo> FilteredMaps
+        public ObservableSynchronizedCollection<LocalBeatmapInfo> FilteredMaps
         {
             get => this.filterdmaps_;
 
@@ -112,7 +113,7 @@ namespace BeatServerBrowser.Local.Models
         public LocalDomainBase()
         {
             this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
-            this.FilteredMaps = new List<LocalBeatmapInfo>();
+            this.FilteredMaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
             this.Filter = new ListFilter();
             this.Count = 0;
         }

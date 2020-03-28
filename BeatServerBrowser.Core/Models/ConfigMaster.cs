@@ -23,6 +23,8 @@ namespace BeatServerBrowser.Core.Models
         #region // プロパティ
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
+        public static readonly string ThisDirectoryPath = new DirectoryInfo(@".\").FullName;
+
         /// <summary>ダークモードフラグ を取得、設定</summary>
         private bool isDark_;
         /// <summary>ダークモードフラグ を取得、設定</summary>

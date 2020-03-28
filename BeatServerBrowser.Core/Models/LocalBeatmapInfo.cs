@@ -61,7 +61,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>カバー画像URI を取得、設定</summary>
         public Uri CoverUri
         {
-            get => this.cover_;
+            get => this.cover_ ?? new Uri($@"{ConfigMaster.ThisDirectoryPath}\Images\default.jpg");
 
             set => this.SetProperty(ref this.cover_, value);
         }
@@ -132,6 +132,11 @@ namespace BeatServerBrowser.Core.Models
         private DelegateCommand preViewCommand_;
         /// <summary>プレビューコマンド を取得、設定</summary>
         public DelegateCommand PreViewCommand => this.preViewCommand_ ?? (this.preViewCommand_ = new DelegateCommand(this.PreView));
+
+        /// <summary>曲削除コマンド を取得、設定</summary>
+        private DelegateCommand deleteCommand_;
+        /// <summary>曲削除コマンド を取得、設定</summary>
+        public DelegateCommand DeleteCommand => this.deleteCommand_ ?? (this.deleteCommand_ = new DelegateCommand(this.Delete));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -189,10 +194,17 @@ namespace BeatServerBrowser.Core.Models
             this.Player.Stop();
             this.Player.Play(soundFileInfo, this);
         }
+
+        private void Delete()
+        {
+            this.DeleteSong?.Invoke();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
         public Action CopyKey;
+
+        public Action DeleteSong;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド

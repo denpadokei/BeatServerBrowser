@@ -19,7 +19,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>プレイリストタイトル を取得、設定</summary>
         public string PlaylistName
         {
-            get => this.playlistName_;
+            get => this.playlistName_ ?? "";
 
             set => this.SetProperty(ref this.playlistName_, value);
         }
@@ -29,7 +29,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>作者 を取得、設定</summary>
         public string Author
         {
-            get => this.author_;
+            get => this.author_ ?? "";
 
             set => this.SetProperty(ref this.author_, value);
         }
@@ -39,7 +39,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>説明 を取得、設定</summary>
         public string DescriptionText
         {
-            get => this.descriptionText_;
+            get => this.descriptionText_ ?? "";
 
             set => this.SetProperty(ref this.descriptionText_, value);
         }
@@ -49,7 +49,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>カバー画像(base64) を取得、設定</summary>
         public string CoverImage
         {
-            get => this.coverImage_;
+            get => this.coverImage_ ?? "";
 
             set => this.SetProperty(ref this.coverImage_, value);
         }
@@ -69,7 +69,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>プレイリストカバー画像 を取得、設定</summary>
         public Uri CoverUri
         {
-            get => this.coverUrl_;
+            get => this.coverUrl_ ?? new Uri($@"{ConfigMaster.ThisDirectoryPath}\Images\default.jpg");
 
             set => this.SetProperty(ref this.coverUrl_, value);
         }
@@ -79,7 +79,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>カバー画像ファイルパス を取得、設定</summary>
         public string CoverPath
         {
-            get => this.coverPath_;
+            get => this.coverPath_ ?? "";
 
             set => this.SetProperty(ref this.coverPath_, value);
         }
@@ -89,7 +89,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>Base64の情報 を取得、設定</summary>
         public string Base64Info
         {
-            get => this.base64Info_;
+            get => this.base64Info_ ?? "";
 
             set => this.SetProperty(ref this.base64Info_, value);
         }
