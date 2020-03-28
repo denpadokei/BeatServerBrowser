@@ -38,7 +38,10 @@
                 <DataGridTemplateColumn CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="!bsrコピー" Command="{Binding CopyCommand}"/>
+                            <DockPanel>
+                                <Button Margin="2" Content="!bsrコピー" Command="{Binding CopyCommand}"/>
+                                <Button Margin="2" Content="再生" Command="{Binding PreViewCommand}"/>
+                            </DockPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

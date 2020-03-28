@@ -67,6 +67,15 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="曲名" Width="*" Binding="{Binding SongTitle}" />
                         <DataGridTextColumn Header="譜面作者" Width="*" Binding="{Binding LevelAuthorName}"/>
+                        <DataGridTemplateColumn MinWidth="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Button Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </control:CustomDataGrid.Columns>
                 </control:CustomDataGrid>
             </Grid>
@@ -94,11 +103,21 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Header="曲名" Width="*" Binding="{Binding SongTitle}"/>
                         <DataGridTextColumn Header="譜面作者" Width="*" Binding="{Binding LevelAuthorName}"/>
+                        <DataGridTemplateColumn MinWidth="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Button Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </control:CustomDataGrid.Columns>
                 </control:CustomDataGrid>
             </Grid>
         </Grid>
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right">
+            <Button Margin="5" Content="停止" Command="{Binding StopCommand}" Cursor="Hand"/>
             <Button Margin="5" Content="キャンセル" Command="{Binding CancelCommand}"/>
             <Button Margin="5" Content="設定" Command="{Binding ApplyCommand}" Cursor="Hand"/>
         </WrapPanel>

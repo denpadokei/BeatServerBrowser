@@ -19,6 +19,7 @@ using BeatServerBrowser.List;
 using BeatServerBrowser.Core;
 using BeatServerBrowser.Local;
 using BeatServerBrowser.PlayList;
+using BeatServerBrowser.Core.Services;
 
 namespace BeatServerBrowser
 {
@@ -78,6 +79,13 @@ namespace BeatServerBrowser
             moduleCatalog.AddModule<SerchModule>();
             moduleCatalog.AddModule<SettingModule>();
             base.ConfigureModuleCatalog(moduleCatalog);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            SoundPlayerService.CurrentPlayer.Stop();
+            
         }
     }
 }

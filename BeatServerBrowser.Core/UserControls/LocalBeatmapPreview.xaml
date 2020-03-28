@@ -28,6 +28,7 @@
                 <Image Grid.Row="1" dp:LazyImageBehavior.LazySource="{Binding CoverUri}" />
                 <DockPanel Grid.Row="2">
                     <Button Content="bsr!コピー" Command="{Binding CopyCommand}" Margin="5"/>
+                    <Button Content="{Binding PlayContent}" Command="{Binding PreViewCommand}" Margin="5"/>
                 </DockPanel>
             </Grid>
         </material:Card>

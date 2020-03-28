@@ -82,6 +82,16 @@ namespace BeatServerBrowser.Core.Models
 
             set => this.SetProperty(ref this.isLoading_, value);
         }
+
+        /// <summary>ボリューム を取得、設定</summary>
+        private double volume_;
+        /// <summary>ボリューム を取得、設定</summary>
+        public double Volume
+        {
+            get => this.volume_;
+
+            set => this.SetProperty(ref this.volume_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -102,6 +112,9 @@ namespace BeatServerBrowser.Core.Models
             }
             if (args.PropertyName == nameof(this.InstallFolder)) {
                 Properties.Settings.Default.InstallFolder = this.InstallFolder;
+            }
+            if (args.PropertyName == nameof(this.Volume)) {
+                Properties.Settings.Default.Volume = this.Volume;
             }
 
             Properties.Settings.Default.Save();
@@ -159,6 +172,7 @@ namespace BeatServerBrowser.Core.Models
         private ConfigMaster()
         {
             this.InstallFolder = Properties.Settings.Default.InstallFolder;
+            this.Volume = Properties.Settings.Default.Volume;
             this.CurrentBeatSaver = new BeatSaver(this.options_);
             this.CurrentScoreSaber = new ScoreSaber();
             this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();

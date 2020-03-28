@@ -110,6 +110,11 @@ namespace BeatServerBrowser.PlayList.ViewModels
         private DelegateCommand selectCoverCommand_;
         /// <summary>カバー画像選択 を取得、設定</summary>
         public DelegateCommand SelectCoverCommand => this.selectCoverCommand_ ?? (this.selectCoverCommand_ = new DelegateCommand(this.SelectCover));
+
+        /// <summary>停止コマンド を取得、設定</summary>
+        private DelegateCommand stopCommand_;
+        /// <summary>停止コマンド を取得、設定</summary>
+        public DelegateCommand StopCommand => this.stopCommand_ ?? (this.stopCommand_ = new DelegateCommand(this.Stop));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -206,6 +211,11 @@ namespace BeatServerBrowser.PlayList.ViewModels
                 return;
             }
             this.PlaylistPreview.CoverPath = fileNames.FirstOrDefault();
+        }
+
+        private void Stop()
+        {
+            this.Player.Stop();
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

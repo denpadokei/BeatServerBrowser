@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BeatServerBrowser.Static.Views
+namespace BeatServerBrowser.Core.UserControls
 {
     /// <summary>
-    /// Interaction logic for ViewA.xaml
+    /// SongDetail.xaml の相互作用ロジック
     /// </summary>
-    public partial class ViewA : UserControl
+    public partial class SongDetail : UserControl
     {
-        public ViewA()
+        public SongDetail()
         {
             InitializeComponent();
         }

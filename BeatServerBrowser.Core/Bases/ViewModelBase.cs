@@ -25,7 +25,10 @@ namespace BeatServerBrowser.Core.Bases
 
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
-        public ConfigMaster Config { get; set; }
+        public ConfigMaster Config => ConfigMaster.Current;
+
+        public SoundPlayerService Player => SoundPlayerService.CurrentPlayer;
+
         protected virtual Logger Logger => LogManager.GetCurrentClassLogger();
 
         /// <summary>タイトル を取得、設定</summary>
@@ -100,9 +103,6 @@ namespace BeatServerBrowser.Core.Bases
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        //[Dependency]
-        //public IContainerProvider containerProvider_;
-
         [Dependency]
         public IRegionManager regionManager_;
 
@@ -123,7 +123,7 @@ namespace BeatServerBrowser.Core.Bases
         #region // 構築・破棄
         public ViewModelBase()
         {
-            this.Config = ConfigMaster.Current;
+            
         }
         #endregion
     }
