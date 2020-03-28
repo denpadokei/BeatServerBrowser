@@ -24,6 +24,8 @@ namespace BeatServerBrowser.Core.Models
                 try {
                     var image = new BitmapImage();
                     image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.CreateOptions = BitmapCreateOptions.None;
                     image.StreamSource = new MemoryStream(wc.DownloadData(uri));
                     image.EndInit();
                     image.Freeze();
@@ -55,6 +57,8 @@ namespace BeatServerBrowser.Core.Models
                     var coverbyte = Convert.FromBase64String(base64string);
                     var image = new BitmapImage();
                     image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.CreateOptions = BitmapCreateOptions.None;
                     image.StreamSource = new MemoryStream(coverbyte);
                     image.EndInit();
                     image.Freeze();

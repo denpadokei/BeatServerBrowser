@@ -164,7 +164,7 @@ namespace BeatServerBrowser.Core.Models
         private readonly HttpOptions options_ = new HttpOptions()
         {
             ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 1, 0),
+            Version = new Version(0, 1, 3),
         };
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
