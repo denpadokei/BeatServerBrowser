@@ -130,12 +130,11 @@ namespace BeatServerBrowser.Core.Models
                 Debug.WriteLine(e);
                 this.Logger.Error(e);
             }
-            //ConfigMaster.Current.CreateLocalBeatmaps();
         }
 
         private void Copy()
         {
-            Clipboard.SetText($"!bsr{this.Key}");
+            Clipboard.SetText($"!bsr {this.Key}");
             this.CopyKey?.Invoke();
             this.Logger.Info($"{this.Key}をクリップボードに送りました。");
             Debug.WriteLine($"{this.Key}をクリップボードに送りました。");

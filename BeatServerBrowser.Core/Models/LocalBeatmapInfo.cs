@@ -182,7 +182,7 @@ namespace BeatServerBrowser.Core.Models
             if (beatmap == null) {
                 return;
             }
-            Clipboard.SetText($"!bsr{beatmap.Key}");
+            Clipboard.SetText($"!bsr {beatmap.Key}");
             this.CopyKey?.Invoke();
             this.Logger.Info($"{beatmap.Key}をクリップボードに送りました。");
             Debug.WriteLine($"{beatmap.Key}をクリップボードに送りました。");
