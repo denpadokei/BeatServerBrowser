@@ -8,6 +8,8 @@ using System.Text;
 using System.Linq;
 using NLog;
 using BeatServerBrowser.Core.Extentions;
+using System.Windows;
+using System.ComponentModel;
 
 namespace BeatServerBrowser.Local.Models
 {
@@ -75,12 +77,14 @@ namespace BeatServerBrowser.Local.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト
+        public Action<LocalBeatmapInfo> DeleteSong { get; set; }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
+        protected abstract void OnLocalmapPropertyChanged(object sender, PropertyChangedEventArgs e);
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
@@ -94,12 +98,20 @@ namespace BeatServerBrowser.Local.Models
 
             this.FilteredMaps.Clear();
             if (string.IsNullOrWhiteSpace(this.Filter.FilterText)) {
-                this.FilteredMaps.AddRange(ConfigMaster.Current.LocalBeatmaps);
+                foreach (var beatmap in ConfigMaster.Current.LocalBeatmaps) {
+                    beatmap.DeleteSong -= this.DeleteSong;
+                    beatmap.DeleteSong += this.DeleteSong;
+                    this.FilteredMaps.Add(beatmap);
+                }
             }
             else if (ConfigMaster.Current.LocalBeatmaps.Where(x => x.SongTitle !=null || x.LevelAuthorName != null).Any()) {
-                this.FilteredMaps.AddRange(ConfigMaster.Current.LocalBeatmaps.Where(x => x.SongTitle != null && x.LevelAuthorName != null
+                foreach (var beatmap in ConfigMaster.Current.LocalBeatmaps.Where(x => x.SongTitle != null && x.LevelAuthorName != null
                 && (x.SongTitle.ToUpper().Contains(this.Filter.FilterText.ToUpper())
-                || x.LevelAuthorName.ToUpper().Contains(this.Filter.FilterText.ToUpper()))));
+                || x.LevelAuthorName.ToUpper().Contains(this.Filter.FilterText.ToUpper())))) {
+                    beatmap.DeleteSong -= this.DeleteSong;
+                    beatmap.DeleteSong += this.DeleteSong;
+                    this.FilteredMaps.Add(beatmap);
+                }
             }
             this.Count = 0;
             this.LocalBeatmaps.Clear();
@@ -116,6 +128,8 @@ namespace BeatServerBrowser.Local.Models
             this.FilteredMaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
             this.Filter = new ListFilter();
             this.Count = 0;
+            WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
+                ConfigMaster.Current.LocalBeatmaps, nameof(INotifyPropertyChanged.PropertyChanged), this.OnLocalmapPropertyChanged);
         }
         #endregion
     }

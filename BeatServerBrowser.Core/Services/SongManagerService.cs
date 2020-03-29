@@ -1,14 +1,21 @@
 ﻿using BeatServerBrowser.Core.Interfaces;
+using BeatServerBrowser.Core.Models;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using Unity;
 
 namespace BeatServerBrowser.Core.Services
 {
-    class SerchService : ISerchService
+    public class SongManagerService : ISongManagerService
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
+        [Dependency]
+        public ICustomDialogService dialogService_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -18,6 +25,8 @@ namespace BeatServerBrowser.Core.Services
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト
+        public Action SongDeleted { get; set; }
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
@@ -30,6 +39,27 @@ namespace BeatServerBrowser.Core.Services
         public void Serch()
         {
             throw new NotImplementedException();
+        }
+
+        public void Delete(LocalBeatmapInfo beatmap)
+        {
+            var param = new DialogParameters()
+            {
+                { "Title", "確認" },
+                { "Message","曲を削除します。\nよろしいですか？" }
+            };
+
+            this.dialogService_?.ShowDialog("ConfimationDialog", param, result =>
+            {
+                if (result.Result == ButtonResult.Yes) {
+                    foreach (var item in beatmap.Directory.EnumerateFiles("*.*", SearchOption.AllDirectories)) {
+                        item.Delete();
+                    }
+                    beatmap.Directory.Delete();
+                    ConfigMaster.Current.LocalBeatmaps.Remove(ConfigMaster.Current.LocalBeatmaps.FirstOrDefault(x => x.Directory.FullName == beatmap.Directory.FullName));
+                    this.SongDeleted?.Invoke();
+                }
+            });
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

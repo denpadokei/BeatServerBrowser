@@ -34,17 +34,20 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="曲名" Binding="{Binding SongTitle}"/>
                 <DataGridTextColumn Header="譜面作者" Binding="{Binding LevelAuthorName}"/>
-                <DataGridTextColumn Header="フォルダ名" Binding="{Binding DirectoryPath}"/>
                 <DataGridTemplateColumn CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DockPanel>
                                 <Button Margin="2" Content="!bsrコピー" Command="{Binding CopyCommand}"/>
                                 <Button Margin="2" Content="再生" Command="{Binding PreViewCommand}"/>
+                                <Button Margin="2" Width="Auto" Command="{Binding DeleteCommand}">
+                                    <material:PackIcon Kind="TrashCanOutline" />
+                                </Button>
                             </DockPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn Header="フォルダ名" Binding="{Binding DirectoryPath}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

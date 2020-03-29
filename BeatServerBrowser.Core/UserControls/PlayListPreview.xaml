@@ -22,7 +22,11 @@
                     <Label Content="{Binding DescriptionText}" Height="120"/>
                     <WrapPanel>
                         <Button Content="編集" Margin="10" Command="{Binding EditCommand}"/>
-                        <Button Content="削除" Margin="10" Command="{Binding DeleteCommand}"/>
+                        <Button Margin="10" Command="{Binding DeleteCommand}">
+                            <Button Grid.Column="2" Width="Auto" Command="{Binding DeleteCommand}" Cursor="Hand">
+                                <material:PackIcon Kind="TrashCanOutline" />
+                            </Button>
+                        </Button>
                     </WrapPanel>
                 </StackPanel>
             </Grid>

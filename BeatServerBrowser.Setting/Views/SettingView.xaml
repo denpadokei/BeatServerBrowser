@@ -29,7 +29,7 @@
             </DockPanel>
             <Button Grid.Row="2" Content="ローカルライブラリ読み込み" Command="{Binding LoadLiblralyCommand}" Cursor="Hand" Width="300" Margin="10"/>
             <Label Content="音量" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20"/>
-            <Slider Grid.Row="3" Minimum="0" Maximum="100" Style="{StaticResource MaterialDesignDiscreteSlider}" ToolTip="MaterialDesignDiscreteSlider" Value="{Binding Config.Volume}" Width="500" />
+            <Slider Grid.Row="3" Minimum="0" Maximum="100" Style="{StaticResource MaterialDesignDiscreteSlider}" ToolTip="音量" Value="{Binding Config.Volume}" Width="500" />
         </Grid>
     </material:Card>
 </UserControl>

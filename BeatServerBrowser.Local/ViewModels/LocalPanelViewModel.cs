@@ -11,6 +11,8 @@ using System.Linq;
 using BeatServerBrowser.Local.Models;
 using System.ComponentModel;
 using System.Windows;
+using Prism.Services.Dialogs;
+using System.IO;
 
 namespace BeatServerBrowser.Local.ViewModels
 {
@@ -68,6 +70,8 @@ namespace BeatServerBrowser.Local.ViewModels
         {
             this.loadingService_?.Load(this.domain_.Serch);
         }
+
+        
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト
@@ -79,6 +83,7 @@ namespace BeatServerBrowser.Local.ViewModels
             base.OnInitialize();
             this.domain_.Filtering();
             this.SerchCommand?.Execute();
+            this.songManager_.SongDeleted += this.Serch;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -92,7 +97,6 @@ namespace BeatServerBrowser.Local.ViewModels
                 }
             }
         }
-
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド

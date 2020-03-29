@@ -34,10 +34,16 @@
         
         
         <dragablz:TabablzControl Grid.Row="1">
-            <TabItem Header="グリッド形式">
+            <TabItem>
+                <TabItem.Header>
+                    <material:PackIcon Kind="Grid" />
+                </TabItem.Header>
                 <ContentControl prism:RegionManager.RegionName="LocalPanelRegion" />
             </TabItem>
-            <TabItem Header="リスト形式">
+            <TabItem>
+                <TabItem.Header>
+                    <material:PackIcon Kind="FormatListBulletedSquare" />
+                </TabItem.Header>
                 <ContentControl prism:RegionManager.RegionName="LocalListRegion"/>
             </TabItem>
         </dragablz:TabablzControl>

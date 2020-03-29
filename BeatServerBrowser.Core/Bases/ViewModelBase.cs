@@ -102,7 +102,7 @@ namespace BeatServerBrowser.Core.Bases
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
-        #region // メンバ変数
+        #region // 依存クラス
         [Dependency]
         public IRegionManager regionManager_;
 
@@ -114,6 +114,9 @@ namespace BeatServerBrowser.Core.Bases
 
         [Dependency]
         public ILoadingService loadingService_;
+
+        [Dependency]
+        public ISongManagerService songManager_;
 
         protected readonly BeatSaver beatSaver_;
 

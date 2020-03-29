@@ -1,5 +1,6 @@
 ﻿using BeatSaverSharp;
 using BeatServerBrowser.Core.Collections;
+using BeatServerBrowser.Core.Extentions;
 using BeatServerBrowser.Core.ScoreSaberSherp;
 using NLog;
 using Prism.Mvvm;
@@ -139,15 +140,14 @@ namespace BeatServerBrowser.Core.Models
                 {
                     return;
                 }
-
+                var temp = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
                 info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).AsParallel().ForAll(folder => {
-                    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
+                    temp.Add(new LocalBeatmapInfo(folder));
                 });
+                
+                this.LocalBeatmaps.AddRange(temp.OrderBy(x => x.SongTitle));
 
-                //foreach (var folder in info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
-                //{
-                //    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
-                //}
+                temp.Dispose();
             }
             catch (Exception e)
             {

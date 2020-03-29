@@ -1,15 +1,22 @@
 ﻿<UserControl x:Class="BeatServerBrowser.List.Views.ListMain"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
     <ContentControl>
         <dragablz:TabablzControl>
-            <TabItem Name="List" Header="リスト形式">
+            <TabItem Name="List">
+                <TabItem.Header>
+                    <material:PackIcon Kind="Grid" />
+                </TabItem.Header>
                 <ContentControl prism:RegionManager.RegionName="ListPanelRegion"/>
             </TabItem>
-            <TabItem Name="Grid" Header="グリッド形式">
+            <TabItem Name="Grid">
+                <TabItem.Header>
+                    <material:PackIcon Kind="FormatListBulletedSquare" />
+                </TabItem.Header>
                 <ContentControl prism:RegionManager.RegionName="ListListRegion"/>
             </TabItem>
         </dragablz:TabablzControl>

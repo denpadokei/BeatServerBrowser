@@ -109,6 +109,9 @@ namespace BeatServerBrowser.Home.ViewModels
                 this.dialogService_.Show("SettingView", new DialogParameters(), _ => { });
             }
             this.loadingService_.Load(this.Config.CreateLocalBeatmaps);
+            foreach (var item in this.Config.LocalBeatmaps) {
+                item.DeleteSong += this.Delete;
+            }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -144,6 +147,11 @@ namespace BeatServerBrowser.Home.ViewModels
             if (sender is ILoadingService && e.PropertyName == nameof(ILoadingService.IsLoading)) {
                 this.IsLoading = this.loadingService_.IsLoading;
             }
+        }
+
+        private void Delete(LocalBeatmapInfo beatmap)
+        {
+            
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

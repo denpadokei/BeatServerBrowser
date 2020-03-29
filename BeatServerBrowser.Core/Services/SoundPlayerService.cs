@@ -128,7 +128,12 @@ namespace BeatServerBrowser.Core.Services
             if (!disposedValue) {
                 if (disposing) {
                     // TODO: マネージ状態を破棄します (マネージ オブジェクト)。
-                    this.Player.Dispose();
+                    try {
+                        this.Player.Dispose();
+                    }
+                    catch (Exception e) {
+                        this.Logger.Error(e);
+                    }
                 }
 
                 // TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。

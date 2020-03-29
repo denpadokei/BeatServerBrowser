@@ -11,6 +11,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using Prism.Services.Dialogs;
+using System.IO;
 
 namespace BeatServerBrowser.Local.ViewModels
 {
@@ -68,6 +70,7 @@ namespace BeatServerBrowser.Local.ViewModels
             base.OnInitialize();
             this.Filtering();
             this.SerchCommand?.Execute();
+            this.songManager_.SongDeleted += this.Filtering;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
