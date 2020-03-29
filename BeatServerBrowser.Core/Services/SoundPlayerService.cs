@@ -13,11 +13,12 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 
 namespace BeatServerBrowser.Core.Services
 {
-    public class SoundPlayerService : BindableBase, IDisposable
+    public class SoundPlayerService : BindableBase
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
@@ -46,6 +47,26 @@ namespace BeatServerBrowser.Core.Services
 
             set => this.SetProperty(ref this.isPreview_, value);
         }
+
+        /// <summary>再生中の音楽ファイル を取得、設定</summary>
+        private VorbisWaveReader sounfFile_;
+        /// <summary>再生中の音楽ファイル を取得、設定</summary>
+        public VorbisWaveReader SoundFile
+        {
+            get => this.sounfFile_;
+
+            set => this.SetProperty(ref this.sounfFile_, value);
+        }
+
+        /// <summary>曲の進捗 を取得、設定</summary>
+        private double songPosition_;
+        /// <summary>曲の進捗 を取得、設定</summary>
+        public double SongPosition
+        {
+            get => this.songPosition_;
+
+            set => this.SetProperty(ref this.songPosition_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -58,25 +79,16 @@ namespace BeatServerBrowser.Core.Services
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public async void Play(FileInfo soundFileInfo, LocalBeatmapInfo info = null)
+        public void Play(FileInfo soundFileInfo, LocalBeatmapInfo info = null)
         {
             try {
                 this.IsPreview = true;
                 this.Beatmap = info;
                 this.Player.Stop();
-                using (var vr = new VorbisWaveReader(soundFileInfo.FullName))
-                using (var pcm = new WaveOutEvent()) {
-                    this.Player.Init(vr);
-                    this.Player.Play();
-                    await Task.Run(() =>
-                    {
-                        while (this.Player.PlaybackState == PlaybackState.Playing) ;
-                        Debug.WriteLine($"{this.Player.PlaybackState}:曲が停止しました。");
-                    });
-                    //while (this.Player.PlaybackState == PlaybackState.Playing) {
-                    //    await Task.Delay(10);
-                    //}
-                }
+                this.SoundFile = new VorbisWaveReader(soundFileInfo.FullName);
+                this.Player.Init(this.SoundFile);
+                this.SetTimer();
+                this.Player.Play();
             }
             catch (Exception e) {
                 this.Logger.Error(e);
@@ -87,12 +99,8 @@ namespace BeatServerBrowser.Core.Services
 
         public void Stop()
         {
-            this.IsPreview = false;
-            this.Beatmap = null;
             this.Player.Stop();
         }
-
-        
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
@@ -100,70 +108,61 @@ namespace BeatServerBrowser.Core.Services
         {
             if (sendor is ConfigMaster && e.PropertyName == nameof(ConfigMaster.Volume)) {
                 if (float.TryParse(ConfigMaster.Current.Volume.ToString(), out var floatVol)) {
-                    var soundVol = floatVol / 100;
+                    var soundVol = floatVol / 100f;
                     this.Player.Volume = soundVol;
                 }
             }
         }
 
+        private void OnPlayBackStopped(object sender, StoppedEventArgs e)
+        {
+            this.timer_?.Stop();
+            this.timer_?.Dispose();
+            this.Player?.Dispose();
+            this.SoundFile?.Dispose();
+            this.SoundFile = null;
+            
+
+            this.IsPreview = false;
+            this.Beatmap = null;
+            Debug.WriteLine($"{this.Player.PlaybackState}:曲が停止しました。");
+        }
+
+        private void SetTimer()
+        {
+            this.timer_ = new Timer(1000);
+            this.timer_.Elapsed += this.RaiseLength;
+            this.timer_.Enabled = true;
+        }
+
+        private async void RaiseLength(object sender, ElapsedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                lock (this.lockObject_) {
+                    this.SongPosition = ((double)this.Player.GetPosition() / (double)this.SoundFile.Length) * 100d;
+                    Debug.WriteLine($"{DateTime.Now:yyyy/MM/dd hh:mm:ss} {this.SongPosition}");
+                }
+            });
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private readonly WaveOut Player;
+        private readonly WaveOutEvent Player;
+
+        private Timer timer_;
+
+        private readonly object lockObject_ = new object();
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
         private SoundPlayerService()
         {
-            this.Player = new WaveOut();
+            this.Player = new WaveOutEvent();
+            this.Player.PlaybackStopped += this.OnPlayBackStopped;
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 ConfigMaster.Current, nameof(INotifyPropertyChanged.PropertyChanged), this.OnConfigPropertyChanged);
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // 重複する呼び出しを検出するには
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue) {
-                if (disposing) {
-                    // TODO: マネージ状態を破棄します (マネージ オブジェクト)。
-                    try {
-                        this.Player.Dispose();
-                    }
-                    catch (Exception e) {
-                        this.Logger.Error(e);
-                    }
-                }
-
-                // TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
-                // TODO: 大きなフィールドを null に設定します。
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: 上の Dispose(bool disposing) にアンマネージ リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします。
-        ~SoundPlayerService()
-        {
-            // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-            Dispose(false);
-        }
-
-        // このコードは、破棄可能なパターンを正しく実装できるように追加されました。
-        public void Dispose()
-        {
-            // 謎Disposeが走るので曲の再生中はDisposeさせない
-            if (this.Player.PlaybackState == PlaybackState.Playing) {
-                return;
-            }
-
-            // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-            Dispose(true);
-            // TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
-            GC.SuppressFinalize(this);
-        }
-        #endregion
         #endregion
     }
 }

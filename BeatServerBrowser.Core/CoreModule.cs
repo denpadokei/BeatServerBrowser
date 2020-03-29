@@ -21,6 +21,7 @@ namespace BeatServerBrowser.Core
             containerRegistry.Register<ICustomDialogService, CustomDialogService>();
             containerRegistry.Register<ISongManagerService, SongManagerService>();
             containerRegistry.RegisterDialog<ConfimationDialog>(nameof(ConfimationDialog));
+            containerRegistry.RegisterDialog<SongDetailDialog>(nameof(SongDetailDialog));
         }
     }
 }

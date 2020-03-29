@@ -29,11 +29,15 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Command="{Binding DownloadCommand}" Margin="5" Cursor="Hand">
                     <material:PackIcon Kind="DownloadOutline" />
                 </Button>
                 <Button Grid.Column="1" Content="!bsrコピー" Command="{Binding CopyCommand}" Margin="5" Cursor="Hand"/>
+                <Button Grid.Column="2" Command="{Binding ShowDetailCommand}" Margin="5" Cursor="Hand" >
+                    <material:PackIcon Kind="InformationCircleOutline" />
+                </Button>
             </Grid>
         </Grid>
     </material:Card>

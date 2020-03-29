@@ -19,7 +19,7 @@ using System.Windows.Media;
 
 namespace BeatServerBrowser.Core.Models
 {
-    public class LocalBeatmapInfo : BindableBase, IEquatable<LocalBeatmapInfo>, IDisposable
+    public class LocalBeatmapInfo : BindableBase, IEquatable<LocalBeatmapInfo>
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
@@ -137,6 +137,11 @@ namespace BeatServerBrowser.Core.Models
         private DelegateCommand deleteCommand_;
         /// <summary>曲削除コマンド を取得、設定</summary>
         public DelegateCommand DeleteCommand => this.deleteCommand_ ?? (this.deleteCommand_ = new DelegateCommand(this.Delete));
+
+        /// <summary>曲詳細コマンド を取得、設定</summary>
+        private DelegateCommand showDetailCommand_;
+        /// <summary>曲詳細コマンド を取得、設定</summary>
+        public DelegateCommand ShowDetailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand(this.ShowDetail));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -197,14 +202,23 @@ namespace BeatServerBrowser.Core.Models
 
         private void Delete()
         {
-            this.DeleteSong?.Invoke(this);
+            this.DeleteSongAction?.Invoke(this);
+        }
+
+        private async void ShowDetail()
+        {
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            SongManager.CurrentSongManager.ShowDeailCommand?.Execute(new BeatmapEntity(beatmap));
+            //this.ShowDetailAction?.Invoke(new BeatmapEntity(beatmap));
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
         public Action CopyKey;
 
-        public Action<LocalBeatmapInfo> DeleteSong { get; set; }
+        public Action<LocalBeatmapInfo> DeleteSongAction; 
+
+        public Action<BeatmapEntity> ShowDetailAction;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
@@ -221,7 +235,7 @@ namespace BeatServerBrowser.Core.Models
             if (ReferenceEquals(this, b)) return true;
             if (this.GetType() != b.GetType()) return false;
 
-            return (this.SongHash.ToUpper() == b.SongHash.ToUpper());
+            return (this.SongHash?.ToUpper() == b.SongHash?.ToUpper());
         }
 
         public string GetKey()
@@ -252,41 +266,6 @@ namespace BeatServerBrowser.Core.Models
             this.IsPreView = false;
             this.PlayContent = "再生";
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // 重複する呼び出しを検出するには
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue) {
-                if (disposing) {
-                    // TODO: マネージ状態を破棄します (マネージ オブジェクト)。
-                    this.Player.Dispose();
-                }
-
-                // TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
-                // TODO: 大きなフィールドを null に設定します。
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: 上の Dispose(bool disposing) にアンマネージ リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします。
-        // ~LocalBeatmapInfo()
-        // {
-        //   // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-        //   Dispose(false);
-        // }
-
-        // このコードは、破棄可能なパターンを正しく実装できるように追加されました。
-        public void Dispose()
-        {
-            // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-            Dispose(true);
-            // TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
         #endregion
     }
 }

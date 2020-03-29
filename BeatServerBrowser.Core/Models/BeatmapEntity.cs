@@ -93,6 +93,11 @@ namespace BeatServerBrowser.Core.Models
         private DelegateCommand copyCommand_;
         /// <summary>コピー を取得、設定</summary>
         public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy));
+
+        /// <summary>詳細表示 を取得、設定</summary>
+        private DelegateCommand showDetailCommand_;
+        /// <summary>詳細表示 を取得、設定</summary>
+        public DelegateCommand ShowDetailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand(this.ShowDetail));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -146,10 +151,18 @@ namespace BeatServerBrowser.Core.Models
 
             return !this.IsInstalled;
         }
+
+        private void ShowDetail()
+        {
+            SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);
+            //this.ShowDetailAction?.Invoke(this);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
         public Action CopyKey;
+
+        public Action<BeatmapEntity> ShowDetailAction;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド

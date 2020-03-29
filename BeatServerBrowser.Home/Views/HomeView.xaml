@@ -36,7 +36,8 @@
                 </DockPanel>
             </StackPanel>
         </material:Card>
-
-        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="MainRegion" Margin="0" />
+        <material:DialogHost Grid.Column="1" Identifier="SongDetail">
+            <ContentControl prism:RegionManager.RegionName="MainRegion" Margin="0" />
+        </material:DialogHost>
     </Grid>
 </UserControl>

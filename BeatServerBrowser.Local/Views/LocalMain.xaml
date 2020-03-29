@@ -26,6 +26,7 @@
                     <StackPanel Grid.Column="1" Margin="20">
                         <Label Content="{Binding Player.Beatmap.SongTitle}" />
                         <Label Content="{Binding Player.Beatmap.LevelAuthorName}" />
+                        <Slider TickFrequency="1" TickPlacement="None" Orientation="Horizontal" Minimum="0" Maximum="100" Value="{Binding Player.SongPosition}" IsHitTestVisible="False" />
                     </StackPanel>
                 </Grid>
                 <Button Grid.Column="1" Content="停止" Margin="10" Command="{Binding StopCommand}"/>
