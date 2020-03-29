@@ -34,11 +34,27 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0">
-                        <Label Content="{Binding Beatmap.SongTitle}"/>
-                        <Label Content="{Binding Beatmap.SongAuthorName}"/>
-                        <Label Content="{Binding Beatmap.LevelAuthorName}"/>
-                        <Label Content="{Binding Beatmap.Uploader}"/>
-                        <Label Content="{Binding Beatmap.SongTitle}"/>
+                        <WrapPanel>
+                            <Label Content="曲名："/>
+                            <Label Content="{Binding Beatmap.SongTitle}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="作曲："/>
+                            <Label Content="{Binding Beatmap.Metadata.SongAuthorName}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="マッパー："/>
+                            <Label Content="{Binding Beatmap.Metadata.LevelAuthorName}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="アップロード者："/>
+                            <Label Content="{Binding Beatmap.UploaderName}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label Content="時間"/>
+                            <material:PackIcon Kind="AvTimer" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Label Content="{Binding Time}"/>
+                        </WrapPanel>
                     </StackPanel>
                     <Grid Grid.Row="1" Height="207" VerticalAlignment="Bottom">
                         <Grid.RowDefinitions>
