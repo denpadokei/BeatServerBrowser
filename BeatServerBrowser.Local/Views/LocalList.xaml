@@ -43,6 +43,9 @@
                                 <Button Margin="2" Width="Auto" Command="{Binding DeleteCommand}">
                                     <material:PackIcon Kind="TrashCanOutline" />
                                 </Button>
+                                <Button Margin="2" Width="Auto" Command="{Binding ShowDetailCommand}">
+                                    <material:PackIcon Kind="InformationCircleOutline" />
+                                </Button>
                             </DockPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

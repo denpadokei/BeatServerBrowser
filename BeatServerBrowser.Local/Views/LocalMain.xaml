@@ -16,6 +16,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <Grid.ColumnDefinitions>
@@ -30,6 +31,9 @@
                     </StackPanel>
                 </Grid>
                 <Button Grid.Column="1" Content="停止" Margin="10" Command="{Binding StopCommand}"/>
+                <Button Grid.Column="2" Command="{Binding ShowDetailCommand}" Margin="10" Cursor="Hand" >
+                    <material:PackIcon Kind="InformationCircleOutline" />
+                </Button>
             </Grid>
         </material:Card>
         

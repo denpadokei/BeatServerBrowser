@@ -1,4 +1,5 @@
 ﻿using BeatSaverSharp;
+using BeatServerBrowser.Core.Services;
 using NLog;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -98,6 +99,11 @@ namespace BeatServerBrowser.Core.Models
         private DelegateCommand showDetailCommand_;
         /// <summary>詳細表示 を取得、設定</summary>
         public DelegateCommand ShowDetailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand(this.ShowDetail));
+
+        /// <summary>プレビューコマンド を取得、設定</summary>
+        private DelegateCommand previewCommand_;
+        /// <summary>プレビューコマンド を取得、設定</summary>
+        public DelegateCommand PreviewCommand => this.previewCommand_ ?? (this.previewCommand_ = new DelegateCommand(this.Preview));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -157,6 +163,28 @@ namespace BeatServerBrowser.Core.Models
             SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);
             //this.ShowDetailAction?.Invoke(this);
         }
+
+        private async void Preview()
+        {
+            if (SoundPlayerService.CurrentPlayer.IsPreview) {
+                SoundPlayerService.CurrentPlayer.Stop();
+            }
+            var body = await this.Beatmap.DownloadZip();
+            var path = ConfigMaster.TempralyDirectory;
+            Directory.CreateDirectory(Path.Combine(path, this.Hash));
+            using (var stream = new MemoryStream(body)) {
+                using (var aricive = new ZipArchive(stream)) {
+                    foreach (var entry in aricive.Entries) {
+                        entry.ExtractToFile(Path.Combine(path, this.Hash, entry.FullName), true);
+                        this.Logger.Info($"{entry.Name}を展開しました。");
+                        Debug.WriteLine($"{entry.Name}を展開しました。");
+                    }
+                    var info = new DirectoryInfo(Path.Combine(path, this.Hash));
+                    var localmap = new LocalBeatmapInfo(info);
+                    localmap.PreViewCommand?.Execute();
+                }
+            }
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
@@ -175,6 +203,7 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
+        private readonly object lockObject_ = new object();
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄

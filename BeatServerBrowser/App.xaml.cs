@@ -85,6 +85,13 @@ namespace BeatServerBrowser
         {
             base.OnExit(e);
             SoundPlayerService.CurrentPlayer.Stop();
+            var info = new DirectoryInfo(ConfigMaster.TempralyDirectory);
+            foreach (var folder in info.EnumerateDirectories()) {
+                foreach (var item in folder.EnumerateFiles()) {
+                    item.Delete();
+                }
+                folder.Delete();
+            }
         }
     }
 }

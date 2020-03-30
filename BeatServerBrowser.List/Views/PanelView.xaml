@@ -32,23 +32,21 @@
                 </DockPanel>
             </Grid>
         </material:Card>
-        <material:Card Grid.Row="1" Padding="20">
-            <control:SerchScrollViewer UnderCommand="{Binding SerchCommand}">
-                <DockPanel>
-                    <ItemsControl ItemsSource="{Binding Beatmaps.Items}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <ContentControl Content="{Binding}" Margin="5"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </DockPanel>
-            </control:SerchScrollViewer>
-        </material:Card>
+        <control:SerchScrollViewer Grid.Row="1" UnderCommand="{Binding SerchCommand}">
+            <DockPanel>
+                <ItemsControl ItemsSource="{Binding Beatmaps.Items}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding}" Margin="5"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </control:SerchScrollViewer>
     </Grid>
 </UserControl>

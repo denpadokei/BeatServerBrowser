@@ -58,6 +58,16 @@ namespace BeatServerBrowser.Core.Services
             set => this.SetProperty(ref this.sounfFile_, value);
         }
 
+        /// <summary>再生中の音楽ファイル を取得、設定</summary>
+        private WaveFileReader soudStream_;
+        /// <summary>再生中の音楽ファイル を取得、設定</summary>
+        public WaveFileReader SoundStream
+        {
+            get => this.soudStream_;
+
+            set => this.SetProperty(ref this.soudStream_, value);
+        }
+
         /// <summary>曲の進捗 を取得、設定</summary>
         private double songPosition_;
         /// <summary>曲の進捗 を取得、設定</summary>
@@ -99,9 +109,50 @@ namespace BeatServerBrowser.Core.Services
             }
         }
 
+        public void Play(Stream stream, LocalBeatmapInfo info = null)
+        {
+            try {
+                this.Player.Stop();
+                this.IsPreview = true;
+                this.SoundFile = new VorbisWaveReader(stream);
+                this.Player.Init(this.SoundFile);
+                this.SetTimer();
+                lock (this.lockObject_) {
+                    this.Player.Play();
+                    this.Beatmap = info;
+                }
+            }
+            catch (Exception e) {
+                this.Logger.Error(e);
+                this.Beatmap = null;
+                this.Player.Stop();
+            }
+        }
+
+        public void Play(String fileName, LocalBeatmapInfo info = null)
+        {
+            try {
+                this.Player.Stop();
+                this.IsPreview = true;
+                this.SoundFile = new VorbisWaveReader(fileName);
+                this.Player.Init(this.SoundFile);
+                this.SetTimer();
+                lock (this.lockObject_) {
+                    this.Player.Play();
+                    this.Beatmap = info;
+                }
+            }
+            catch (Exception e) {
+                this.Logger.Error(e);
+                this.Beatmap = null;
+                this.Player.Stop();
+            }
+        }
+
         public void Stop()
         {
             this.Player.Stop();
+            this.SoundFile.Dispose();
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

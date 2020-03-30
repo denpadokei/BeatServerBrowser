@@ -217,6 +217,9 @@ namespace BeatServerBrowser.Core.Models
 
         private async void ShowDetail()
         {
+            if (string.IsNullOrWhiteSpace(this.SongHash)) {
+                return;
+            }
             var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
             SongManager.CurrentSongManager.ShowDeailCommand?.Execute(new BeatmapEntity(beatmap));
             //this.ShowDetailAction?.Invoke(new BeatmapEntity(beatmap));
