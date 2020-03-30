@@ -76,6 +76,16 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.localBeatmaps_, value);
         }
 
+        /// <summary>ソートしたローカルライブラリ を取得、設定</summary>
+        private SortedObservableCollection<LocalBeatmapInfo, string> sortedLocalBeatmaps_;
+        /// <summary>ソートしたローカルライブラリ を取得、設定</summary>
+        public SortedObservableCollection<LocalBeatmapInfo, string> SortedLocalBeatmaps
+        {
+            get => this.sortedLocalBeatmaps_;
+
+            set => this.SetProperty(ref this.sortedLocalBeatmaps_, value);
+        }
+
         /// <summary>ロード中かどうか を取得、設定</summary>
         private bool isLoading_;
         /// <summary>ロード中かどうか を取得、設定</summary>
@@ -140,14 +150,10 @@ namespace BeatServerBrowser.Core.Models
                 {
                     return;
                 }
-                var temp = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
                 info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).AsParallel().ForAll(folder => {
-                    temp.Add(new LocalBeatmapInfo(folder));
+                    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
+                    
                 });
-                
-                this.LocalBeatmaps.AddRange(temp.OrderBy(x => x.SongTitle));
-
-                temp.Dispose();
             }
             catch (Exception e)
             {
@@ -164,7 +170,7 @@ namespace BeatServerBrowser.Core.Models
         private readonly HttpOptions options_ = new HttpOptions()
         {
             ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 1, 3),
+            Version = new Version(0, 1, 5),
         };
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -178,6 +184,7 @@ namespace BeatServerBrowser.Core.Models
             this.CurrentBeatSaver = new BeatSaver(this.options_);
             this.CurrentScoreSaber = new ScoreSaber();
             this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
+            this.SortedLocalBeatmaps = this.LocalBeatmaps.ToSyncedSortedObservableCollection(key => key.SongTitle, isDescending: false);
         }
         #endregion
     }

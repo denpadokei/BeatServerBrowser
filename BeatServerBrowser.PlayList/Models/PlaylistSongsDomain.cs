@@ -7,6 +7,7 @@ using StatefulModel;
 using BeatServerBrowser.Core.Models;
 using System.Collections;
 using BeatServerBrowser.Core.Extentions;
+using BeatServerBrowser.Core.Interfaces;
 
 namespace BeatServerBrowser.PlayList.Models
 {
@@ -32,6 +33,26 @@ namespace BeatServerBrowser.PlayList.Models
             get => this.playlistBeatmaps_;
 
             set => this.SetProperty(ref this.playlistBeatmaps_, value);
+        }
+
+        /// <summary>ソートしたローカルライブラリ を取得、設定</summary>
+        private SortedObservableCollection<LocalBeatmapInfo, string> sortedLocalBeatmaps_;
+        /// <summary>ソートしたローカルライブラリ を取得、設定</summary>
+        public SortedObservableCollection<LocalBeatmapInfo, string> SortedLocalBeatmaps
+        {
+            get => this.sortedLocalBeatmaps_;
+
+            set => this.SetProperty(ref this.sortedLocalBeatmaps_, value);
+        }
+
+        /// <summary>ソートしたプレイリスト を取得、設定</summary>
+        private SortedObservableCollection<LocalBeatmapInfo, int> sortedPlaylistBeatmaps_;
+        /// <summary>ソートしたプレイリスト を取得、設定</summary>
+        public SortedObservableCollection<LocalBeatmapInfo, int> SortedPlaylistBeatmaps
+        {
+            get => this.sortedPlaylistBeatmaps_;
+
+            set => this.SetProperty(ref this.sortedPlaylistBeatmaps_, value);
         }
 
         /// <summary>ローカルフィルター を取得、設定</summary>
@@ -71,6 +92,7 @@ namespace BeatServerBrowser.PlayList.Models
             foreach (var item in list) {
                 if (item is LocalBeatmapInfo beatmap) {
                     this.nonFilteredLocalbeatmaps_.Remove(beatmap);
+                    beatmap.Index = this.nonFilteredPlaylistbeatmaps_.Count;
                     this.nonFilteredPlaylistbeatmaps_.Add(beatmap);
                 }
             }
@@ -83,10 +105,39 @@ namespace BeatServerBrowser.PlayList.Models
             foreach (var item in list) {
                 if (item is LocalBeatmapInfo beatmap) {
                     this.nonFilteredPlaylistbeatmaps_.Remove(beatmap);
+                    beatmap.Index = 0;
                     this.nonFilteredLocalbeatmaps_.Add(beatmap);
                 }
                 this.FilteringLocalBeatmap();
                 this.FilteringPlaylist();
+            }
+        }
+
+        public void Move(IList list, bool isUp)
+        {
+            if (isUp) {
+                if (list.OfType<LocalBeatmapInfo>().OrderBy(x => x.Index).FirstOrDefault().Index == 0) {
+                    return;
+                }
+                foreach (var beatmap in list.OfType<LocalBeatmapInfo>().OrderBy(x => x.Index)) {
+                    var tmp = this.SortedPlaylistBeatmaps[beatmap.Index - 1];
+                    this.SortedPlaylistBeatmaps.Remove(this.SortedPlaylistBeatmaps.FirstOrDefault(x => x.Index == beatmap.Index - 1));
+                    beatmap.Index -= 1;
+                    tmp.Index += 1;
+                    this.SortedPlaylistBeatmaps.Add(tmp);
+                }
+            }
+            else {
+                if (list.OfType<LocalBeatmapInfo>().OrderByDescending(x => x.Index).FirstOrDefault().Index == this.PlaylistBeatmaps.Count - 1) {
+                    return;
+                }
+                foreach (var beatmap in list.OfType<LocalBeatmapInfo>().OrderByDescending(x => x.Index)) {
+                    var tmp = this.SortedPlaylistBeatmaps[beatmap.Index + 1];
+                    this.SortedPlaylistBeatmaps.Remove(this.SortedPlaylistBeatmaps.FirstOrDefault(x => x.Index == beatmap.Index + 1));
+                    beatmap.Index += 1;
+                    tmp.Index -= 1;
+                    this.SortedPlaylistBeatmaps.Add(tmp);
+                }
             }
         }
 
@@ -113,8 +164,8 @@ namespace BeatServerBrowser.PlayList.Models
             }
             else {
                 foreach (var beatmap in this.nonFilteredPlaylistbeatmaps_.Where(x =>
-            x.SongTitle.ToUpper().Contains(this.LocalBeatmapFilter.FilterText.ToUpper())
-            || x.LevelAuthorName.ToUpper().Contains(this.LocalBeatmapFilter.FilterText.ToUpper()))) {
+            x.SongTitle.ToUpper().Contains(this.PlaylistFilter.FilterText.ToUpper())
+            || x.LevelAuthorName.ToUpper().Contains(this.PlaylistFilter.FilterText.ToUpper()))) {
                     this.PlaylistBeatmaps.Add(beatmap);
                 }
             }
@@ -133,8 +184,11 @@ namespace BeatServerBrowser.PlayList.Models
         #region // 構築・破棄
         public PlaylistSongsDomain()
         {
+            
             this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
             this.PlaylistBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
+            this.SortedPlaylistBeatmaps = this.PlaylistBeatmaps.ToSyncedSortedObservableCollection(key => key.Index, isDescending : false);
+            this.SortedLocalBeatmaps = this.LocalBeatmaps.ToSyncedSortedObservableCollection(key => key.SongTitle, isDescending: false);
             this.LocalBeatmapFilter = new PlaylistFilter();
             this.PlaylistFilter = new PlaylistFilter();
             this.nonFilteredLocalbeatmaps_ = new List<LocalBeatmapInfo>();

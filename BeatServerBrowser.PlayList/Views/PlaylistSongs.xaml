@@ -90,30 +90,40 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <material:Card Grid.Row="0">
-                    <TextBox material:HintAssist.Hint="検索" Margin="5" Text="{Binding PlaylistFilter.FilterText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox material:HintAssist.Hint="検索" Margin="5" Text="{Binding PlaylistFilteringText, UpdateSourceTrigger=PropertyChanged}"/>
                 </material:Card>
-                <control:CustomDataGrid x:Name="Playlistmaps" Grid.Row="1" ItemsSource="{Binding PlaylistBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80" IsReadOnly="True">
-                    <control:CustomDataGrid.Columns>
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image dp:LazyImageBehavior.LazySource="{Binding CoverUri}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="曲名" Width="*" Binding="{Binding SongTitle}"/>
-                        <DataGridTextColumn Header="譜面作者" Width="*" Binding="{Binding LevelAuthorName}"/>
-                        <DataGridTemplateColumn MinWidth="120">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <Button Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </control:CustomDataGrid.Columns>
-                </control:CustomDataGrid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <control:CustomDataGrid x:Name="Playlistmaps" Grid.Column="0" ItemsSource="{Binding PlaylistBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80" IsReadOnly="True">
+                        <control:CustomDataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image dp:LazyImageBehavior.LazySource="{Binding CoverUri}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="曲名" Width="*" Binding="{Binding SongTitle}"/>
+                            <DataGridTextColumn Header="譜面作者" Width="*" Binding="{Binding LevelAuthorName}"/>
+                            <DataGridTemplateColumn MinWidth="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Button Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </control:CustomDataGrid.Columns>
+                    </control:CustomDataGrid>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <Button Content="↑" Command="{Binding MoveUpCommand}" CommandParameter="{Binding SelectedItems, ElementName=Playlistmaps}"/>
+                        <Button Content="↓" Command="{Binding MoveDownCommand}" CommandParameter="{Binding SelectedItems, ElementName=Playlistmaps}" Cursor="Hand"/>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right">

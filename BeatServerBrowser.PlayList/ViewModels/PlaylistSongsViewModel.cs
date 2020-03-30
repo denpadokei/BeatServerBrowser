@@ -83,6 +83,16 @@ namespace BeatServerBrowser.PlayList.ViewModels
 
             set => this.SetProperty(ref this.canApply_, value);
         }
+
+        /// <summary>プレイリストのフィルタリングテキスト を取得、設定</summary>
+        private string playlistFilteringText_;
+        /// <summary>プレイリストのフィルタリングテキスト を取得、設定</summary>
+        public string PlaylistFilteringText
+        {
+            get => this.playlistFilteringText_;
+
+            set => this.SetProperty(ref this.playlistFilteringText_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -115,6 +125,17 @@ namespace BeatServerBrowser.PlayList.ViewModels
         private DelegateCommand stopCommand_;
         /// <summary>停止コマンド を取得、設定</summary>
         public DelegateCommand StopCommand => this.stopCommand_ ?? (this.stopCommand_ = new DelegateCommand(this.Stop));
+
+        /// <summary>上に移動 を取得、設定</summary>
+        private DelegateCommand<IList> moveUpCommand_;
+        /// <summary>上に移動 を取得、設定</summary>
+        public DelegateCommand<IList> MoveUpCommand => this.moveUpCommand_ ?? (this.moveUpCommand_ = new DelegateCommand<IList>(this.MoveUp, this.IsFilterd).ObservesProperty(() => this.PlaylistFilteringText));
+
+        /// <summary>下に移動 を取得、設定</summary>
+        private DelegateCommand<IList> moveDownCommand_;
+        /// <summary>下に移動 を取得、設定</summary>
+        public DelegateCommand<IList> MoveDownCommand => this.moveDownCommand_ ?? (this.moveDownCommand_ = new DelegateCommand<IList>(this.MoveDown, this.IsFilterd).ObservesProperty(() => this.PlaylistFilteringText));
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -146,7 +167,7 @@ namespace BeatServerBrowser.PlayList.ViewModels
                     jsonentity.PlayListTytle = this.PlaylistPreview.PlaylistName;
                     jsonentity.PlayListDescription = this.PlaylistPreview.DescriptionText;
                     jsonentity.FileLock = null;
-                    foreach (var item in this.domain_.nonFilteredPlaylistbeatmaps_) {
+                    foreach (var item in this.domain_.nonFilteredPlaylistbeatmaps_.OrderBy(x => x.Index)) {
                         var beatmap = new PlaylistSongEntity();
                         beatmap.Key = item.GetKey();
                         beatmap.SongName = item.SongTitle;
@@ -213,13 +234,41 @@ namespace BeatServerBrowser.PlayList.ViewModels
             this.PlaylistPreview.CoverPath = fileNames.FirstOrDefault();
         }
 
+        private void MoveUp(IList list)
+        {
+            if (list.Count == 0) {
+                return;
+            }
+            this.domain_.Move(list, true);
+        }
+
+        private void MoveDown(IList list)
+        {
+            if (list.Count == 0) {
+                return;
+            }
+            this.domain_.Move(list, false);
+        }
+
         private void Stop()
         {
             this.Player.Stop();
         }
+
+        private bool IsFilterd(IList _)
+        {
+            return this.domain_.nonFilteredPlaylistbeatmaps_.Count == this.domain_.SortedPlaylistBeatmaps.Count;
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
+        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+            if (args.PropertyName == nameof(this.PlaylistFilteringText)) {
+                this.PlaylistFilter.FilterText = this.PlaylistFilteringText;
+            }
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
@@ -241,7 +290,7 @@ namespace BeatServerBrowser.PlayList.ViewModels
         {
             this.Title = parameters.GetValue<string>("Title");
             this.PlaylistPreview = parameters.GetValue<PlaylistPreviewEntity>("Playlist");
-            this.domain_.nonFilteredLocalbeatmaps_.AddRange(ConfigMaster.Current.LocalBeatmaps);
+            this.domain_.nonFilteredLocalbeatmaps_.AddRange(ConfigMaster.Current.SortedLocalBeatmaps);
             var songlist = new List<LocalBeatmapInfo>();
             foreach (var beatmap in this.PlaylistPreview.Entity.Songs) {
                 var playlistsong = ConfigMaster.Current.LocalBeatmaps.FirstOrDefault(x => x.SongHash == beatmap.Hash);
@@ -298,8 +347,8 @@ namespace BeatServerBrowser.PlayList.ViewModels
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 this.PlaylistFilter, nameof(INotifyPropertyChanged.PropertyChanged), this.OnPlaylistFilterPropertyChanged);
 
-            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(this.domain_.LocalBeatmaps);
-            this.PlaylistBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(this.domain_.PlaylistBeatmaps);
+            this.LocalBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(this.domain_.SortedLocalBeatmaps);
+            this.PlaylistBeatmaps = new MTObservableCollection<LocalBeatmapInfo>(this.domain_.SortedPlaylistBeatmaps);
         }
         #endregion
     }

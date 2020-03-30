@@ -17,10 +17,10 @@ namespace BeatServerBrowser.Local.Finderes
             page++;
             if (mapList == null) {
                 for (int i = (page - 1) * 10; i < page * 10; i++) {
-                    if (ConfigMaster.Current.LocalBeatmaps.Count <= i) {
+                    if (ConfigMaster.Current.SortedLocalBeatmaps.Count <= i) {
                         continue;
                     }
-                    list.Add(ConfigMaster.Current.LocalBeatmaps[i]);
+                    list.Add(ConfigMaster.Current.SortedLocalBeatmaps[i]);
                 }
             }
             else {

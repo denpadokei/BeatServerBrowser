@@ -82,18 +82,20 @@ namespace BeatServerBrowser.Core.Services
         public void Play(FileInfo soundFileInfo, LocalBeatmapInfo info = null)
         {
             try {
-                this.IsPreview = true;
-                this.Beatmap = info;
                 this.Player.Stop();
+                this.IsPreview = true;
                 this.SoundFile = new VorbisWaveReader(soundFileInfo.FullName);
                 this.Player.Init(this.SoundFile);
                 this.SetTimer();
-                this.Player.Play();
+                lock (this.lockObject_) {
+                    this.Player.Play();
+                    this.Beatmap = info;
+                }
             }
             catch (Exception e) {
                 this.Logger.Error(e);
                 this.Beatmap = null;
-                this.Stop();
+                this.Player.Stop();
             }
         }
 
@@ -116,32 +118,32 @@ namespace BeatServerBrowser.Core.Services
 
         private void OnPlayBackStopped(object sender, StoppedEventArgs e)
         {
-            this.timer_?.Stop();
-            this.timer_?.Dispose();
-            this.Player?.Dispose();
-            this.SoundFile?.Dispose();
-            this.SoundFile = null;
-            
-
-            this.IsPreview = false;
-            this.Beatmap = null;
-            Debug.WriteLine($"{this.Player.PlaybackState}:曲が停止しました。");
+            lock (this.lockObject_) {
+                this.timer_.Stop();
+                this.IsPreview = false;
+                if (this.Player.PlaybackState != PlaybackState.Playing) {
+                    this.Beatmap = null;
+                }
+                Debug.WriteLine($"{this.Player.PlaybackState}:曲が停止しました。");
+            }
         }
 
         private void SetTimer()
         {
-            this.timer_ = new Timer(1000);
-            this.timer_.Elapsed += this.RaiseLength;
-            this.timer_.Enabled = true;
+            this.timer_.Start();
         }
 
         private async void RaiseLength(object sender, ElapsedEventArgs e)
         {
             await Task.Run(() =>
             {
-                lock (this.lockObject_) {
+                try {
                     this.SongPosition = ((double)this.Player.GetPosition() / (double)this.SoundFile.Length) * 100d;
                     Debug.WriteLine($"{DateTime.Now:yyyy/MM/dd hh:mm:ss} {this.SongPosition}");
+                }
+                catch (Exception e) {
+                    this.timer_.Stop();
+                    Debug.WriteLine(e);
                 }
             });
         }
@@ -162,6 +164,9 @@ namespace BeatServerBrowser.Core.Services
             this.Player.PlaybackStopped += this.OnPlayBackStopped;
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 ConfigMaster.Current, nameof(INotifyPropertyChanged.PropertyChanged), this.OnConfigPropertyChanged);
+            this.timer_ = new Timer(1000);
+            this.timer_.Elapsed += this.RaiseLength;
+            this.timer_.Enabled = true;
         }
         #endregion
     }

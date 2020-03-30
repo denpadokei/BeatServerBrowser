@@ -1,4 +1,5 @@
-﻿using BeatServerBrowser.Core.Services;
+﻿using BeatServerBrowser.Core.Interfaces;
+using BeatServerBrowser.Core.Services;
 using NAudio.Vorbis;
 using NAudio.Wave;
 using Newtonsoft.Json;
@@ -19,7 +20,7 @@ using System.Windows.Media;
 
 namespace BeatServerBrowser.Core.Models
 {
-    public class LocalBeatmapInfo : BindableBase, IEquatable<LocalBeatmapInfo>
+    public class LocalBeatmapInfo : BindableBase, IEquatable<LocalBeatmapInfo>, IIndexable
     {
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プロパティ
@@ -116,6 +117,16 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.player_, value);
         }
 
+        /// <summary>曲のソート順 を取得、設定</summary>
+        private int index__;
+        /// <summary>曲のソート順 を取得、設定</summary>
+        public int Index
+        {
+            get => this.index__;
+
+            set => this.SetProperty(ref this.index__, value);
+        }
+
         public DirectoryInfo Directory { get; set; }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -196,7 +207,6 @@ namespace BeatServerBrowser.Core.Models
         private void PreView()
         {
             var soundFileInfo = this.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
-            this.Player.Stop();
             this.Player.Play(soundFileInfo, this);
         }
 

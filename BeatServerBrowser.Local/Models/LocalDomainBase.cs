@@ -98,14 +98,14 @@ namespace BeatServerBrowser.Local.Models
 
             this.FilteredMaps.Clear();
             if (string.IsNullOrWhiteSpace(this.Filter.FilterText)) {
-                foreach (var beatmap in ConfigMaster.Current.LocalBeatmaps) {
+                foreach (var beatmap in ConfigMaster.Current.SortedLocalBeatmaps) {
                     beatmap.DeleteSongAction -= this.DeleteSong;
                     beatmap.DeleteSongAction += this.DeleteSong;
                     this.FilteredMaps.Add(beatmap);
                 }
             }
-            else if (ConfigMaster.Current.LocalBeatmaps.Where(x => x.SongTitle !=null || x.LevelAuthorName != null).Any()) {
-                foreach (var beatmap in ConfigMaster.Current.LocalBeatmaps.Where(x => x.SongTitle != null && x.LevelAuthorName != null
+            else if (ConfigMaster.Current.SortedLocalBeatmaps.Where(x => x.SongTitle !=null || x.LevelAuthorName != null).Any()) {
+                foreach (var beatmap in ConfigMaster.Current.SortedLocalBeatmaps.Where(x => x.SongTitle != null && x.LevelAuthorName != null
                 && (x.SongTitle.ToUpper().Contains(this.Filter.FilterText.ToUpper())
                 || x.LevelAuthorName.ToUpper().Contains(this.Filter.FilterText.ToUpper())))) {
                     beatmap.DeleteSongAction -= this.DeleteSong;
