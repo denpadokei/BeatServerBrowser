@@ -40,6 +40,16 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.coverUri_, value);
         }
 
+        /// <summary>カバー画像（byte[]） を取得、設定</summary>
+        private byte[] coverbuff_;
+        /// <summary>カバー画像（byte[]） を取得、設定</summary>
+        public byte[] CoverBuff
+        {
+            get => this.coverbuff_;
+
+            set => this.SetProperty(ref this.coverbuff_, value);
+        }
+
 
         public string SongTitle => this.Beatmap.Name;
 
@@ -211,6 +221,7 @@ namespace BeatServerBrowser.Core.Models
         {
             this.Beatmap = beatmap;
             this.CoverUri = new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}");
+            this.CoverBuff = this.Beatmap.FetchCoverImage().Result;
         }
         #endregion
     }

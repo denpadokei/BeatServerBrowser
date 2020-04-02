@@ -23,7 +23,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image dp:LazyImageBehavior.LazySource="{Binding CoverUri}"/>
+                            <Image dp:LazyImageBehavior.KeySource="{Binding CoverBuff}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

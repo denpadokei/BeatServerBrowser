@@ -146,13 +146,19 @@ namespace BeatServerBrowser.Core.Services
                 this.Logger.Error(e);
                 this.Beatmap = null;
                 this.Player.Stop();
+                this.SoundFile?.Dispose();
             }
         }
 
         public void Stop()
         {
-            this.Player.Stop();
-            this.SoundFile.Dispose();
+            try {
+                this.Player.Stop();
+                this.SoundFile?.Dispose();
+            }
+            catch (Exception e) {
+                Debug.WriteLine(e);
+            }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -193,7 +199,9 @@ namespace BeatServerBrowser.Core.Services
                     Debug.WriteLine($"{DateTime.Now:yyyy/MM/dd hh:mm:ss} {this.SongPosition}");
                 }
                 catch (Exception e) {
+                    this.Player?.Stop();
                     this.timer_.Stop();
+                    this.SoundFile?.Dispose();
                     Debug.WriteLine(e);
                 }
             });

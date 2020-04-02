@@ -42,6 +42,23 @@ namespace BeatServerBrowser.Core.DependencyPropaties
         public static readonly DependencyProperty Base64SourceProperty =
             DependencyProperty.RegisterAttached("Base64Source", typeof(string), typeof(LazyImageBehavior), new PropertyMetadata("", Base64Source_Changed));
 
+        [AttachedPropertyBrowsableForType(typeof(Image))]
+        public static string GetKeySource(Image element)
+        {
+            return (string)element.GetValue(KeySourceProperty);
+        }
+
+        [AttachedPropertyBrowsableForType(typeof(Image))]
+        public static void SetKeySource(Image element, string value)
+        {
+            element.SetValue(KeySourceProperty, value);
+        }
+
+        public static readonly DependencyProperty KeySourceProperty =
+            DependencyProperty.RegisterAttached("KeySource", typeof(byte[]), typeof(LazyImageBehavior), new PropertyMetadata(null, KeySourse_Changed));
+
+        
+
 
         #endregion
 
@@ -83,6 +100,18 @@ namespace BeatServerBrowser.Core.DependencyPropaties
                 return;
             }
             var image = await LazyBitmapImage.ConvertImage(e.NewValue as string);
+            if (image != null) {
+                element.Source = image;
+            }
+        }
+
+        private static async void KeySourse_Changed(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var element = sender as Image;
+            if (element == null) {
+                return;
+            }
+            var image = await LazyBitmapImage.GetBeatmapImage(e.NewValue as byte[]);
             if (image != null) {
                 element.Source = image;
             }

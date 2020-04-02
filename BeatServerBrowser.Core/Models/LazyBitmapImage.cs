@@ -1,6 +1,7 @@
 ﻿using NLog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
@@ -32,15 +33,19 @@ namespace BeatServerBrowser.Core.Models
                     return image;
                 }
                 catch (WebException webe) {
+                    Debug.WriteLine(webe);
                     logger.Error(webe);
                 }
                 catch (IOException ioe) {
+                    Debug.WriteLine(ioe);
                     logger.Error(ioe);
                 }
                 catch (InvalidOperationException ie) {
+                    Debug.WriteLine(ie);
                     logger.Error(ie);
                 }
                 catch (Exception e) {
+                    Debug.WriteLine(e);
                     logger.Error(e);
                 }
                 finally {
@@ -69,6 +74,41 @@ namespace BeatServerBrowser.Core.Models
                     logger.Error(e);
                 }
 
+                return null;
+            });
+        }
+
+
+        public static Task<BitmapImage> GetBeatmapImage(byte[] keyByte)
+        {
+            var logger = LogManager.GetCurrentClassLogger();
+            return Task.Run(() => {
+                try {
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.CreateOptions = BitmapCreateOptions.None;
+                    image.StreamSource = new MemoryStream(keyByte);
+                    image.EndInit();
+                    image.Freeze();
+                    return image;
+                }
+                catch (WebException webe) {
+                    Debug.WriteLine(webe);
+                    logger.Error(webe);
+                }
+                catch (IOException ioe) {
+                    Debug.WriteLine(ioe);
+                    logger.Error(ioe);
+                }
+                catch (InvalidOperationException ie) {
+                    Debug.WriteLine(ie);
+                    logger.Error(ie);
+                }
+                catch (Exception e) {
+                    Debug.WriteLine(e);
+                    logger.Error(e);
+                }
                 return null;
             });
         }

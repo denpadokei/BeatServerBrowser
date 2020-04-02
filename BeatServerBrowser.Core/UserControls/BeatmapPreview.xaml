@@ -24,7 +24,7 @@
                 <Label Grid.Row="0" Content="{Binding SongTitle}" Margin="2" Height="30"/>
                 <Label Grid.Row="1" Content="{Binding UploaderName}" Margin="2" Height="30"/>
             </Grid>
-            <Image Grid.Row="1" dependprop:LazyImageBehavior.LazySource="{Binding CoverUri}" />
+            <Image Grid.Row="1" dependprop:LazyImageBehavior.KeySource="{Binding CoverBuff}" />
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />

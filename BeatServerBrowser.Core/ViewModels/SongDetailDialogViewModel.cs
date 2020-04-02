@@ -116,7 +116,7 @@ namespace BeatServerBrowser.Core.ViewModels
             foreach (var difficulty in this.Beatmap.Metadata.Characteristics) {
                 this.BeatmapDifficults.Add(difficulty);
             }
-            var span = new TimeSpan(0, 0, this.Beatmap.Metadata.Duration);
+            var span = new TimeSpan(0, 0, (int)this.Beatmap.Metadata.Duration);
             this.Time = $"{span}";
         }
         #endregion

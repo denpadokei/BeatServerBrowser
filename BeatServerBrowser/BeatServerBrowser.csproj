@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>BeatServerBrowser</AssemblyName>
-    <AssemblyVersion>0.1.5.0</AssemblyVersion>
-    <FileVersion>0.1.5.0</FileVersion>
+    <AssemblyVersion>0.1.5.1</AssemblyVersion>
+    <FileVersion>0.1.5.1</FileVersion>
     <Version>0.1.5.0</Version>
     <Authors>denpadokei</Authors>
     <StartupObject></StartupObject>
@@ -17,7 +17,7 @@
     <Page Remove="Models\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BeatSaverSharp" Version="1.5.2" />
+    <PackageReference Include="BeatSaverSharp" Version="1.5.3" />
     <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
     <PackageReference Include="NLog" Version="4.6.8" />
