@@ -176,23 +176,28 @@ namespace BeatServerBrowser.Core.Models
 
         private async void Preview()
         {
-            if (SoundPlayerService.CurrentPlayer.IsPreview) {
-                SoundPlayerService.CurrentPlayer.Stop();
-            }
-            var body = await this.Beatmap.DownloadZip();
-            var path = ConfigMaster.TempralyDirectory;
-            Directory.CreateDirectory(Path.Combine(path, this.Hash));
-            using (var stream = new MemoryStream(body)) {
-                using (var aricive = new ZipArchive(stream)) {
-                    foreach (var entry in aricive.Entries) {
-                        entry.ExtractToFile(Path.Combine(path, this.Hash, entry.FullName), true);
-                        this.Logger.Info($"{entry.Name}を展開しました。");
-                        Debug.WriteLine($"{entry.Name}を展開しました。");
-                    }
-                    var info = new DirectoryInfo(Path.Combine(path, this.Hash));
-                    var localmap = new LocalBeatmapInfo(info);
-                    localmap.PreViewCommand?.Execute();
+            try {
+                if (SoundPlayerService.CurrentPlayer.IsPreview) {
+                    SoundPlayerService.CurrentPlayer.Stop();
                 }
+                var body = await this.Beatmap.DownloadZip();
+                var path = ConfigMaster.TempralyDirectory;
+                Directory.CreateDirectory(Path.Combine(path, this.Hash));
+                using (var stream = new MemoryStream(body)) {
+                    using (var aricive = new ZipArchive(stream)) {
+                        foreach (var entry in aricive.Entries) {
+                            entry.ExtractToFile(Path.Combine(path, this.Hash, entry.FullName), true);
+                            this.Logger.Info($"{entry.Name}を展開しました。");
+                            Debug.WriteLine($"{entry.Name}を展開しました。");
+                        }
+                        var info = new DirectoryInfo(Path.Combine(path, this.Hash));
+                        var localmap = new LocalBeatmapInfo(info);
+                        localmap.PreViewCommand?.Execute();
+                    }
+                }
+            }
+            catch (Exception e) {
+                Debug.WriteLine(e);
             }
         }
         #endregion

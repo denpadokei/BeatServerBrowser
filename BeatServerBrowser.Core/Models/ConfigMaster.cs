@@ -107,6 +107,16 @@ namespace BeatServerBrowser.Core.Models
 
             set => this.SetProperty(ref this.volume_, value);
         }
+
+        /// <summary>ｼｭの有効かどうか を取得、設定</summary>
+        private bool isEnambleSh_;
+        /// <summary>ｼｭの有効かどうか を取得、設定</summary>
+        public bool IsEnableSh
+        {
+            get => this.isEnambleSh_;
+
+            set => this.SetProperty(ref this.isEnambleSh_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -187,6 +197,7 @@ namespace BeatServerBrowser.Core.Models
             this.CurrentScoreSaber = new ScoreSaber();
             this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
             this.SortedLocalBeatmaps = this.LocalBeatmaps.ToSyncedSortedObservableCollection(key => key.SongTitle, isDescending: false);
+            this.IsEnableSh = false;
         }
         #endregion
     }

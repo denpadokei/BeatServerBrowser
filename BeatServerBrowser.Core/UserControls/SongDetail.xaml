@@ -28,7 +28,17 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-                <Image Width="250" Height="250" Grid.Column="0" VerticalAlignment="Top" dp:LazyImageBehavior.KeySource="{Binding Beatmap.CoverBuff}" Margin="5"/>
+                <Grid Grid.Column="0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="250"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Width="250" Grid.Row="0" VerticalAlignment="Top" dp:LazyImageBehavior.KeySource="{Binding Beatmap.CoverBuff}" Margin="5"/>
+                    <Button Grid.Row="1" Command="{Binding Beatmap.DownloadCommand}" Margin="5" VerticalAlignment="Top">
+                        <material:PackIcon Kind="FileDownloadOutline"/>
+                    </Button>
+                </Grid>
+                
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition />

@@ -39,7 +39,9 @@
                         <DataTemplate>
                             <DockPanel>
                                 <Button Margin="2" Content="!bsrコピー" Command="{Binding CopyCommand}"/>
-                                <Button Margin="2" Content="再生" Command="{Binding PreViewCommand}"/>
+                                <Button Margin="2" Command="{Binding PreViewCommand}">
+                                    <material:PackIcon Kind="PlayArrow" />
+                                </Button>
                                 <Button Margin="2" Width="Auto" Command="{Binding DeleteCommand}">
                                     <material:PackIcon Kind="TrashCanOutline" />
                                 </Button>

@@ -5,6 +5,7 @@
              xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewmodel="clr-namespace:BeatServerBrowser.Home.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dp="clr-namespace:BeatServerBrowser.Core.DependencyPropaties;assembly=BeatServerBrowser.Core"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:action="clr-namespace:BeatServerBrowser.Core.Actions;assembly=BeatServerBrowser.Core"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,27 +18,55 @@
             <action:DataContextInitialize/>
         </b:EventTrigger>
     </b:Interaction.Triggers>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <material:Card Grid.Row="0" Padding="10" Margin="5" IsEnabled="{Binding IsEnable}">
-            <StackPanel>
+    <material:DrawerHost BorderBrush="{DynamicResource MaterialDesignDivider}" IsLeftDrawerOpen="{Binding ElementName=MainMenuToggleButton, Path=IsChecked}">
+        <material:DrawerHost.LeftDrawerContent>
+            <StackPanel MinWidth="220" IsEnabled="{Binding IsEnable}">
+                <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="16" IsChecked="{Binding ElementName=MainMenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
                 <Button Content="オンライン一覧" Command="{Binding NavigateListCommand}" VerticalAlignment="Center" Margin="20" Cursor="Hand" />
                 <Button Content="オンライン検索" Command="{Binding NavigateSerchCommand}" VerticalAlignment="Center" Margin="20" />
                 <Button Content="ローカルライブラリ" Command="{Binding NavigateLocalCommand}" VerticalAlignment="Center" Margin="20" Cursor="Hand" />
                 <Button Content="プレイリスト" Command="{Binding NavigatePlaylistCommand}" VerticalAlignment="Center" Margin="20" Cursor="Hand" />
                 <Button Content="設定" Command="{Binding ShowSettingWindowCommand}" VerticalAlignment="Center" Margin="20" />
                 <DockPanel>
-                    <TextBlock Text="ローカル曲数" Margin="20"/>
-                    <TextBlock Text="{Binding LocalSongCount}" Margin="20"/>
-                    <TextBlock Text="曲" Margin="5,20,0,20"/>
+                    <Label Content="ローカル曲数" Margin="20"/>
+                    <Label Content="{Binding LocalSongCount}" Margin="20"/>
+                    <Label Content="曲" Margin="5,20,0,20"/>
                 </DockPanel>
             </StackPanel>
-        </material:Card>
+        </material:DrawerHost.LeftDrawerContent>
         <material:DialogHost Grid.Column="1" Identifier="SongDetail">
-            <ContentControl prism:RegionManager.RegionName="MainRegion" Margin="0" />
+            <DockPanel>
+                <material:ColorZone Mode="PrimaryDark" Padding="16" DockPanel.Dock="Top">
+                    <DockPanel>
+                        <ToggleButton x:Name="MainMenuToggleButton" Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="{Binding IsOpenDraw}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Image Height="70" Grid.Column="0" Margin="20,2,20,2" dp:LazyImageBehavior.LazySource="{Binding Player.Beatmap.CoverUri}"/>
+                                <StackPanel Grid.Column="1" Margin="20,2,20,2">
+                                    <Label Content="{Binding Player.Beatmap.SongTitle}" />
+                                    <Label Content="{Binding Player.Beatmap.LevelAuthorName}" />
+                                    <Slider TickFrequency="1" TickPlacement="None" Orientation="Horizontal" Minimum="0" Maximum="100" Value="{Binding Player.SongPosition}" IsHitTestVisible="False" />
+                                </StackPanel>
+                            </Grid>
+                            <Button Grid.Column="1" Content="停止" Margin="10" Command="{Binding StopCommand}"/>
+                            <Button Grid.Column="2" Command="{Binding ShowDetailCommand}" Margin="10" Cursor="Hand" >
+                                <material:PackIcon Kind="InformationCircleOutline" />
+                            </Button>
+                        </Grid>
+                    </DockPanel>
+                </material:ColorZone>
+                <ContentControl prism:RegionManager.RegionName="MainRegion" Margin="0" />
+            </DockPanel>
         </material:DialogHost>
-    </Grid>
+        
+    </material:DrawerHost>
 </UserControl>

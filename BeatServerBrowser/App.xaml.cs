@@ -81,16 +81,21 @@ namespace BeatServerBrowser
             base.ConfigureModuleCatalog(moduleCatalog);
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs args)
         {
-            base.OnExit(e);
+            base.OnExit(args);
             SoundPlayerService.CurrentPlayer.Stop();
             var info = new DirectoryInfo(ConfigMaster.TempralyDirectory);
             foreach (var folder in info.EnumerateDirectories()) {
-                foreach (var item in folder.EnumerateFiles()) {
-                    item.Delete();
+                try {
+                    foreach (var item in folder.EnumerateFiles()) {
+                        item.Delete();
+                    }
+                    folder.Delete();
                 }
-                folder.Delete();
+                catch (Exception e) {
+                    Debug.WriteLine(e);
+                }
             }
         }
     }

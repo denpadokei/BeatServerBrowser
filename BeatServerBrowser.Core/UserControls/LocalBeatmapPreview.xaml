@@ -34,7 +34,9 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Content="!bsrコピー" Command="{Binding CopyCommand}" Margin="5"/>
-                    <Button Grid.Column="1" Content="{Binding PlayContent}" Command="{Binding PreViewCommand}" Margin="5" Cursor="Hand"/>
+                    <Button Grid.Column="1" Command="{Binding PreViewCommand}" Margin="5" Cursor="Hand">
+                        <material:PackIcon Kind="PlayArrow" />
+                    </Button>
                     <Button Grid.Column="2" Width="Auto" Command="{Binding DeleteCommand}" Margin="2">
                         <material:PackIcon Kind="TrashCanOutline" />
                     </Button>

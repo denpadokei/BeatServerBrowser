@@ -7,38 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <material:Card Grid.Row="0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Image Height="70" Grid.Column="0" Margin="20" dp:LazyImageBehavior.LazySource="{Binding Player.Beatmap.CoverUri}"/>
-                    <StackPanel Grid.Column="1" Margin="20">
-                        <Label Content="{Binding Player.Beatmap.SongTitle}" />
-                        <Label Content="{Binding Player.Beatmap.LevelAuthorName}" />
-                        <Slider TickFrequency="1" TickPlacement="None" Orientation="Horizontal" Minimum="0" Maximum="100" Value="{Binding Player.SongPosition}" IsHitTestVisible="False" />
-                    </StackPanel>
-                </Grid>
-                <Button Grid.Column="1" Content="停止" Margin="10" Command="{Binding StopCommand}"/>
-                <Button Grid.Column="2" Command="{Binding ShowDetailCommand}" Margin="10" Cursor="Hand" >
-                    <material:PackIcon Kind="InformationCircleOutline" />
-                </Button>
-            </Grid>
-        </material:Card>
-        
-        
-        <dragablz:TabablzControl Grid.Row="1">
+        <dragablz:TabablzControl>
             <TabItem>
                 <TabItem.Header>
                     <material:PackIcon Kind="Grid" />

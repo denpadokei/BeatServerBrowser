@@ -209,7 +209,7 @@ namespace BeatServerBrowser.Core.Services
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private readonly WaveOutEvent Player;
+        private readonly WaveOut Player;
 
         private Timer timer_;
 
@@ -219,7 +219,7 @@ namespace BeatServerBrowser.Core.Services
         #region // 構築・破棄
         private SoundPlayerService()
         {
-            this.Player = new WaveOutEvent();
+            this.Player = new WaveOut();
             this.Player.PlaybackStopped += this.OnPlayBackStopped;
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 ConfigMaster.Current, nameof(INotifyPropertyChanged.PropertyChanged), this.OnConfigPropertyChanged);
