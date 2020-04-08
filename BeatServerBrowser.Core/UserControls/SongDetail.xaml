@@ -95,6 +95,10 @@
                                 <Label Content="{Binding Difficulity.Notes}"/>
                             </DockPanel>
                             <DockPanel>
+                                <Label Content="NPS"/>
+                                <Label Content="{Binding NPS}" />
+                            </DockPanel>
+                            <DockPanel>
                                 <Label Content="壁数"/>
                                 <Label Content="{Binding Difficulity.Obstacles}"/>
                             </DockPanel>

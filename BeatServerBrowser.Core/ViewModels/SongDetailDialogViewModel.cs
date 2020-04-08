@@ -76,6 +76,16 @@ namespace BeatServerBrowser.Core.ViewModels
             set => this.SetProperty(ref this.difficulty_, value);
         }
 
+        /// <summary>NPS を取得、設定</summary>
+        private string nps_;
+        /// <summary>NPS を取得、設定</summary>
+        public string NPS
+        {
+            get => this.nps_;
+
+            set => this.SetProperty(ref this.nps_, value);
+        }
+
         /// <summary>時間 を取得、設定</summary>
         private string time_;
         /// <summary>時間 を取得、設定</summary>
@@ -106,6 +116,7 @@ namespace BeatServerBrowser.Core.ViewModels
             }
             else if (args.PropertyName == nameof(this.SelectedDifficult) && this.SelectedDifficult is KeyValuePair<string, BeatmapCharacteristicDifficulty?> dict) {
                 this.Difficulity = dict.Value;
+                this.NPS = $"{(double)this.Difficulity.Value.Notes / (double)this.Difficulity.Value.Length:N2}";
             }
         }
 
