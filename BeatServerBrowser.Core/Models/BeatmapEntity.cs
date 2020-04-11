@@ -142,7 +142,7 @@ namespace BeatServerBrowser.Core.Models
                         }
                     }
                 }
-                var newBeatmap = new LocalBeatmapInfo(directoryInfo);
+                var newBeatmap = new LocalBeatmapInfo(directoryInfo, true);
                 newBeatmap.CreateCommand.Execute();
                 ConfigMaster.Current.LocalBeatmaps.Add(newBeatmap);
                 this.IsInstalled = true;
@@ -191,7 +191,7 @@ namespace BeatServerBrowser.Core.Models
                             Debug.WriteLine($"{entry.Name}を展開しました。");
                         }
                         var info = new DirectoryInfo(Path.Combine(path, this.Hash));
-                        var localmap = new LocalBeatmapInfo(info);
+                        var localmap = new LocalBeatmapInfo(info, false);
                         localmap.PreViewCommand?.Execute();
                     }
                 }

@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using BeatServerBrowser.Core.Services;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -117,6 +118,11 @@ namespace BeatServerBrowser.Core.Models
         private DelegateCommand deleteCommand_;
         /// <summary>削除コマンド を取得、設定</summary>
         public DelegateCommand DeleteCommand => this.deleteCommand_ ?? (this.deleteCommand_ = new DelegateCommand(this.Delete).ObservesCanExecute(() => this.IsLock));
+
+        /// <summary>プレビュー を取得、設定</summary>
+        private DelegateCommand previewCommand_;
+        /// <summary>プレビュー を取得、設定</summary>
+        public DelegateCommand PreviewCommand => this.previewCommand_ ?? (this.previewCommand_ = new DelegateCommand(this.Preview));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -128,6 +134,17 @@ namespace BeatServerBrowser.Core.Models
         private void Delete()
         {
             this.DeleteEvent?.Invoke(this);
+        }
+
+        private void Preview()
+        {
+            var list = new List<LocalBeatmapInfo>();
+            foreach (var songjson in this.Entity.Songs) {
+                var beatmap = ConfigMaster.Current.SortedLocalBeatmaps.FirstOrDefault(x => x.SongHash == songjson.Hash);
+                list.Add(beatmap);
+            }
+            var soundFileInfo = list[0].Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
+            SoundPlayerService.CurrentPlayer.Play(soundFileInfo, list[0], list);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

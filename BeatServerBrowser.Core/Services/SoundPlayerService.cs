@@ -1,15 +1,20 @@
-﻿using BeatServerBrowser.Core.Interfaces;
+﻿using BeatServerBrowser.Core.Extentions;
+using BeatServerBrowser.Core.Interfaces;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Static.Enums;
+using MaterialDesignThemes.Wpf;
 using NAudio.Vorbis;
 using NAudio.Wave;
 using NLog;
 using Prism.Mvvm;
+using StatefulModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +41,16 @@ namespace BeatServerBrowser.Core.Services
             get => this.beatmap_ ?? new LocalBeatmapInfo();
 
             set => this.SetProperty(ref this.beatmap_, value);
+        }
+
+        /// <summary>再生する曲のリスト を取得、設定</summary>
+        private ObservableSynchronizedCollection<LocalBeatmapInfo> playlist_;
+        /// <summary>再生する曲のリスト を取得、設定</summary>
+        public ObservableSynchronizedCollection<LocalBeatmapInfo> Playlist
+        {
+            get => this.playlist_;
+
+            set => this.SetProperty(ref this.playlist_, value);
         }
 
         /// <summary>再生中かどうか を取得、設定</summary>
@@ -68,6 +83,26 @@ namespace BeatServerBrowser.Core.Services
             set => this.SetProperty(ref this.soudStream_, value);
         }
 
+        /// <summary>リピートモード を取得、設定</summary>
+        private PackIconKind repeatMode_;
+        /// <summary>リピートモード を取得、設定</summary>
+        public PackIconKind RepeatMode
+        {
+            get => this.repeatMode_;
+
+            set => this.SetProperty(ref this.repeatMode_, value);
+        }
+
+        /// <summary>シャッフルするかどうか を取得、設定</summary>
+        private bool isShuffule_;
+        /// <summary>シャッフルするかどうか を取得、設定</summary>
+        public bool IsShuffule
+        {
+            get => this.isShuffule_;
+
+            set => this.SetProperty(ref this.isShuffule_, value);
+        }
+
         /// <summary>曲の進捗 を取得、設定</summary>
         private double songPosition_;
         /// <summary>曲の進捗 を取得、設定</summary>
@@ -76,6 +111,16 @@ namespace BeatServerBrowser.Core.Services
             get => this.songPosition_;
 
             set => this.SetProperty(ref this.songPosition_, value);
+        }
+
+        /// <summary>再生中の曲のインデックス を取得、設定</summary>
+        private int playIndex_;
+        /// <summary>再生中の曲のインデックス を取得、設定</summary>
+        public int PlayIndex
+        {
+            get => this.playIndex_;
+
+            set => this.SetProperty(ref this.playIndex_, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -89,7 +134,7 @@ namespace BeatServerBrowser.Core.Services
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public void Play(FileInfo soundFileInfo, LocalBeatmapInfo info = null)
+        public void Play(FileInfo soundFileInfo, LocalBeatmapInfo info = null, IList playlist = null)
         {
             try {
                 this.Player.Stop();
@@ -98,6 +143,14 @@ namespace BeatServerBrowser.Core.Services
                 this.Player.Init(this.SoundFile);
                 this.SetTimer();
                 lock (this.lockObject_) {
+                    if (playlist != null) {
+                        this.PlayIndex = playlist.IndexOf(info);
+                        this.CreatePlaylist(playlist.OfType<LocalBeatmapInfo>().ToList());
+                    }
+                    else {
+                        this.Playlist.Clear();
+                        this.Playlist.Add(info);
+                    }
                     this.Player.Play();
                     this.Beatmap = info;
                 }
@@ -109,7 +162,7 @@ namespace BeatServerBrowser.Core.Services
             }
         }
 
-        public void Play(Stream stream, LocalBeatmapInfo info = null)
+        public void Play(Stream stream, LocalBeatmapInfo info = null, IList playlist = null)
         {
             try {
                 this.Player.Stop();
@@ -118,8 +171,15 @@ namespace BeatServerBrowser.Core.Services
                 this.Player.Init(this.SoundFile);
                 this.SetTimer();
                 lock (this.lockObject_) {
-                    this.Player.Play();
+                    if (playlist != null) {
+                        this.CreatePlaylist(playlist.OfType<LocalBeatmapInfo>().ToList());
+                    }
+                    else {
+                        this.Playlist.Clear();
+                        this.Playlist.Add(info);
+                    }
                     this.Beatmap = info;
+                    this.Player.Play();
                 }
             }
             catch (Exception e) {
@@ -153,8 +213,11 @@ namespace BeatServerBrowser.Core.Services
         public void Stop()
         {
             try {
-                this.Player.Stop();
-                this.SoundFile?.Dispose();
+                lock (this.lockObject_) {
+                    this.Player.Stop();
+                    this.SoundFile?.Dispose();
+                    this.IsPreview = false;
+                }
             }
             catch (Exception e) {
                 Debug.WriteLine(e);
@@ -177,11 +240,61 @@ namespace BeatServerBrowser.Core.Services
         {
             lock (this.lockObject_) {
                 this.timer_.Stop();
-                this.IsPreview = false;
                 if (this.Player.PlaybackState != PlaybackState.Playing) {
                     this.Beatmap = null;
                 }
                 Debug.WriteLine($"{this.Player.PlaybackState}:曲が停止しました。");
+                if (this.IsPreview == false) {
+                    return;
+                }
+                switch (this.RepeatMode) {
+                    case PackIconKind.RepeatOne:
+                        this.SoundFile.Position = 0;
+                        this.Beatmap = this.Playlist[this.PlayIndex];
+                        this.Player.Init(this.SoundFile);
+                        this.SetTimer();
+                        lock (this.lockObject_) {
+                            this.IsPreview = true;
+                            this.Player.Play();
+                        }
+                        break;
+                    case PackIconKind.Repeat:
+                        this.PlayIndex++;
+                        if (this.Playlist.Count <= this.PlayIndex) {
+                            this.PlayIndex = 0;
+                        }
+                        this.Beatmap = this.Playlist[this.PlayIndex];
+                        var file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                        this.IsPreview = true;
+                        this.SoundFile?.Dispose();
+                        this.SoundFile = new VorbisWaveReader(file.FullName);
+                        this.Player.Init(this.SoundFile);
+                        this.SetTimer();
+                        lock (this.lockObject_) {
+                            this.Player.Play();
+                        }
+                        break;
+                    default:
+                        this.PlayIndex++;
+                        if (this.Playlist.Count <= this.PlayIndex) {
+                            this.PlayIndex = 0;
+                            this.IsPreview = false;
+                            return;
+                        }
+                        else {
+                            this.Beatmap = this.Playlist[this.PlayIndex];
+                            file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                            this.IsPreview = true;
+                            this.SoundFile?.Dispose();
+                            this.SoundFile = new VorbisWaveReader(file.FullName);
+                            this.Player.Init(this.SoundFile);
+                            this.SetTimer();
+                            lock (this.lockObject_) {
+                                this.Player.Play();
+                            }
+                        }
+                        break;
+                }
             }
         }
 
@@ -206,6 +319,24 @@ namespace BeatServerBrowser.Core.Services
                 }
             });
         }
+
+        private void CreatePlaylist(IList<LocalBeatmapInfo> list)
+        {
+            this.Playlist.Clear();
+            this.Playlist.Add(list[0]);
+            list.RemoveAt(0);
+            if (this.IsShuffule) {
+                var ramdam = new Random();
+                while (list.Count > 0) {
+                    var beatmap = list[ramdam.Next(0, list.Count)];
+                    this.Playlist.Add(beatmap);
+                    list.Remove(beatmap);
+                }
+            }
+            else {
+                this.Playlist.AddRange(list);
+            }
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
@@ -220,6 +351,7 @@ namespace BeatServerBrowser.Core.Services
         private SoundPlayerService()
         {
             this.Player = new WaveOut();
+            this.Playlist = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
             this.Player.PlaybackStopped += this.OnPlayBackStopped;
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 ConfigMaster.Current, nameof(INotifyPropertyChanged.PropertyChanged), this.OnConfigPropertyChanged);

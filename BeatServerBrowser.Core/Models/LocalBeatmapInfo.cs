@@ -127,6 +127,16 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.index__, value);
         }
 
+        /// <summary>ローカルで作成されたものかどうか を取得、設定</summary>
+        private bool isLocal_;
+        /// <summary>ローカルで作成されたものかどうか を取得、設定</summary>
+        public bool IsLocal
+        {
+            get => this.isLocal_;
+
+            set => this.SetProperty(ref this.isLocal_, value);
+        }
+
         public DirectoryInfo Directory { get; set; }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -206,8 +216,18 @@ namespace BeatServerBrowser.Core.Models
 
         private void PreView()
         {
+            this.Player.Stop();
             var soundFileInfo = this.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
-            this.Player.Play(soundFileInfo, this);
+            if (this.IsLocal) {
+                var playlist = ConfigMaster.Current.SortedLocalBeatmaps.ToList();
+                playlist.Remove(this);
+                playlist.Insert(0, this);
+                this.Player.Play(soundFileInfo, this, playlist);
+            }
+            else {
+                this.Player.Play(soundFileInfo, this);
+            }
+            
         }
 
         private void Delete()
@@ -262,13 +282,14 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄
-        public LocalBeatmapInfo(DirectoryInfo directory)
+        public LocalBeatmapInfo(DirectoryInfo directory, bool isLocal)
         {
             this.Player = SoundPlayerService.CurrentPlayer;
             this.Directory = directory;
             this.CreateCommand = new DelegateCommand(this.Create);
             this.IsPreView = false;
             this.PlayContent = "再生";
+            this.IsLocal = isLocal;
             this.Create();
         }
 
@@ -277,6 +298,7 @@ namespace BeatServerBrowser.Core.Models
             this.Player = SoundPlayerService.CurrentPlayer;
             this.CreateCommand = new DelegateCommand(this.Create);
             this.IsPreView = false;
+            this.IsLocal = false;
             this.PlayContent = "再生";
         }
         #endregion

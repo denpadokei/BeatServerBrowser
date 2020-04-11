@@ -7,7 +7,7 @@
              xmlns:dp="clr-namespace:BeatServerBrowser.Core.DependencyPropaties"
              xmlns:local="clr-namespace:BeatServerBrowser.Core.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="120" d:DesignWidth="800">
+             d:DesignHeight="300" d:DesignWidth="800">
     <Grid>
         <material:Card Padding="20">
             <Grid>
@@ -21,7 +21,10 @@
                     <Label Content="{Binding Author}"/>
                     <Label Content="{Binding DescriptionText}" Height="50"/>
                     <WrapPanel>
-                        <Button Margin="10" Width="Auto" Command="{Binding EditCommand}">
+                        <Button Margin="10" Width="Auto" Command="{Binding PreviewCommand}" Cursor="Hand">
+                            <material:PackIcon Kind="PlayArrow" />
+                        </Button>
+                        <Button Margin="10" Width="Auto" Command="{Binding EditCommand}" Cursor="Hand">
                             <material:PackIcon Kind="FileEdit" />
                         </Button>
                         <Button Width="Auto" Command="{Binding DeleteCommand}" Cursor="Hand">

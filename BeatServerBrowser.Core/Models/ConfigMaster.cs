@@ -163,7 +163,7 @@ namespace BeatServerBrowser.Core.Models
                     return;
                 }
                 info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).AsParallel().ForAll(folder => {
-                    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder));
+                    this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder, true));
                     
                 });
             }

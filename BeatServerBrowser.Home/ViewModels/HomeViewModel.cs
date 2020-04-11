@@ -57,6 +57,45 @@ namespace BeatServerBrowser.Home.ViewModels
 
             set => this.SetProperty(ref this.isOpenDraw_, value);
         }
+
+        /// <summary>リピートアイコン を取得、設定</summary>
+        private PackIconKind repeatIcon_;
+        /// <summary>リピートアイコン を取得、設定</summary>
+        public PackIconKind RepeatIcon
+        {
+            get => this.repeatIcon_;
+
+            set => this.SetProperty(ref this.repeatIcon_, value);
+        }
+
+        /// <summary>シャッフルアイコン を取得、設定</summary>
+        private PackIconKind shuffuleIcon_;
+        /// <summary>シャッフルアイコン を取得、設定</summary>
+        public PackIconKind ShuffuleIcon
+        {
+            get => this.shuffuleIcon_;
+
+            set => this.SetProperty(ref this.shuffuleIcon_, value);
+        }
+        /// <summary>リピートするかどうか を取得、設定</summary>
+        private bool isRepeat_;
+        /// <summary>リピートするかどうか を取得、設定</summary>
+        public bool IsRepeat
+        {
+            get => this.isRepeat_;
+
+            set => this.SetProperty(ref this.isRepeat_, value);
+        }
+
+        /// <summary>シャッフルするかどうか を取得、設定</summary>
+        private bool isShuffule_;
+        /// <summary>シャッフルするかどうか を取得、設定</summary>
+        public bool IsShuffule
+        {
+            get => this.isShuffule_;
+
+            set => this.SetProperty(ref this.isShuffule_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -159,6 +198,9 @@ namespace BeatServerBrowser.Home.ViewModels
             if (string.IsNullOrWhiteSpace(ConfigMaster.Current.InstallFolder) || !File.Exists(@$"{ConfigMaster.Current.InstallFolder}\Beat Saber.exe")) {
                 this.dialogService_.Show("SettingView", new DialogParameters(), _ => { });
             }
+            this.RepeatIcon = PackIconKind.RepeatOff;
+            this.Player.RepeatMode = PackIconKind.RepeatOff;
+            this.ShuffuleIcon = PackIconKind.ShuffleDisabled;
             this.loadingService_.Load(this.Config.CreateLocalBeatmaps);
         }
 
@@ -176,6 +218,28 @@ namespace BeatServerBrowser.Home.ViewModels
                         Debug.WriteLine(e);
                     }
                 }
+            }
+            if (args.PropertyName == nameof(this.IsRepeat)) {
+                if (this.IsRepeat == true && this.RepeatIcon == PackIconKind.RepeatOff) {
+                    this.RepeatIcon = PackIconKind.Repeat;
+                }
+                else if (this.IsRepeat == false && this.RepeatIcon == PackIconKind.Repeat) {
+                    this.IsRepeat = true;
+                    this.RepeatIcon = PackIconKind.RepeatOne;
+                }
+                else if (this.IsRepeat == false && this.RepeatIcon == PackIconKind.RepeatOne) {
+                    this.RepeatIcon = PackIconKind.RepeatOff;
+                }
+                this.Player.RepeatMode = this.RepeatIcon;
+            }
+            if (args.PropertyName == nameof(this.IsShuffule)) {
+                if (this.IsShuffule) {
+                    this.ShuffuleIcon = PackIconKind.ShuffleVariant;
+                }
+                else {
+                    this.ShuffuleIcon = PackIconKind.ShuffleDisabled;
+                }
+                this.Player.IsShuffule = this.IsShuffule;
             }
         }
         #endregion
@@ -240,7 +304,7 @@ namespace BeatServerBrowser.Home.ViewModels
         public HomeViewModel()
         {
             this.ShPlayer = new WaveOut();
-            this.SoundFile = new AudioFileReader(Path.Combine(ConfigMaster.ThisDirectoryPath, @"Sounds\shukansei.wav"));
+            //this.SoundFile = new AudioFileReader(Path.Combine(ConfigMaster.ThisDirectoryPath, @"Sounds\shukansei.wav"));
         }
         #endregion
     }

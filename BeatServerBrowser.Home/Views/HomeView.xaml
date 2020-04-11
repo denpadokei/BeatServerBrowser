@@ -57,10 +57,27 @@
                                     <Slider TickFrequency="1" TickPlacement="None" Orientation="Horizontal" Minimum="0" Maximum="100" Value="{Binding Player.SongPosition}" IsHitTestVisible="False" />
                                 </StackPanel>
                             </Grid>
-                            <Button Grid.Column="1" Content="停止" Margin="10" Command="{Binding StopCommand}"/>
-                            <Button Grid.Column="2" Command="{Binding ShowDetailCommand}" Margin="10" Cursor="Hand" >
-                                <material:PackIcon Kind="InformationCircleOutline" />
-                            </Button>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Row="0" Grid.Column="0" Content="停止" Margin="2" Command="{Binding StopCommand}"/>
+                                <Button Grid.Row="0" Grid.Column="1" Command="{Binding ShowDetailCommand}" Margin="2" Cursor="Hand" >
+                                    <material:PackIcon Kind="InformationCircleOutline" />
+                                </Button>
+                                <ToggleButton Grid.Row="1" Grid.Column="0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"  ToolTip="MaterialDesignFlatPrimaryToggleButton" IsChecked="{Binding IsRepeat}">
+                                    <material:PackIcon Kind="{Binding RepeatIcon}" Height="21" Width="21" Foreground="DarkGray"/>
+                                </ToggleButton>
+                                <ToggleButton Grid.Row="1" Grid.Column="1" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"  ToolTip="MaterialDesignFlatPrimaryToggleButton" IsChecked="{Binding IsShuffule}">
+                                    <material:PackIcon Kind="{Binding ShuffuleIcon}" Height="21" Width="21" Foreground="DarkGray" />
+                                </ToggleButton>
+                                
+                            </Grid>
                         </Grid>
                     </DockPanel>
                 </material:ColorZone>
