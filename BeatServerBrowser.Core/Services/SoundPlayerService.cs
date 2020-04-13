@@ -31,6 +31,8 @@ namespace BeatServerBrowser.Core.Services
         private static SoundPlayerService player_ = new SoundPlayerService();
 
         public static SoundPlayerService CurrentPlayer => player_;
+
+        
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
         /// <summary>再生中の譜面情報 を取得、設定</summary>
@@ -333,6 +335,7 @@ namespace BeatServerBrowser.Core.Services
                 try {
                     this.SongPosition = ((double)this.Player.GetPosition() / (double)this.SoundFile.Length) * 100d;
                     Debug.WriteLine($"{DateTime.Now:yyyy/MM/dd hh:mm:ss} {this.SongPosition}");
+                    //this.Logger.Info($"{this.SongPosition}");
                 }
                 catch (Exception e) {
                     this.Player?.Stop();
@@ -423,9 +426,9 @@ namespace BeatServerBrowser.Core.Services
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private readonly WaveOut Player;
+        private readonly Timer timer_;
 
-        private Timer timer_;
+        private readonly WaveOut Player;
 
         private readonly object lockObject_ = new object();
         #endregion
