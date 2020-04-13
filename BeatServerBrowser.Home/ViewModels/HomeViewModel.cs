@@ -221,6 +221,9 @@ namespace BeatServerBrowser.Home.ViewModels
             this.RepeatIcon = PackIconKind.RepeatOff;
             this.Player.RepeatMode = PackIconKind.RepeatOff;
             this.ShuffuleIcon = PackIconKind.ShuffleDisabled;
+
+            this.IsRepeat = true;
+            this.IsShuffule = true;
             this.loadingService_.Load(this.Config.CreateLocalBeatmaps);
         }
 
