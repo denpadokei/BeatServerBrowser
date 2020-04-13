@@ -122,6 +122,16 @@ namespace BeatServerBrowser.Core.Services
 
             set => this.SetProperty(ref this.playIndex_, value);
         }
+
+        /// <summary>スキップで停止したかどうか を取得、設定</summary>
+        private bool isSkip_;
+        /// <summary>スキップで停止したかどうか を取得、設定</summary>
+        public bool IsSkip
+        {
+            get => this.isSkip_;
+
+            set => this.SetProperty(ref this.isSkip_, value);
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -134,6 +144,12 @@ namespace BeatServerBrowser.Core.Services
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
+        /// <summary>
+        /// ファイル情報から音楽を再生します
+        /// </summary>
+        /// <param name="soundFileInfo"></param>
+        /// <param name="info"></param>
+        /// <param name="playlist"></param>
         public void Play(FileInfo soundFileInfo, LocalBeatmapInfo info = null, IList playlist = null)
         {
             try {
@@ -162,6 +178,12 @@ namespace BeatServerBrowser.Core.Services
             }
         }
 
+        /// <summary>
+        /// <see cref="Stream"/>から音楽ファイルを再生します。
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="info"></param>
+        /// <param name="playlist"></param>
         public void Play(Stream stream, LocalBeatmapInfo info = null, IList playlist = null)
         {
             try {
@@ -189,6 +211,11 @@ namespace BeatServerBrowser.Core.Services
             }
         }
 
+        /// <summary>
+        /// ファイル名から音楽ファイル再生します。
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="info"></param>
         public void Play(String fileName, LocalBeatmapInfo info = null)
         {
             try {
@@ -223,6 +250,48 @@ namespace BeatServerBrowser.Core.Services
                 Debug.WriteLine(e);
             }
         }
+
+        public void SkipBackword()
+        {
+            if (this.Playlist.Count == 0) {
+                return;
+            }
+
+            lock (this.lockObject_) {
+                this.timer_.Stop();
+                this.Player.Stop();
+                if (0 <= this.SongPosition && this.SongPosition <= 2) {
+                    if (this.PlayIndex == 0) {
+                        this.PlayIndex = this.Playlist.Count - 1;
+                    }
+                    else {
+                        this.PlayIndex--;
+                    }
+                }
+                this.SongPosition = 0;
+                this.IsSkip = true;
+            }
+        }
+
+        public void SkipForward()
+        {
+            if (this.Playlist.Count == 0) {
+                return;
+            }
+
+            lock (this.lockObject_) {
+                this.timer_.Stop();
+                this.Player.Stop();
+                this.SongPosition = 0;
+                if (this.PlayIndex >= this.Playlist.Count - 1) {
+                    this.PlayIndex = 0;
+                }
+                else {
+                    this.PlayIndex++;
+                }
+                this.IsSkip = true;
+            }
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
@@ -240,6 +309,7 @@ namespace BeatServerBrowser.Core.Services
         {
             lock (this.lockObject_) {
                 this.timer_.Stop();
+                this.SongPosition = 0;
                 if (this.Player.PlaybackState != PlaybackState.Playing) {
                     this.Beatmap = null;
                 }
@@ -247,54 +317,7 @@ namespace BeatServerBrowser.Core.Services
                 if (this.IsPreview == false) {
                     return;
                 }
-                switch (this.RepeatMode) {
-                    case PackIconKind.RepeatOne:
-                        this.SoundFile.Position = 0;
-                        this.Beatmap = this.Playlist[this.PlayIndex];
-                        this.Player.Init(this.SoundFile);
-                        this.SetTimer();
-                        lock (this.lockObject_) {
-                            this.IsPreview = true;
-                            this.Player.Play();
-                        }
-                        break;
-                    case PackIconKind.Repeat:
-                        this.PlayIndex++;
-                        if (this.Playlist.Count <= this.PlayIndex) {
-                            this.PlayIndex = 0;
-                        }
-                        this.Beatmap = this.Playlist[this.PlayIndex];
-                        var file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
-                        this.IsPreview = true;
-                        this.SoundFile?.Dispose();
-                        this.SoundFile = new VorbisWaveReader(file.FullName);
-                        this.Player.Init(this.SoundFile);
-                        this.SetTimer();
-                        lock (this.lockObject_) {
-                            this.Player.Play();
-                        }
-                        break;
-                    default:
-                        this.PlayIndex++;
-                        if (this.Playlist.Count <= this.PlayIndex) {
-                            this.PlayIndex = 0;
-                            this.IsPreview = false;
-                            return;
-                        }
-                        else {
-                            this.Beatmap = this.Playlist[this.PlayIndex];
-                            file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
-                            this.IsPreview = true;
-                            this.SoundFile?.Dispose();
-                            this.SoundFile = new VorbisWaveReader(file.FullName);
-                            this.Player.Init(this.SoundFile);
-                            this.SetTimer();
-                            lock (this.lockObject_) {
-                                this.Player.Play();
-                            }
-                        }
-                        break;
-                }
+                this.PlayNextSong();
             }
         }
 
@@ -336,6 +359,66 @@ namespace BeatServerBrowser.Core.Services
             else {
                 this.Playlist.AddRange(list);
             }
+        }
+
+        private void PlayNextSong()
+        {
+            if (this.IsSkip) {
+                this.IsPreview = true;
+                this.Beatmap = this.Playlist[this.PlayIndex];
+                this.SoundFile?.Dispose();
+                this.SoundFile = new VorbisWaveReader(this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault().FullName);
+                this.Player.Init(this.SoundFile);
+                this.SetTimer();
+                this.Player.Play();
+            }
+            else {
+                switch (this.RepeatMode) {
+                    case PackIconKind.RepeatOne:
+                        this.Beatmap = this.Playlist[this.PlayIndex];
+                        this.IsPreview = true;
+                        this.SoundFile?.Dispose();
+                        this.SoundFile = new VorbisWaveReader(this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault().FullName);
+                        this.Player.Init(this.SoundFile);
+                        this.SetTimer();
+                        this.IsPreview = true;
+                        this.Player.Play();
+                        break;
+                    case PackIconKind.Repeat:
+                        this.PlayIndex++;
+                        if (this.Playlist.Count <= this.PlayIndex) {
+                            this.PlayIndex = 0;
+                        }
+                        this.Beatmap = this.Playlist[this.PlayIndex];
+                        var file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                        this.IsPreview = true;
+                        this.SoundFile?.Dispose();
+                        this.SoundFile = new VorbisWaveReader(file.FullName);
+                        this.Player.Init(this.SoundFile);
+                        this.SetTimer();
+                        this.Player.Play();
+                        break;
+                    default:
+                        this.PlayIndex++;
+                        if (this.Playlist.Count <= this.PlayIndex) {
+                            this.PlayIndex = 0;
+                            this.IsPreview = false;
+                            return;
+                        }
+                        else {
+                            this.Beatmap = this.Playlist[this.PlayIndex];
+                            file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                            this.IsPreview = true;
+                            this.SoundFile?.Dispose();
+                            this.SoundFile = new VorbisWaveReader(file.FullName);
+                            this.Player.Init(this.SoundFile);
+                            this.SetTimer();
+                            this.Player.Play();
+                        }
+                        break;
+                }
+            }
+            this.IsSkip = false;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

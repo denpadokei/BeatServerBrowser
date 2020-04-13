@@ -44,6 +44,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
                                 <Grid.ColumnDefinitions>
@@ -58,24 +59,34 @@
                                 </StackPanel>
                             </Grid>
                             <Grid Grid.Column="1">
+                                <Button Command="{Binding ShowDetailCommand}" Margin="2" Cursor="Hand" >
+                                    <material:PackIcon Kind="InformationCircleOutline" />
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Column="3">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Row="0" Grid.Column="0" Content="停止" Margin="2" Command="{Binding StopCommand}"/>
-                                <Button Grid.Row="0" Grid.Column="1" Command="{Binding ShowDetailCommand}" Margin="2" Cursor="Hand" >
-                                    <material:PackIcon Kind="InformationCircleOutline" />
-                                </Button>
-                                <ToggleButton Grid.Row="1" Grid.Column="0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"  ToolTip="MaterialDesignFlatPrimaryToggleButton" IsChecked="{Binding IsRepeat}">
-                                    <material:PackIcon Kind="{Binding RepeatIcon}" Height="21" Width="21" Foreground="DarkGray"/>
-                                </ToggleButton>
-                                <ToggleButton Grid.Row="1" Grid.Column="1" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"  ToolTip="MaterialDesignFlatPrimaryToggleButton" IsChecked="{Binding IsShuffule}">
-                                    <material:PackIcon Kind="{Binding ShuffuleIcon}" Height="21" Width="21" Foreground="DarkGray" />
-                                </ToggleButton>
+                                <DockPanel Grid.Row="0" HorizontalAlignment="Center">
+                                    <ToggleButton Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" Margin="5,2" ToolTip="MaterialDesignFlatPrimaryToggleButton" IsChecked="{Binding IsRepeat}" >
+                                        <material:PackIcon Kind="{Binding RepeatIcon}" Height="21" Width="21" Foreground="DarkGray"/>
+                                    </ToggleButton>
+                                    <ToggleButton Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}" Margin="5,2" ToolTip="MaterialDesignFlatPrimaryToggleButton" IsChecked="{Binding IsShuffule}">
+                                        <material:PackIcon Kind="{Binding ShuffuleIcon}" Height="21" Width="21" Foreground="DarkGray" />
+                                    </ToggleButton>
+                                </DockPanel>
+                                <DockPanel Grid.Row="1">
+                                    <Button Margin="2" Command="{Binding SkipBackwordCommand}">
+                                        <material:PackIcon Kind="SkipBackward" />
+                                    </Button>
+                                    <Button Margin="2" Command="{Binding StopCommand}">
+                                        <material:PackIcon Kind="Stop"/>
+                                    </Button>
+                                    <Button Margin="2" Command="{Binding SkipForwordCommand}">
+                                        <material:PackIcon Kind="SkipForward" />
+                                    </Button>
+                                </DockPanel>
                                 
                             </Grid>
                         </Grid>

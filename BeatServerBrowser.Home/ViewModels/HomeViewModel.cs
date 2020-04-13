@@ -129,6 +129,16 @@ namespace BeatServerBrowser.Home.ViewModels
         /// <summary>停止 を取得、設定</summary>
         public DelegateCommand StopCommand => this.stopCommand_ ?? (this.stopCommand_ = new DelegateCommand(this.Stop));
 
+        /// <summary>次の曲へのコマンド を取得、設定</summary>
+        private DelegateCommand skipForwordCommand_;
+        /// <summary>次の曲へのコマンド を取得、設定</summary>
+        public DelegateCommand SkipForwordCommand => this.skipForwordCommand_ ?? (this.skipForwordCommand_ = new DelegateCommand(this.SkipForword));
+
+        /// <summary>前の曲へコマンド を取得、設定</summary>
+        private DelegateCommand skipBackwordCommand_;
+        /// <summary>前の曲へコマンド を取得、設定</summary>
+        public DelegateCommand SkipBackwordCommand => this.skipBackwordCommand_ ?? (this.skipBackwordCommand_ = new DelegateCommand(this.SkipBackword));
+
         /// <summary>詳細表示 を取得、設定</summary>
         private DelegateCommand showDetailCommand_;
         /// <summary>詳細表示 を取得、設定</summary>
@@ -169,6 +179,16 @@ namespace BeatServerBrowser.Home.ViewModels
         private void ShowDetail()
         {
             this.Player.Beatmap.ShowDetailCommand?.Execute();
+        }
+
+        private void SkipForword()
+        {
+            this.Player.SkipForward();
+        }
+
+        private void SkipBackword()
+        {
+            this.Player.SkipBackword();
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
