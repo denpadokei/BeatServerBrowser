@@ -12,7 +12,7 @@ namespace BeatServerBrowser.Core.Actions
     {
         protected override void Invoke(object parameter)
         {
-            if (this.AssociatedObject is IDisposable context) {
+            if (this.AssociatedObject.DataContext is IDisposable context) {
                 context.Dispose();
             }
         }

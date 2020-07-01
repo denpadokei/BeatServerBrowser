@@ -271,10 +271,10 @@ namespace BeatServerBrowser.Core.Models
             return (this.SongHash?.ToUpper() == b.SongHash?.ToUpper());
         }
 
-        public string GetKey()
+        public async Task<string> GetKey()
         {
-            var beatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash).Result;
-            return beatmap.Key;
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            return beatmap == null ? "" : beatmap.Key;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

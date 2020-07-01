@@ -169,7 +169,7 @@ namespace BeatServerBrowser.PlayList.ViewModels
                     jsonentity.FileLock = null;
                     foreach (var item in this.domain_.nonFilteredPlaylistbeatmaps_.OrderBy(x => x.Index)) {
                         var beatmap = new PlaylistSongEntity();
-                        beatmap.Key = item.GetKey();
+                        beatmap.Key = "";// await item.GetKey();
                         beatmap.SongName = item.SongTitle;
                         beatmap.Hash = item.SongHash;
                         jsonentity.Songs.Add(beatmap);

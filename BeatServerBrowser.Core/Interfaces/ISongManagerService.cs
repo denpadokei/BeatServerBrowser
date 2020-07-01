@@ -11,6 +11,6 @@ namespace BeatServerBrowser.Core.Interfaces
 
         void Delete(LocalBeatmapInfo beatmap);
 
-        Action SongDeleted { get; set; }
+        event Action SongDeleted;
     }
 }
