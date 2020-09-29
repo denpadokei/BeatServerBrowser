@@ -8,7 +8,7 @@ namespace BeatServerBrowser.Core.Models
     public class PlaylistSongEntity
     {
         [JsonProperty("key")]
-        public string Key { get; set; }
+        public string Key { get; set; } = "";
 
         [JsonProperty("songName")]
         public string SongName { get; set; }

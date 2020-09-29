@@ -166,10 +166,8 @@ namespace BeatServerBrowser.PlayList.ViewModels
                     jsonentity.PlayListAuthor = this.PlaylistPreview.Author;
                     jsonentity.PlayListTytle = this.PlaylistPreview.PlaylistName;
                     jsonentity.PlayListDescription = this.PlaylistPreview.DescriptionText;
-                    jsonentity.FileLock = null;
                     foreach (var item in this.domain_.nonFilteredPlaylistbeatmaps_.OrderBy(x => x.Index)) {
                         var beatmap = new PlaylistSongEntity();
-                        beatmap.Key = "";// await item.GetKey();
                         beatmap.SongName = item.SongTitle;
                         beatmap.Hash = item.SongHash;
                         jsonentity.Songs.Add(beatmap);
