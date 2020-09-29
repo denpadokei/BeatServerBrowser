@@ -156,9 +156,10 @@ namespace BeatSaberDataProvider
         public static void WriteExceptions(this AggregateException ae, string message)
         {
             var logger = LogManager.GetCurrentClassLogger();
+            logger.Error(ae);
 
             for (int i = 0; i < ae.InnerExceptions.Count; i++) {
-                logger.ErrorException($"Exception {i}:\n", ae.InnerExceptions[i]);
+                //logger.Error($"Exception {i}:\n", ae.InnerExceptions[i]);
                 if (ae.InnerExceptions[i] is AggregateException ex)
                     WriteExceptions(ex, ""); // TODO: This could get very long
             }
