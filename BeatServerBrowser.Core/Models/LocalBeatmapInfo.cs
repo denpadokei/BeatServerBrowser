@@ -162,7 +162,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>曲詳細コマンド を取得、設定</summary>
         private DelegateCommand showDetailCommand_;
         /// <summary>曲詳細コマンド を取得、設定</summary>
-        public DelegateCommand ShowDetailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand(this.ShowDetail));
+        public DelegateCommand ShowDetailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand(async () => await this.ShowDetail()));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -235,12 +235,15 @@ namespace BeatServerBrowser.Core.Models
             this.DeleteSongAction?.Invoke(this);
         }
 
-        private async void ShowDetail()
+        private async Task ShowDetail()
         {
             if (string.IsNullOrWhiteSpace(this.SongHash)) {
                 return;
             }
             var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            if (beatmap == null) {
+                return;
+            }
             SongManager.CurrentSongManager.ShowDeailCommand?.Execute(new BeatmapEntity(beatmap));
             //this.ShowDetailAction?.Invoke(new BeatmapEntity(beatmap));
         }
@@ -256,6 +259,7 @@ namespace BeatServerBrowser.Core.Models
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
         public override bool Equals(object obj) => this.Equals(obj as LocalBeatmapInfo);
+        public override int GetHashCode() => base.GetHashCode();
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド

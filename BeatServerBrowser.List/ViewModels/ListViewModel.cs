@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Threading.Tasks;
 
 namespace BeatServerBrowser.List.ViewModels
 {
@@ -55,7 +56,7 @@ namespace BeatServerBrowser.List.ViewModels
             if (this.loadingService_.IsLoading == true) {
                 return;
             }
-            this.loadingService_?.Load(this.domain_.Serch);
+            this.loadingService_?.Load(async () => await this.domain_.Serch());
         }
 
         private void Reset()

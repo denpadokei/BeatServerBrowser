@@ -41,10 +41,13 @@ namespace BeatServerBrowser.PlayList.Models
         {
             this.Playlists.Clear();
             var info = new DirectoryInfo(this.playlistPath);
-            foreach (var json in info.EnumerateFiles("*.json", SearchOption.TopDirectoryOnly)) {
-                var jsontext = File.ReadAllText(json.FullName);
+            var jsons = info.EnumerateFiles("*.json", SearchOption.AllDirectories);
+            var bplists = info.EnumerateFiles("*.bplist", SearchOption.AllDirectories);
+            var playlists = jsons.Union(bplists);
+            foreach (var jsonfileInfo in playlists) {
+                var jsontext = File.ReadAllText(jsonfileInfo.FullName);
                 var playlist = JsonConvert.DeserializeObject<PlaylistJsonEntity>(jsontext);
-                var playlistpreview = new PlaylistPreviewEntity(json)
+                var playlistpreview = new PlaylistPreviewEntity(jsonfileInfo)
                 {
                     Entity = playlist
                 };

@@ -37,9 +37,9 @@ namespace BeatServerBrowser.Core.ViewModels
         }
 
         /// <summary>難易度リスト を取得、設定</summary>
-        private ObservableSynchronizedCollection<KeyValuePair<string, BeatmapCharacteristicDifficulty?>> diffivults_;
+        private ObservableSynchronizedCollection<KeyValuePair<string, BeatmapCharacteristicDifficulty>> diffivults_;
         /// <summary>難易度リスト を取得、設定</summary>
-        public ObservableSynchronizedCollection<KeyValuePair<string, BeatmapCharacteristicDifficulty?>> Difficults
+        public ObservableSynchronizedCollection<KeyValuePair<string, BeatmapCharacteristicDifficulty>> Difficults
         {
             get => this.diffivults_;
 
@@ -67,9 +67,9 @@ namespace BeatServerBrowser.Core.ViewModels
         }
 
         /// <summary>選択中の難易度 を取得、設定</summary>
-        private BeatmapCharacteristicDifficulty? difficulty_;
+        private BeatmapCharacteristicDifficulty difficulty_;
         /// <summary>選択中の難易度 を取得、設定</summary>
-        public BeatmapCharacteristicDifficulty? Difficulity
+        public BeatmapCharacteristicDifficulty Difficulity
         {
             get => this.difficulty_;
 
@@ -114,9 +114,9 @@ namespace BeatServerBrowser.Core.ViewModels
                 }
                 this.SelectedDifficult = this.Difficults[0];
             }
-            else if (args.PropertyName == nameof(this.SelectedDifficult) && this.SelectedDifficult is KeyValuePair<string, BeatmapCharacteristicDifficulty?> dict) {
+            else if (args.PropertyName == nameof(this.SelectedDifficult) && this.SelectedDifficult is KeyValuePair<string, BeatmapCharacteristicDifficulty> dict) {
                 this.Difficulity = dict.Value;
-                this.NPS = $"{(double)this.Difficulity.Value.Notes / (double)this.Difficulity.Value.Length:N2}";
+                this.NPS = $"{(double)this.Difficulity.Notes / (double)this.Difficulity.Length:N2}";
             }
         }
 
@@ -144,7 +144,7 @@ namespace BeatServerBrowser.Core.ViewModels
         #region // 構築・破棄
         public SongDetailDialogViewModel()
         {
-            this.Difficults = new ObservableSynchronizedCollection<KeyValuePair<string, BeatmapCharacteristicDifficulty?>>();
+            this.Difficults = new ObservableSynchronizedCollection<KeyValuePair<string, BeatmapCharacteristicDifficulty>>();
             this.BeatmapDifficults = new ObservableSynchronizedCollection<BeatmapCharacteristic>();
         }
         #endregion

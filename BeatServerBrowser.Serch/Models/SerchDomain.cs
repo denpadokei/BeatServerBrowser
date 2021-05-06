@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StatefulModel;
+using System.Threading.Tasks;
 
 namespace BeatServerBrowser.Serch.Models
 {
@@ -52,13 +53,13 @@ namespace BeatServerBrowser.Serch.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public void Serch()
+        public async Task Serch()
         {
             if (string.IsNullOrWhiteSpace(this.Filter.Filter)) {
                 return;
             }
 
-            var page = SerchDataBase.Serch(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Filter, this.Filter.Count);
+            var page = await SerchDataBase.Serch(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Filter, this.Filter.Count);
             foreach (var beatmap in page.Docs) {
                 this.Beatmaps.Add(new BeatmapEntity(beatmap));
             }

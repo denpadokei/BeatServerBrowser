@@ -50,7 +50,7 @@ namespace BeatServerBrowser
             
         }
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
             var config = new LoggingConfiguration();
@@ -83,8 +83,10 @@ namespace BeatServerBrowser
 
         protected override void OnExit(ExitEventArgs args)
         {
-            base.OnExit(args);
             SoundPlayerService.CurrentPlayer.Stop();
+            if (!Directory.Exists(ConfigMaster.TempralyDirectory)) {
+                Directory.CreateDirectory(ConfigMaster.TempralyDirectory);
+            }
             var info = new DirectoryInfo(ConfigMaster.TempralyDirectory);
             foreach (var folder in info.EnumerateDirectories()) {
                 try {
@@ -97,6 +99,7 @@ namespace BeatServerBrowser
                     Debug.WriteLine(e);
                 }
             }
+            base.OnExit(args);
         }
     }
 }

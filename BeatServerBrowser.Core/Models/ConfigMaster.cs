@@ -13,6 +13,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,9 +25,9 @@ namespace BeatServerBrowser.Core.Models
         #region // プロパティ
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
-        public static readonly string ThisDirectoryPath = new DirectoryInfo(@".\").FullName;
+        public static string ThisDirectoryPath => Directory.GetCurrentDirectory();
 
-        public static readonly string TempralyDirectory = Path.Combine(Path.GetTempPath(), "BSBTemp");
+        public static string TempralyDirectory => Path.Combine(Path.GetTempPath(), "BSBTemp");
 
         /// <summary>ダークモードフラグ を取得、設定</summary>
         private bool isDark_;
@@ -179,11 +180,7 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private readonly HttpOptions options_ = new HttpOptions()
-        {
-            ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 1, 5),
-        };
+        private readonly HttpOptions options_ = new HttpOptions("BeatServerBrowser", Assembly.GetCallingAssembly().GetName().Version);
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄

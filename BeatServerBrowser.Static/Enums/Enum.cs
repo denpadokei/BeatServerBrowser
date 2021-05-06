@@ -15,8 +15,6 @@ namespace BeatServerBrowser.Static.Enums
         Raiting,
         [Description("ダウンロード数")]
         Downloads,
-        [Description("プレイカウント数")]
-        Plays,
         [Description("ランク")]
         Rank
     }

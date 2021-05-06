@@ -4,44 +4,48 @@ using BeatServerBrowser.Core.ScoreSaberSherp.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BeatServerBrowser.List.DataBases
 {
     public static class ListDataBase
     {
-        public static Page GetLatestPage(BeatSaver beatSaver, uint count)
+        public static async Task<Page<PagedRequestOptions>> GetLatestPage(BeatSaver beatSaver, uint count)
         {
-            var page = beatSaver.Latest(count).Result;
+            var op = PagedRequestOptions.Default;
+            op.Page = count;
+            var page = await beatSaver.Latest(op);
             return page;
         }
 
-        public static Page GetHotPage(BeatSaver beatSaver, uint count)
+        public static async Task<Page<PagedRequestOptions>> GetHotPage(BeatSaver beatSaver, uint count)
         {
-            var page = beatSaver.Hot(count).Result;
+            var op = PagedRequestOptions.Default;
+            op.Page = count;
+            var page = await beatSaver.Hot(op);
             return page;
         }
 
-        public static Page GetDownloadsPage(BeatSaver beatSaver, uint count)
+        public static async Task<Page<PagedRequestOptions>> GetDownloadsPage(BeatSaver beatSaver, uint count)
         {
-            var page = beatSaver.Downloads(count).Result;
+            var op = PagedRequestOptions.Default;
+            op.Page = count;
+            var page = await beatSaver.Downloads(op);
             return page;
         }
 
-        public static Page GetRatingPage(BeatSaver beatSaver, uint count)
+        public static async Task<Page<PagedRequestOptions>> GetRatingPage(BeatSaver beatSaver, uint count)
         {
-            var page = beatSaver.Rating(count).Result;
+            var op = PagedRequestOptions.Default;
+            op.Page = count;
+            var page = await beatSaver.Rating(op);
             return page;
         }
-
-        public static Page GetPlaysPage(BeatSaver beatSaver, uint count)
+        public static async Task<Scores> GetRankPage(ScoreSaber scoreSaber, uint count)
         {
-            var page = beatSaver.Plays(count).Result;
-            return page;
-        }
-
-        public static Scores GetRankPage(ScoreSaber scoreSaber, uint count)
-        {
-            var songs = scoreSaber.Rank(count).Result;
+            var op = PagedRequestOptions.Default;
+            op.Page = count;
+            var songs = await scoreSaber.Rank(count);
             return songs;
         }
     }

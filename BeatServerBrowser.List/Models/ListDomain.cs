@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using StatefulModel;
+using System.Threading.Tasks;
 
 namespace BeatServerBrowser.List.Models
 {
@@ -51,27 +52,24 @@ namespace BeatServerBrowser.List.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public void Serch()
+        public async Task Serch()
         {
-            var page = new Page();
+            var page = new Page<PagedRequestOptions>();
             switch (this.Filter.CurrentPageType) {
                 case Static.Enums.PageType.Latest:
-                    page = ListDataBase.GetLatestPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
+                    page = await ListDataBase.GetLatestPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Hot:
-                    page = ListDataBase.GetHotPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
+                    page = await ListDataBase.GetHotPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Raiting:
-                    page = ListDataBase.GetRatingPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
+                    page = await ListDataBase.GetRatingPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Downloads:
-                    page = ListDataBase.GetDownloadsPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
-                    break;
-                case Static.Enums.PageType.Plays:
-                    page = ListDataBase.GetPlaysPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
+                    page = await ListDataBase.GetDownloadsPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
                 case Static.Enums.PageType.Rank:
-                    var songs = ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, this.Filter.Count);
+                    var songs = await ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, this.Filter.Count);
                     if (songs == null) {
                         return;
                     }

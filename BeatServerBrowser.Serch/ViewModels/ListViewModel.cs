@@ -8,6 +8,7 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BeatServerBrowser.Serch.ViewModels
 {
@@ -53,7 +54,7 @@ namespace BeatServerBrowser.Serch.ViewModels
             if (this.IsLoading == true) {
                 return;
             }
-            this.loadingService_?.Load(this.serchDomain_.Serch);
+            this.loadingService_?.Load(async () => await this.serchDomain_.Serch());
         }
 
         private void Reset()
