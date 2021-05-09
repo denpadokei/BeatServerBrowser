@@ -1,8 +1,6 @@
 ﻿using BeatServerBrowser.Local.Finderes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace BeatServerBrowser.Local.Models
 {
@@ -23,7 +21,7 @@ namespace BeatServerBrowser.Local.Models
             finally {
                 this.IsLoading = false;
             }
-            
+
         }
 
         protected override void OnLocalmapPropertyChanged(object sender, PropertyChangedEventArgs e)

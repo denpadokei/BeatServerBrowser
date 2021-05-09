@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Windows.Data;
-using System.Windows.Threading;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using StatefulModel;
 
 namespace BeatServerBrowser.Core.Collections

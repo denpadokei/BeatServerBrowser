@@ -1,7 +1,4 @@
 ﻿using BeatSaverSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BeatServerBrowser.Serch.DataBases

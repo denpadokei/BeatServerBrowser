@@ -12,10 +12,10 @@ namespace BeatSaberDataProvider
     public static class Utilities
     {
         private static Logger Logging => LogManager.GetCurrentClassLogger();
-        
+
         public static string MakeSafeFilename(string str)
         {
-            StringBuilder retStr = new StringBuilder(str);
+            var retStr = new StringBuilder(str);
             foreach (var character in Path.GetInvalidFileNameChars()) {
                 retStr.Replace(character.ToString(), string.Empty);
             }
@@ -31,7 +31,7 @@ namespace BeatSaberDataProvider
         /// <returns>Successful</returns>
         public static bool StrToBool(string str, out bool result, bool defaultVal = false)
         {
-            bool successful = true;
+            var successful = true;
             switch (str.ToLower()) {
                 case "0":
                     result = false;
@@ -57,12 +57,12 @@ namespace BeatSaberDataProvider
 
         public static void EmptyDirectory(string directory, bool delete = true)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+            var directoryInfo = new DirectoryInfo(directory);
             if (directoryInfo.Exists) {
-                foreach (FileInfo file in directoryInfo.GetFiles()) {
+                foreach (var file in directoryInfo.GetFiles()) {
                     file.Delete();
                 }
-                foreach (DirectoryInfo dir in directoryInfo.GetDirectories()) {
+                foreach (var dir in directoryInfo.GetDirectories()) {
                     dir.Delete(true);
                 }
                 if (delete) {
@@ -73,18 +73,18 @@ namespace BeatSaberDataProvider
 
         public static void MoveFilesRecursively(DirectoryInfo source, DirectoryInfo target)
         {
-            foreach (DirectoryInfo directoryInfo in source.GetDirectories()) {
+            foreach (var directoryInfo in source.GetDirectories()) {
                 Utilities.MoveFilesRecursively(directoryInfo, target.CreateSubdirectory(directoryInfo.Name));
             }
-            foreach (FileInfo fileInfo in source.GetFiles()) {
-                string newPath = Path.Combine(target.FullName, fileInfo.Name);
+            foreach (var fileInfo in source.GetFiles()) {
+                var newPath = Path.Combine(target.FullName, fileInfo.Name);
                 if (File.Exists(newPath)) {
                     try {
                         File.Delete(newPath);
                     }
                     catch (Exception) {
                         try {
-                            string oldFilePath = Path.Combine(target.FullName, "FilesToDelete");
+                            var oldFilePath = Path.Combine(target.FullName, "FilesToDelete");
                             if (!Directory.Exists(oldFilePath)) {
                                 Directory.CreateDirectory(oldFilePath);
                             }
@@ -95,7 +95,7 @@ namespace BeatSaberDataProvider
                 }
                 // Check for file lock
                 var time = Stopwatch.StartNew();
-                bool waitTimeout = false;
+                var waitTimeout = false;
                 while (IsFileLocked(fileInfo.FullName) && !waitTimeout)
                     waitTimeout = time.ElapsedMilliseconds < 1000;
                 if (waitTimeout)
@@ -109,7 +109,7 @@ namespace BeatSaberDataProvider
             // If the file can be opened for exclusive access it means that the file
             // is no longer locked by another process.
             try {
-                using (FileStream inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None))
+                using (var inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None))
                     return !(inputStream.Length > 0);
             }
             catch (Exception) // TODO: Catch only IOException? so the caller doesn't wait for a Timeout if there are other errors
@@ -132,7 +132,7 @@ namespace BeatSaberDataProvider
 
         public static string FormatTimeSpan(TimeSpan timeElapsed)
         {
-            string timeElapsedStr = "";
+            var timeElapsedStr = "";
             if (timeElapsed.TotalMinutes >= 1) {
                 timeElapsedStr = $"{(int)timeElapsed.TotalMinutes}m ";
             }
@@ -145,7 +145,7 @@ namespace BeatSaberDataProvider
     {
         public static void Clear<T>(this ConcurrentQueue<T> queue)
         {
-            while (queue.TryDequeue(out T item)) {
+            while (queue.TryDequeue(out var item)) {
                 // do nothing
             }
         }
@@ -158,7 +158,7 @@ namespace BeatSaberDataProvider
             var logger = LogManager.GetCurrentClassLogger();
             logger.Error(ae);
 
-            for (int i = 0; i < ae.InnerExceptions.Count; i++) {
+            for (var i = 0; i < ae.InnerExceptions.Count; i++) {
                 //logger.Error($"Exception {i}:\n", ae.InnerExceptions[i]);
                 if (ae.InnerExceptions[i] is AggregateException ex)
                     WriteExceptions(ex, ""); // TODO: This could get very long

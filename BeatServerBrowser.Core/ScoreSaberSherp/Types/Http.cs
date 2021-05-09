@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -39,7 +38,7 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
         #region // インターナルメソッド
         internal async Task<HttpResponse> GetAsync(string url, CancellationToken token, IProgress<double> progress = null)
         {
-            var resp = await Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            var resp = await this.Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             if ((int)resp.StatusCode == 429) {
                 //var ex = new RateLimitExceededException(resp);
                 //if (Options.HandleRateLimits == false) {
@@ -54,26 +53,28 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
                 //    await Task.Delay(millis).ConfigureAwait(false);
                 //}
 
-                return await GetAsync(url, token, progress).ConfigureAwait(false);
+                return await this.GetAsync(url, token, progress).ConfigureAwait(false);
             }
 
-            if (token.IsCancellationRequested) throw new TaskCanceledException();
+            if (token.IsCancellationRequested)
+                throw new TaskCanceledException();
 
-            using MemoryStream ms = new MemoryStream();
-            using Stream s = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using var ms = new MemoryStream();
+            using var s = await resp.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-            byte[] buffer = new byte[1 << 13];
+            var buffer = new byte[1 << 13];
             int bytesRead;
 
-            long? contentLength = resp.Content.Headers.ContentLength;
+            var contentLength = resp.Content.Headers.ContentLength;
             long totalRead = 0;
             progress?.Report(0);
 
             while ((bytesRead = await s.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0) {
-                if (token.IsCancellationRequested) throw new TaskCanceledException();
+                if (token.IsCancellationRequested)
+                    throw new TaskCanceledException();
 
                 if (contentLength != null) {
-                    double prog = (double)totalRead / (double)contentLength;
+                    var prog = (double)totalRead / (double)contentLength;
                     progress?.Report(prog);
                 }
 
@@ -82,7 +83,7 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
             }
 
             progress?.Report(1);
-            byte[] bytes = ms.ToArray();
+            var bytes = ms.ToArray();
 
             return new HttpResponse(resp, bytes);
         }
@@ -100,7 +101,7 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
             };
 
-            Client = new HttpClient(handler)
+            this.Client = new HttpClient(handler)
             {
                 BaseAddress = new Uri($"{ScoreSaber.BaseURL}/api/"),
                 Timeout = TimeSpan.FromSeconds(30),
@@ -124,24 +125,24 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
 
         internal HttpResponse(HttpResponseMessage resp, byte[] body)
         {
-            StatusCode = resp.StatusCode;
-            ReasonPhrase = resp.ReasonPhrase;
-            Headers = resp.Headers;
-            RequestMessage = resp.RequestMessage;
-            IsSuccessStatusCode = resp.IsSuccessStatusCode;
+            this.StatusCode = resp.StatusCode;
+            this.ReasonPhrase = resp.ReasonPhrase;
+            this.Headers = resp.Headers;
+            this.RequestMessage = resp.RequestMessage;
+            this.IsSuccessStatusCode = resp.IsSuccessStatusCode;
             //RateLimit = RateLimitInfo.FromHttp(resp);
 
-            _body = body;
+            this._body = body;
         }
 
-        public byte[] Bytes() => _body;
-        public string String() => Encoding.UTF8.GetString(_body);
+        public byte[] Bytes() => this._body;
+        public string String() => Encoding.UTF8.GetString(this._body);
         public T JSON<T>()
         {
-            string body = String();
+            var body = this.String();
 
-            using StringReader sr = new StringReader(body);
-            using JsonTextReader reader = new JsonTextReader(sr);
+            using var sr = new StringReader(body);
+            using var reader = new JsonTextReader(sr);
 
             return Http.JsonSerializer.Deserialize<T>(reader);
         }

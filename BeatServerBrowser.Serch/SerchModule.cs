@@ -14,9 +14,6 @@ namespace BeatServerBrowser.Serch
             regionManager.RegisterViewWithRegion("SerchPanelRegion", typeof(PanelView));
         }
 
-        public void RegisterTypes(IContainerRegistry containerRegistry)
-        {
-            containerRegistry.RegisterForNavigation(typeof(SerchMain), "SerchMain");
-        }
+        public void RegisterTypes(IContainerRegistry containerRegistry) => containerRegistry.RegisterForNavigation(typeof(SerchMain), "SerchMain");
     }
 }

@@ -1,13 +1,8 @@
-﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Models;
-using BeatServerBrowser.Core.Collections;
+﻿using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Serch.DataBases;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using StatefulModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BeatServerBrowser.Serch.Models

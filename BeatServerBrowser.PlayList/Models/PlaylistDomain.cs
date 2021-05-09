@@ -1,12 +1,11 @@
-﻿using Prism.Commands;
+﻿using BeatServerBrowser.Core.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using StatefulModel;
-using BeatServerBrowser.Core.Models;
+using System;
 using System.IO;
+using System.Linq;
 
 namespace BeatServerBrowser.PlayList.Models
 {
@@ -44,9 +43,9 @@ namespace BeatServerBrowser.PlayList.Models
             var jsons = info.EnumerateFiles("*.json", SearchOption.AllDirectories);
             var bplists = info.EnumerateFiles("*.bplist", SearchOption.AllDirectories);
             var playlists = jsons.Union(bplists);
-            foreach (var jsonfileInfo in playlists) {
+            foreach (var jsonfileInfo in playlists.OrderBy(x => x.Name)) {
                 var jsontext = File.ReadAllText(jsonfileInfo.FullName);
-                var playlist = JsonConvert.DeserializeObject<PlaylistJsonEntity>(jsontext);
+                var playlist = JObject.Parse(jsontext);
                 var playlistpreview = new PlaylistPreviewEntity(jsonfileInfo)
                 {
                     Entity = playlist
@@ -57,17 +56,15 @@ namespace BeatServerBrowser.PlayList.Models
             }
         }
 
-        public StreamWriter CreateJsonFile(PlaylistPreviewEntity entity)
+        public void CreateJsonFile(PlaylistPreviewEntity entity)
         {
-            var info = new DirectoryInfo(this.playlistPath);
-            var filename = "MyPlaylist";
-            if (entity?.Json != null) {
-                var deletejson = new FileInfo(entity.Json.FullName);
-                deletejson.Delete();
+            if (entity.Json?.Exists == true) {
+                File.WriteAllText(entity.Json.FullName, entity.Entity.ToString());
             }
-            filename = entity.PlaylistName;
-            return File.CreateText($@"{info.FullName}\{filename}.json");
-            
+            else {
+                var filename = Path.Combine(this.playlistPath, $"{entity.PlaylistName}_{DateTime.Now}.bplist");
+                File.WriteAllText(filename, entity.Entity.ToString());
+            }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

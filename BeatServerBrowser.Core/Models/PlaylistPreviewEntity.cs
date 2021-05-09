@@ -1,11 +1,11 @@
 ﻿using BeatServerBrowser.Core.Services;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 
@@ -56,11 +56,11 @@ namespace BeatServerBrowser.Core.Models
         }
 
         /// <summary>JSONオブジェクト を取得、設定</summary>
-        private PlaylistJsonEntity entity_;
+        private JObject entity_;
         /// <summary>JSONオブジェクト を取得、設定</summary>
-        public PlaylistJsonEntity Entity
+        public JObject Entity
         {
-            get => this.entity_ ?? new PlaylistJsonEntity();
+            get => this.entity_ ?? JObject.FromObject(new object());
 
             set => this.SetProperty(ref this.entity_, value);
         }
@@ -105,7 +105,7 @@ namespace BeatServerBrowser.Core.Models
             set => this.SetProperty(ref this.json_, value);
         }
 
-        public bool IsLock => this.Entity?.FileLock == null;
+        public bool IsLock => true;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -126,23 +126,22 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private void Edit()
-        {
-            this.EditEvent?.Invoke(this);
-        }
+        private void Edit() => this.EditEvent?.Invoke(this);
 
-        private void Delete()
-        {
-            this.DeleteEvent?.Invoke(this);
-        }
+        private void Delete() => this.DeleteEvent?.Invoke(this);
 
         private void Preview()
         {
             var list = new List<LocalBeatmapInfo>();
-            foreach (var songjson in this.Entity.Songs) {
-                var beatmap = ConfigMaster.Current.SortedLocalBeatmaps.FirstOrDefault(x => x.SongHash == songjson.Hash);
-                list.Add(beatmap);
+            if (this.Entity.TryGetValue("songs", out var songs)) {
+                foreach (var songjson in songs.ToObject<List<JObject>>()) {
+                    if (songjson.TryGetValue("hash", out var hash)) {
+                        var beatmap = ConfigMaster.Current.SortedLocalBeatmaps.FirstOrDefault(x => x.SongHash == hash.ToString());
+                        list.Add(beatmap);
+                    }
+                }
             }
+            
             var soundFileInfo = list[0].Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
             SoundPlayerService.CurrentPlayer.Play(soundFileInfo, list[0], list);
         }
@@ -153,13 +152,24 @@ namespace BeatServerBrowser.Core.Models
         {
             base.OnPropertyChanged(args);
             if (args.PropertyName == nameof(this.Entity)) {
-                this.PlaylistName = this.Entity.PlayListTytle;
-                this.Author = this.Entity.PlayListAuthor;
-                this.DescriptionText = this.Entity.PlayListDescription;
+                if (this.Entity.TryGetValue("playlistTitle", out var title)) {
+                    this.PlaylistName = title.ToString();
+                }
+                if (this.Entity.TryGetValue("playlistAuthor", out var author)) {
+                    this.Author = author.ToString();
+                }
+                if (this.Entity.TryGetValue("playlistDescription", out var description)) {
+                    this.DescriptionText = description.ToString();
+                }
+                
+                
+                
                 try {
-                    var stringArray = this.Entity.Image.Split(',');
-                    this.Base64Info = stringArray[0];
-                    this.CoverImage = stringArray[1];
+                    if (this.Entity.TryGetValue("image", out var image)) {
+                        var stringArray = image.ToString().Split(',');
+                        this.Base64Info = stringArray.FirstOrDefault();
+                        this.CoverImage = stringArray.LastOrDefault();
+                    }
                 }
                 catch (Exception e) {
                     Debug.WriteLine(e);
@@ -199,7 +209,7 @@ namespace BeatServerBrowser.Core.Models
         #region // 構築・破棄
         public PlaylistPreviewEntity()
         {
-            
+
         }
 
         public PlaylistPreviewEntity(FileInfo info)

@@ -8,8 +8,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -169,11 +167,7 @@ namespace BeatServerBrowser.Core.Models
             return !this.IsInstalled;
         }
 
-        private void ShowDetail()
-        {
-            SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);
-            //this.ShowDetailAction?.Invoke(this);
-        }
+        private void ShowDetail() => SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);//this.ShowDetailAction?.Invoke(this);
 
         private async void Preview()
         {

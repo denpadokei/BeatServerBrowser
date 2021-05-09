@@ -1,25 +1,23 @@
-﻿using Prism.Ioc;
-using BeatServerBrowser.Views;
-using System.Windows;
-using Prism.Regions;
-using Prism.Modularity;
-using BeatServerBrowser.Home;
-using NLog;
-using NLog.Targets;
-using NLog.Config;
-using System.Diagnostics;
-using System;
-using MaterialDesignThemes.Wpf;
-using System.Configuration;
-using System.IO;
+﻿using BeatServerBrowser.Core;
 using BeatServerBrowser.Core.Models;
-using BeatServerBrowser.Setting;
-using BeatServerBrowser.Serch;
+using BeatServerBrowser.Core.Services;
+using BeatServerBrowser.Home;
 using BeatServerBrowser.List;
-using BeatServerBrowser.Core;
 using BeatServerBrowser.Local;
 using BeatServerBrowser.PlayList;
-using BeatServerBrowser.Core.Services;
+using BeatServerBrowser.Serch;
+using BeatServerBrowser.Setting;
+using BeatServerBrowser.Views;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using Prism.Ioc;
+using Prism.Modularity;
+using Prism.Regions;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 
 namespace BeatServerBrowser
 {
@@ -28,10 +26,7 @@ namespace BeatServerBrowser
     /// </summary>
     public partial class App
     {
-        protected override Window CreateShell()
-        {
-            return Container.Resolve<MainWindow>();
-        }
+        protected override Window CreateShell() => this.Container.Resolve<MainWindow>();
 
         protected override void OnInitialized()
         {
@@ -47,7 +42,7 @@ namespace BeatServerBrowser
                 Debug.WriteLine(e);
                 logger.Error(e);
             }
-            
+
         }
 
         protected override void Initialize()
@@ -66,7 +61,7 @@ namespace BeatServerBrowser
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            
+
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

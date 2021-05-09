@@ -9,7 +9,7 @@ namespace BeatServerBrowser.Serch.Views
     {
         public ListView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

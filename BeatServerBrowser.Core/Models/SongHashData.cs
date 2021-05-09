@@ -2,9 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace BeatServerBrowser.Core.Models
 {
@@ -15,11 +13,8 @@ namespace BeatServerBrowser.Core.Models
         [JsonIgnore]
         public string Directory
         {
-            get { return _directory; }
-            set
-            {
-                _directory = value?.TrimEnd('\\', '/');
-            }
+            get => this._directory;
+            set => this._directory = value?.TrimEnd('\\', '/');
         }
         [JsonProperty("directoryHash")]
         public long DirectoryHash { get; set; }
@@ -41,7 +36,7 @@ namespace BeatServerBrowser.Core.Models
         {
             if (string.IsNullOrEmpty(directory))
                 throw new ArgumentNullException(nameof(directory), "directory cannot be null or empty for SongHashData's constructor.");
-            Directory = Path.GetFullPath(directory.TrimEnd('/', '\\'));
+            this.Directory = Path.GetFullPath(directory.TrimEnd('/', '\\'));
         }
 
         /// <summary>
@@ -63,14 +58,11 @@ namespace BeatServerBrowser.Core.Models
 
         public string GenerateHash()
         {
-            SongHash = SongHashDataProviderService.GenerateHash(Directory, SongHash);
-            return SongHash;
+            this.SongHash = SongHashDataProviderService.GenerateHash(this.Directory, this.SongHash);
+            return this.SongHash;
         }
 
-        public void GenerateDirectoryHash()
-        {
-            DirectoryHash = SongHashDataProviderService.GenerateDirectoryHash(Directory);
-        }
+        public void GenerateDirectoryHash() => this.DirectoryHash = SongHashDataProviderService.GenerateDirectoryHash(this.Directory);
 
         /// <summary>
         /// Returns true if the folder path matches. Case sensitive
@@ -81,7 +73,7 @@ namespace BeatServerBrowser.Core.Models
         {
             if (other == null)
                 return false;
-            return Directory.Equals(other.Directory, StringComparison.CurrentCulture);
+            return this.Directory.Equals(other.Directory, StringComparison.CurrentCulture);
         }
     }
 

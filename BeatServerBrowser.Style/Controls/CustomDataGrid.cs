@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,8 +32,8 @@ namespace BeatServerBrowser.Style.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            Decorator child = VisualTreeHelper.GetChild(this, 0) as Decorator;
-            ScrollViewer childSV = child.Child as ScrollViewer;
+            var child = VisualTreeHelper.GetChild(this, 0) as Decorator;
+            var childSV = child.Child as ScrollViewer;
             childSV.ScrollChanged += new ScrollChangedEventHandler(this.OnScrollChanged);
         }
 

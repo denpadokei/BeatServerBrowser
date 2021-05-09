@@ -1,9 +1,6 @@
 ﻿using BeatSaverSharp;
 using BeatServerBrowser.Core.ScoreSaberSherp;
 using BeatServerBrowser.Core.ScoreSaberSherp.Types;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BeatServerBrowser.List.DataBases

@@ -1,8 +1,6 @@
 ﻿using BeatServerBrowser.Core.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BeatServerBrowser.Local.Finderes
 {
@@ -16,7 +14,7 @@ namespace BeatServerBrowser.Local.Finderes
             var list = new List<LocalBeatmapInfo>();
             page++;
             if (mapList == null) {
-                for (int i = (page - 1) * 10; i < page * 10; i++) {
+                for (var i = (page - 1) * 10; i < page * 10; i++) {
                     if (ConfigMaster.Current.SortedLocalBeatmaps.Count <= i) {
                         continue;
                     }
@@ -24,14 +22,14 @@ namespace BeatServerBrowser.Local.Finderes
                 }
             }
             else {
-                for (int i = (page - 1) * 10; i < page * 10; i++) {
-                   if (!mapList.Any() || mapList.Count <= i) {
+                for (var i = (page - 1) * 10; i < page * 10; i++) {
+                    if (!mapList.Any() || mapList.Count <= i) {
                         continue;
                     }
                     list.Add(mapList[i]);
                 }
             }
-            
+
             return list;
         }
     }

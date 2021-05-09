@@ -1,8 +1,6 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using Microsoft.WindowsAPICodePack.Shell;
+﻿using Microsoft.WindowsAPICodePack.Shell;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BeatServerBrowser.Core.Models
 {

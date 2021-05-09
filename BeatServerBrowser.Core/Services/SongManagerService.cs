@@ -2,10 +2,8 @@
 using BeatServerBrowser.Core.Models;
 using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Unity;
 
 namespace BeatServerBrowser.Core.Services
@@ -35,10 +33,7 @@ namespace BeatServerBrowser.Core.Services
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public void Serch()
-        {
-            throw new NotImplementedException();
-        }
+        public void Serch() => throw new NotImplementedException();
 
         public void Delete(LocalBeatmapInfo beatmap)
         {

@@ -9,7 +9,7 @@ namespace BeatServerBrowser.Local.Views
     {
         public LocalList()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

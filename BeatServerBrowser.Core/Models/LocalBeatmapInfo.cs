@@ -1,22 +1,15 @@
 ﻿using BeatServerBrowser.Core.Interfaces;
 using BeatServerBrowser.Core.Services;
-using NAudio.Vorbis;
-using NAudio.Wave;
 using Newtonsoft.Json;
 using NLog;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace BeatServerBrowser.Core.Models
 {
@@ -163,6 +156,13 @@ namespace BeatServerBrowser.Core.Models
         private DelegateCommand showDetailCommand_;
         /// <summary>曲詳細コマンド を取得、設定</summary>
         public DelegateCommand ShowDetailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand(async () => await this.ShowDetail()));
+
+        /// <summary>曲詳細コマンド を取得、設定</summary>
+        private DelegateCommand showDetailCommandOnPlaylistView_;
+        /// <summary>曲詳細コマンド を取得、設定</summary>
+        public DelegateCommand ShowDeailCommandOnPlaylistView => this.showDetailCommandOnPlaylistView_ ?? (this.showDetailCommandOnPlaylistView_ = new DelegateCommand(async () => await this.ShowDetailOnPlaylistView()));
+
+        
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -227,13 +227,10 @@ namespace BeatServerBrowser.Core.Models
             else {
                 this.Player.Play(soundFileInfo, this);
             }
-            
+
         }
 
-        private void Delete()
-        {
-            this.DeleteSongAction?.Invoke(this);
-        }
+        private void Delete() => this.DeleteSongAction?.Invoke(this);
 
         private async Task ShowDetail()
         {
@@ -247,12 +244,25 @@ namespace BeatServerBrowser.Core.Models
             SongManager.CurrentSongManager.ShowDeailCommand?.Execute(new BeatmapEntity(beatmap));
             //this.ShowDetailAction?.Invoke(new BeatmapEntity(beatmap));
         }
+
+
+        private async Task ShowDetailOnPlaylistView()
+        {
+            if (string.IsNullOrWhiteSpace(this.SongHash)) {
+                return;
+            }
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            if (beatmap == null) {
+                return;
+            }
+            SongManager.CurrentSongManager.ShowDeailCommandOnPlaylistView?.Execute(new BeatmapEntity(beatmap));
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
         public Action CopyKey;
 
-        public Action<LocalBeatmapInfo> DeleteSongAction; 
+        public Action<LocalBeatmapInfo> DeleteSongAction;
 
         public Action<BeatmapEntity> ShowDetailAction;
         #endregion
@@ -268,9 +278,12 @@ namespace BeatServerBrowser.Core.Models
         #region // パブリックメソッド
         public bool Equals(LocalBeatmapInfo b)
         {
-            if (b is null) return false;
-            if (ReferenceEquals(this, b)) return true;
-            if (this.GetType() != b.GetType()) return false;
+            if (b is null)
+                return false;
+            if (ReferenceEquals(this, b))
+                return true;
+            if (this.GetType() != b.GetType())
+                return false;
 
             return (this.SongHash?.ToUpper() == b.SongHash?.ToUpper());
         }

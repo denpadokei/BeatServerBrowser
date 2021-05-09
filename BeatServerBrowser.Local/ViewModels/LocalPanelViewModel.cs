@@ -1,18 +1,11 @@
 ﻿using BeatServerBrowser.Core.Bases;
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
-using Prism.Commands;
-using StatefulModel;
-using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using BeatServerBrowser.Local.Models;
+using Prism.Commands;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
-using Prism.Services.Dialogs;
-using System.IO;
 
 namespace BeatServerBrowser.Local.ViewModels
 {
@@ -63,15 +56,12 @@ namespace BeatServerBrowser.Local.ViewModels
                 this.domain_.LocalBeatmaps.Clear();
                 this.domain_.Count = 0;
             }
-            
+
         }
 
-        private void Serch()
-        {
-            this.loadingService_?.Load(this.domain_.Serch);
-        }
+        private void Serch() => this.loadingService_?.Load(this.domain_.Serch);
 
-        
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト

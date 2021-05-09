@@ -1,26 +1,20 @@
 ﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Core.Interfaces;
+using BeatServerBrowser.Core.Models;
+using BeatServerBrowser.Core.Services;
 using NLog;
-using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using Unity;
-using BeatServerBrowser.Core.Services;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Windows.Threading;
-using Prism.Ioc;
+using Unity;
 
 namespace BeatServerBrowser.Core.Bases
 {
-    public class ViewModelBase : BindableBase, IWindowPanel
+    public class ViewModelBase : BindableBase, IWindowPanel, INavigationAware
     {
 
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -64,7 +58,7 @@ namespace BeatServerBrowser.Core.Bases
             }
         }
 
-        public bool IsEnable { get { return !this.IsLoading; } }
+        public bool IsEnable => !this.IsLoading;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド
@@ -98,7 +92,19 @@ namespace BeatServerBrowser.Core.Bases
         #region // パブリックメソッド
         public virtual void OnInitialize()
         {
-            
+
+        }
+
+        public virtual void OnNavigatedTo(NavigationContext navigationContext)
+        {
+        }
+        public virtual bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+        public virtual void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -126,7 +132,7 @@ namespace BeatServerBrowser.Core.Bases
         #region // 構築・破棄
         public ViewModelBase()
         {
-            
+
         }
         #endregion
     }

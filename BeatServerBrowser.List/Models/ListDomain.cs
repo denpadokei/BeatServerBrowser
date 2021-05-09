@@ -1,11 +1,7 @@
 ﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.List.DataBases;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using StatefulModel;
 using System.Threading.Tasks;
 
@@ -73,7 +69,7 @@ namespace BeatServerBrowser.List.Models
                     if (songs == null) {
                         return;
                     }
-                    foreach(var scoremap in songs.Scoremaps) {
+                    foreach (var scoremap in songs.Scoremaps) {
                         var scorebeatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(scoremap.ID).Result;
                         if (scorebeatmap == null) {
                             break;

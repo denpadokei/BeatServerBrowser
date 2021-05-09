@@ -1,15 +1,11 @@
 ﻿using BeatServerBrowser.Core.Models;
+using NLog;
 using Prism.Mvvm;
-using BeatServerBrowser.Core.Collections;
 using StatefulModel;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using NLog;
-using BeatServerBrowser.Core.Extentions;
-using System.Windows;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows;
 
 namespace BeatServerBrowser.Local.Models
 {
@@ -104,7 +100,7 @@ namespace BeatServerBrowser.Local.Models
                     this.FilteredMaps.Add(beatmap);
                 }
             }
-            else if (ConfigMaster.Current.SortedLocalBeatmaps.Where(x => x.SongTitle !=null || x.LevelAuthorName != null).Any()) {
+            else if (ConfigMaster.Current.SortedLocalBeatmaps.Where(x => x.SongTitle != null || x.LevelAuthorName != null).Any()) {
                 foreach (var beatmap in ConfigMaster.Current.SortedLocalBeatmaps.Where(x => x.SongTitle != null && x.LevelAuthorName != null
                 && (x.SongTitle.ToUpper().Contains(this.Filter.FilterText.ToUpper())
                 || x.LevelAuthorName.ToUpper().Contains(this.Filter.FilterText.ToUpper())))) {

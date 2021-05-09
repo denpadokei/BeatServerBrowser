@@ -9,7 +9,7 @@ namespace BeatServerBrowser.PlayList.Views
     {
         public CreatePlaylist()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }
