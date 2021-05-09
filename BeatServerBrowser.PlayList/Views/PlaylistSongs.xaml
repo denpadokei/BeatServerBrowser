@@ -58,7 +58,7 @@
                     <material:Card Grid.Row="0">
                         <TextBox material:HintAssist.Hint="ローカルライブラリ 検索" Margin="5" Text="{Binding LocalBeatmapFilter.FilterText, UpdateSourceTrigger=PropertyChanged}"/>
                     </material:Card>
-                    <control:CustomDataGrid x:Name="Localmaps" Grid.Row="1" ItemsSource="{Binding LocalBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80" IsReadOnly="True">
+                    <control:CustomDataGrid x:Name="Localmaps" Grid.Row="1" ItemsSource="{Binding LocalBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="100" IsReadOnly="True">
                         <control:CustomDataGrid.Columns>
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
@@ -72,12 +72,16 @@
                             <DataGridTemplateColumn Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel>
-                                            <Button Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
-                                            <Button Width="70" Command="{Binding ShowDeailCommandOnPlaylistView}" Margin="2" Cursor="Hand">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Button Grid.Row="0" Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
+                                            <Button Grid.Row="1" Width="70" Command="{Binding ShowDeailCommandOnPlaylistView}" Margin="2" Cursor="Hand">
                                                 <material:PackIcon Kind="InformationCircleOutline" />
                                             </Button>
-                                        </StackPanel>
+                                        </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -102,7 +106,7 @@
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <control:CustomDataGrid x:Name="Playlistmaps" Grid.Column="0" ItemsSource="{Binding PlaylistBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="80" IsReadOnly="True">
+                        <control:CustomDataGrid x:Name="Playlistmaps" Grid.Column="0" ItemsSource="{Binding PlaylistBeatmaps.Items}" AutoGenerateColumns="False" RowHeight="100" IsReadOnly="True">
                             <control:CustomDataGrid.Columns>
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
@@ -116,12 +120,16 @@
                                 <DataGridTemplateColumn Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel>
-                                                <Button Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
-                                                <Button Width="70" Command="{Binding ShowDeailCommandOnPlaylistView}" Margin="2" Cursor="Hand">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Button Grid.Row="0" Width="70" Content="再生" Command="{Binding PreViewCommand}"/>
+                                                <Button Grid.Row="1" Width="70" Command="{Binding ShowDeailCommandOnPlaylistView}" Margin="2" Cursor="Hand">
                                                     <material:PackIcon Kind="InformationCircleOutline" />
                                                 </Button>
-                                            </StackPanel>
+                                            </Grid>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
