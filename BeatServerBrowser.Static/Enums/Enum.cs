@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace BeatServerBrowser.Static.Enums
 {
@@ -15,8 +13,6 @@ namespace BeatServerBrowser.Static.Enums
         Raiting,
         [Description("ダウンロード数")]
         Downloads,
-        [Description("プレイカウント数")]
-        Plays,
         [Description("ランク")]
         Rank
     }

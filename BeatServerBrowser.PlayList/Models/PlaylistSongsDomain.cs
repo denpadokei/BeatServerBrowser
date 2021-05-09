@@ -1,13 +1,10 @@
-﻿using Prism.Commands;
+﻿using BeatServerBrowser.Core.Extentions;
+using BeatServerBrowser.Core.Models;
 using Prism.Mvvm;
-using System;
+using StatefulModel;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using StatefulModel;
-using BeatServerBrowser.Core.Models;
-using System.Collections;
-using BeatServerBrowser.Core.Extentions;
-using BeatServerBrowser.Core.Interfaces;
 
 namespace BeatServerBrowser.PlayList.Models
 {
@@ -184,10 +181,10 @@ namespace BeatServerBrowser.PlayList.Models
         #region // 構築・破棄
         public PlaylistSongsDomain()
         {
-            
+
             this.LocalBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
             this.PlaylistBeatmaps = new ObservableSynchronizedCollection<LocalBeatmapInfo>();
-            this.SortedPlaylistBeatmaps = this.PlaylistBeatmaps.ToSyncedSortedObservableCollection(key => key.Index, isDescending : false);
+            this.SortedPlaylistBeatmaps = this.PlaylistBeatmaps.ToSyncedSortedObservableCollection(key => key.Index, isDescending: false);
             this.SortedLocalBeatmaps = this.LocalBeatmaps.ToSyncedSortedObservableCollection(key => key.SongTitle, isDescending: false);
             this.LocalBeatmapFilter = new PlaylistFilter();
             this.PlaylistFilter = new PlaylistFilter();

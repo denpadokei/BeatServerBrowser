@@ -2,16 +2,9 @@
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.PlayList.Models;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Services.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Windows;
 
 namespace BeatServerBrowser.PlayList.ViewModels
 {
@@ -47,15 +40,13 @@ namespace BeatServerBrowser.PlayList.ViewModels
                 { "Title", entity.PlaylistName },
                 { "Playlist", entity }
             };
-            this.dialogService_.ShowDialog("PlaylistSongs", param, result => {
+            this.dialogService_.ShowDialog("PlaylistSongs", param, result =>
+            {
                 if (result.Result == ButtonResult.OK) {
                     // ここでJSON化する処理
                     var json = result.Parameters.GetValue<string>("Songlist");
                     var playlist = result.Parameters.GetValue<PlaylistPreviewEntity>("Playlist");
-                    using (var writer = this.domain_.CreateJsonFile(entity)) {
-                        writer.Write(json);
-                        writer.Close();
-                    }
+                    this.domain_.CreateJsonFile(entity);
                     this.loadingService_?.Load(this.domain_.LoadPlaylists);
                 }
             });
@@ -73,7 +64,7 @@ namespace BeatServerBrowser.PlayList.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
-        
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
@@ -84,15 +75,13 @@ namespace BeatServerBrowser.PlayList.ViewModels
                 { "Title", entity.PlaylistName },
                 { "Playlist", entity }
             };
-            this.dialogService_.ShowDialog("PlaylistSongs", param, result => {
+            this.dialogService_.ShowDialog("PlaylistSongs", param, result =>
+            {
                 if (result.Result == ButtonResult.OK) {
                     // ここでJSON化する処理
                     var json = result.Parameters.GetValue<string>("Songlist");
                     var playlist = result.Parameters.GetValue<PlaylistPreviewEntity>("Playlist");
-                    using (var writer = this.domain_.CreateJsonFile(entity)) {
-                        writer.Write(json);
-                        writer.Close();
-                    }
+                    this.domain_.CreateJsonFile(entity);
                     this.loadingService_?.Load(this.domain_.LoadPlaylists);
                 }
             });
@@ -105,7 +94,8 @@ namespace BeatServerBrowser.PlayList.ViewModels
                 { "Title", "確認" },
                 { "Message", "プレイリストを削除します。よろしいですか？"}
             };
-            this.dialogService_?.ShowDialog("ConfimationDialog", param, result => {
+            this.dialogService_?.ShowDialog("ConfimationDialog", param, result =>
+            {
                 if (result.Result == ButtonResult.Yes) {
                     entity.Json.Delete();
                     this.loadingService_?.Load(this.domain_.LoadPlaylists);
@@ -115,7 +105,7 @@ namespace BeatServerBrowser.PlayList.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private PlaylistDomain domain_;
+        private readonly PlaylistDomain domain_;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄

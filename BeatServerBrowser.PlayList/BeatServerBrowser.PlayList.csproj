@@ -5,13 +5,13 @@
     <AssemblyName>BeatServerBrowser.PlayList</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Dragablz" Version="0.0.3.203" />
-    <PackageReference Include="MaterialDesignColors" Version="1.2.7" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
+    <PackageReference Include="Dragablz" Version="0.0.3.223" />
+    <PackageReference Include="MaterialDesignColors" Version="2.0.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
-    <PackageReference Include="StatefulModel" Version="0.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+    <PackageReference Include="StatefulModel.Standard" Version="0.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeatServerBrowser.Core\BeatServerBrowser.Core.csproj" />

@@ -5,7 +5,6 @@ using Prism.Modularity;
 using Prism.Regions;
 using System;
 using System.Diagnostics;
-using Unity.Exceptions;
 
 namespace BeatServerBrowser.List
 {

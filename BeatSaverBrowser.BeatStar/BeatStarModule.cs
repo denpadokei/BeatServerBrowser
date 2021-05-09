@@ -1,9 +1,9 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 
-namespace BeatServerBrowser.Static
+namespace BeatSaverBrowser.BeatStar
 {
-    public class StaticModule : IModule
+    public class BeatStarModule : IModule
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {

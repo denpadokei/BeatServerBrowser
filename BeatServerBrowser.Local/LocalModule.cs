@@ -14,9 +14,6 @@ namespace BeatServerBrowser.Local
             regionManager.RegisterViewWithRegion("LocalPanelRegion", typeof(LocalPanel));
         }
 
-        public void RegisterTypes(IContainerRegistry containerRegistry)
-        {
-            containerRegistry.RegisterForNavigation(typeof(LocalMain), "LocalMain");
-        }
+        public void RegisterTypes(IContainerRegistry containerRegistry) => containerRegistry.RegisterForNavigation(typeof(LocalMain), "LocalMain");
     }
 }

@@ -34,11 +34,17 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Image Width="250" Grid.Row="0" VerticalAlignment="Top" dp:LazyImageBehavior.KeySource="{Binding Beatmap.CoverBuff}" Margin="5"/>
-                    <Button Grid.Row="1" Command="{Binding Beatmap.DownloadCommand}" Margin="5" VerticalAlignment="Top">
-                        <material:PackIcon Kind="FileDownloadOutline"/>
-                    </Button>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Command="{Binding Beatmap.DownloadCommand}" Margin="5" VerticalAlignment="Top" Cursor="Hand">
+                            <material:PackIcon Kind="FileDownloadOutline"/>
+                        </Button>
+                        <Button Grid.Column="1" Content="!bsrコピー" Command="{Binding Beatmap.CopyCommand}" Margin="5"/>
+                    </Grid>
                 </Grid>
-                
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition />

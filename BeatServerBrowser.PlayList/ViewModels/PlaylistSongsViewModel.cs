@@ -1,22 +1,21 @@
-﻿using BeatServerBrowser.Core.Collections;
+﻿using BeatServerBrowser.Core.Bases;
+using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.PlayList.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using BeatServerBrowser.Core.Bases;
 using System.IO;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace BeatServerBrowser.PlayList.ViewModels
 {
@@ -142,12 +141,12 @@ namespace BeatServerBrowser.PlayList.ViewModels
         private async void Apply()
         {
             try {
-                var param = new DialogParameters(); ;
-
-                await Task.Run(() => {
+                var param = new DialogParameters();
+                await Task.Run(() =>
+                {
                     this.IsLoading = true;
-                    var jsonentity = new PlaylistJsonEntity();
-                    string metadata = "";
+                    var jsonentity = this.PlaylistPreview.Entity;
+                    var metadata = "";
                     var ex = "jpg";
                     if (!string.IsNullOrWhiteSpace(this.PlaylistPreview.CoverPath)) {
                         var info = new FileInfo(this.PlaylistPreview.CoverPath);
@@ -162,23 +161,29 @@ namespace BeatServerBrowser.PlayList.ViewModels
                     else {
                         metadata = this.PlaylistPreview.Base64Info;
                     }
-                    jsonentity.Image = $"{metadata},{this.PlaylistPreview.CoverImage}";
-                    jsonentity.PlayListAuthor = this.PlaylistPreview.Author;
-                    jsonentity.PlayListTytle = this.PlaylistPreview.PlaylistName;
-                    jsonentity.PlayListDescription = this.PlaylistPreview.DescriptionText;
+                    jsonentity["image"] = $"{metadata},{this.PlaylistPreview.CoverImage}";
+                    jsonentity["playlistAuthor"] = this.PlaylistPreview.Author;
+                    jsonentity["playlistTitle"] = this.PlaylistPreview.PlaylistName;
+                    jsonentity["playlistDescription"] = this.PlaylistPreview.DescriptionText;
+                    var songs = this.PlaylistPreview.Entity.GetValue("songs").Children().ToList();
                     foreach (var item in this.domain_.nonFilteredPlaylistbeatmaps_.OrderBy(x => x.Index)) {
-                        var beatmap = new PlaylistSongEntity();
-                        beatmap.SongName = item.SongTitle;
-                        beatmap.Hash = item.SongHash;
-                        jsonentity.Songs.Add(beatmap);
+                        if (songs.Any(x => x["hash"]?.ToString().ToUpper() == item?.SongHash.ToUpper())) {
+                            continue;
+                        }
+                        var beatmap = new
+                        {
+                            songName = item.SongTitle,
+                            hash = item.SongHash
+                        };
+                        songs.Add(JObject.FromObject(beatmap));
                     }
-
+                    jsonentity["songs"] = JArray.FromObject(songs);
                     var json = JsonConvert.SerializeObject(jsonentity);
                     param = new DialogParameters()
-                    {
-                        { "Playlist", this.PlaylistPreview },
-                        { "Songlist", json }
-                    };
+                        {
+                            { "Playlist", this.PlaylistPreview },
+                            { "Songlist", json }
+                        };
                     this.IsLoading = false;
                 });
                 var result = new DialogResult(ButtonResult.OK, param);
@@ -192,10 +197,7 @@ namespace BeatServerBrowser.PlayList.ViewModels
             }
         }
 
-        private void Cancel()
-        {
-            this.RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel, null));
-        }
+        private void Cancel() => this.RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel, null));
 
         private void Add(IList songs)
         {
@@ -248,15 +250,9 @@ namespace BeatServerBrowser.PlayList.ViewModels
             this.domain_.Move(list, false);
         }
 
-        private void Stop()
-        {
-            this.Player.Stop();
-        }
+        private void Stop() => this.Player.Stop();
 
-        private bool IsFilterd(IList _)
-        {
-            return this.domain_.nonFilteredPlaylistbeatmaps_.Count == this.domain_.SortedPlaylistBeatmaps.Count;
-        }
+        private bool IsFilterd(IList _) => this.domain_.nonFilteredPlaylistbeatmaps_.Count == this.domain_.SortedPlaylistBeatmaps.Count;
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
@@ -274,14 +270,11 @@ namespace BeatServerBrowser.PlayList.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public bool CanCloseDialog()
-        {
-            return !this.IsLoading;
-        }
+        public bool CanCloseDialog() => !this.IsLoading;
 
         public void OnDialogClosed()
         {
-            
+
         }
 
         public void OnDialogOpened(IDialogParameters parameters)
@@ -290,13 +283,16 @@ namespace BeatServerBrowser.PlayList.ViewModels
             this.PlaylistPreview = parameters.GetValue<PlaylistPreviewEntity>("Playlist");
             this.domain_.nonFilteredLocalbeatmaps_.AddRange(ConfigMaster.Current.SortedLocalBeatmaps);
             var songlist = new List<LocalBeatmapInfo>();
-            foreach (var beatmap in this.PlaylistPreview.Entity.Songs) {
-                var playlistsong = ConfigMaster.Current.LocalBeatmaps.FirstOrDefault(x => x.SongHash == beatmap.Hash);
-                if (playlistsong == null) {
-                    continue;
+            if (this.PlaylistPreview.Entity.TryGetValue("songs", out var songs)) {
+                foreach (var beatmap in songs.Children()) {
+                    var playlistsong = ConfigMaster.Current.LocalBeatmaps.FirstOrDefault(x => x.SongHash?.ToUpper() == beatmap["hash"]?.ToString().ToUpper());
+                    if (playlistsong == null) {
+                        continue;
+                    }
+                    songlist.Add(playlistsong);
                 }
-                songlist.Add(playlistsong);
             }
+
             this.domain_.Add(songlist);
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(
                 this.PlaylistPreview, nameof(INotifyPropertyChanged.PropertyChanged), this.OnPlaylistPreviewPropertyChanged);
@@ -305,31 +301,22 @@ namespace BeatServerBrowser.PlayList.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        private void OnLocalmapFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            this.domain_.FilteringLocalBeatmap();
-        }
+        private void OnLocalmapFilterPropertyChanged(object sender, PropertyChangedEventArgs e) => this.domain_.FilteringLocalBeatmap();
 
-        private void OnPlaylistFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            this.domain_.FilteringPlaylist();
-        }
+        private void OnPlaylistFilterPropertyChanged(object sender, PropertyChangedEventArgs e) => this.domain_.FilteringPlaylist();
 
-        private void OnPlaylistPreviewPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            this.RaisePropertyChanged(nameof(this.CanApply));
-        }
+        private void OnPlaylistPreviewPropertyChanged(object sender, PropertyChangedEventArgs e) => this.RaisePropertyChanged(nameof(this.CanApply));
 
         private bool CanApplyMethod()
         {
-            this.CanApply = !string.IsNullOrWhiteSpace(this.PlaylistPreview.PlaylistName) && !string.IsNullOrWhiteSpace(this.PlaylistPreview.Author);
+            this.CanApply = !string.IsNullOrWhiteSpace(this.PlaylistPreview.PlaylistName);
             return this.CanApply;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private PlaylistSongsDomain domain_;
-        private Regex extention_ = new Regex("[a-z, A-Z]");
+        private readonly PlaylistSongsDomain domain_;
+        private readonly Regex extention_ = new Regex("[a-z, A-Z]");
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄

@@ -1,11 +1,9 @@
 ﻿using BeatServerBrowser.Core.Interfaces;
 using BeatServerBrowser.Core.Models;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Microsoft.WindowsAPICodePack.Shell;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Unity;
 
 namespace BeatServerBrowser.Core.Services
@@ -15,15 +13,9 @@ namespace BeatServerBrowser.Core.Services
         [Dependency]
         public IDialogService dialogService_;
 
-        public void Show(string name, IDialogParameters parameters, Action<IDialogResult> callback)
-        {
-            this.dialogService_?.Show(name, parameters, callback);
-        }
+        public void Show(string name, IDialogParameters parameters, Action<IDialogResult> callback) => this.dialogService_?.Show(name, parameters, callback);
 
-        public void ShowDialog(string name, IDialogParameters parameters, Action<IDialogResult> callback)
-        {
-            this.dialogService_?.ShowDialog(name, parameters, callback);
-        }
+        public void ShowDialog(string name, IDialogParameters parameters, Action<IDialogResult> callback) => this.dialogService_?.ShowDialog(name, parameters, callback);
 
         public void ShowOpenFileDialog(OpenFileDialogParameters parameters, out IEnumerable<string> fileNames)
         {

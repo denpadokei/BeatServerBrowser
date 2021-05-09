@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BeatServerBrowser.Core.Services
@@ -31,7 +30,7 @@ namespace BeatServerBrowser.Core.Services
 
         public SongHashDataProviderService()
         {
-            Data = new Dictionary<string, SongHashData>();
+            this.Data = new Dictionary<string, SongHashData>();
         }
 
         public static void SetDataFile(string filePath)
@@ -48,7 +47,7 @@ namespace BeatServerBrowser.Core.Services
         {
             if (SongHashFile == null)
                 throw new InvalidOperationException("Unable to save SongHashFile, data file not set.");
-            bool writeFinished = false;
+            var writeFinished = false;
             var dataList = new Dictionary<string, SongHashData>();
             var keys = DataProviders.Keys.ToList();
             foreach (var key in keys) {
@@ -88,11 +87,11 @@ namespace BeatServerBrowser.Core.Services
                 var token = JObject.Parse(str);
                 foreach (JProperty item in token.Children()) {
                     var directory = item.Name;
-                    Data.Add(directory, new SongHashData(item, directory));
+                    this.Data.Add(directory, new SongHashData(item, directory));
                 }
             }
-            foreach (var item in Data.Keys) {
-                Data[item].Directory = item;
+            foreach (var item in this.Data.Keys) {
+                this.Data[item].Directory = item;
             }
         }
 
@@ -105,9 +104,9 @@ namespace BeatServerBrowser.Core.Services
         {
             DirectoryInfo songFolder = null;
             if (string.IsNullOrEmpty(CustomLevelsFolder)) {
-                string path = string.Empty;
-                if (Data.Count > 0)
-                    path = Data.First().Key;
+                var path = string.Empty;
+                if (this.Data.Count > 0)
+                    path = this.Data.First().Key;
                 if (string.IsNullOrEmpty(path))
                     throw new ArgumentNullException("Custom songs folder wasn't provided and can't be determined from the SongHashData file.");
                 CustomLevelsFolder = path;
@@ -115,7 +114,7 @@ namespace BeatServerBrowser.Core.Services
             songFolder = new DirectoryInfo(CustomLevelsFolder).Parent;
             var missingHashData = new Dictionary<string, SongHashData>();
             foreach (var folder in songFolder.GetDirectories()) {
-                if (Data.Keys.Any(k => k == folder.FullName))
+                if (this.Data.Keys.Any(k => k == folder.FullName))
                     continue;
                 if (folder.GetFiles().Any(f => f.Name.ToLower() == "info.dat")) {
                     missingHashData.Add(folder.FullName, new SongHashData() { Directory = folder.FullName });
@@ -123,7 +122,7 @@ namespace BeatServerBrowser.Core.Services
             }
             missingHashData.Values.ToList().AsParallel().ForAll(h => h.GenerateHash());
             foreach (var item in missingHashData) {
-                Data.Add(item.Key, item.Value);
+                this.Data.Add(item.Key, item.Value);
             }
         }
 
@@ -133,7 +132,7 @@ namespace BeatServerBrowser.Core.Services
                 var newSongHashData = new SongHashData() { Directory = songDirectory };
                 if (hashImmediately)
                     newSongHashData.GenerateHash();
-                Data.Add(songDirectory, newSongHashData);
+                this.Data.Add(songDirectory, newSongHashData);
                 return newSongHashData;
             }
             return null;
@@ -143,7 +142,7 @@ namespace BeatServerBrowser.Core.Services
         {
             var hashDataList = new List<SongHashData>();
             foreach (var songDirectory in songDirectories) {
-                hashDataList.Add(AddSongToHash(songDirectory, false));
+                hashDataList.Add(this.AddSongToHash(songDirectory, false));
             }
             hashDataList.AsParallel().ForAll(h => h.GenerateHash());
         }
@@ -160,26 +159,26 @@ namespace BeatServerBrowser.Core.Services
         {
             var logger = LogManager.GetCurrentClassLogger();
 
-            byte[] combinedBytes = Array.Empty<byte>();
-            string infoFile = Path.Combine(songDirectory, "info.dat");
+            var combinedBytes = Array.Empty<byte>();
+            var infoFile = Path.Combine(songDirectory, "info.dat");
             if (!File.Exists(infoFile))
                 return null;
             combinedBytes = combinedBytes.Concat(File.ReadAllBytes(infoFile)).ToArray();
             var token = JToken.Parse(File.ReadAllText(infoFile));
             var beatMapSets = token["_difficultyBeatmapSets"];
-            int numChars = beatMapSets.Children().Count();
-            for (int i = 0; i < numChars; i++) {
+            var numChars = beatMapSets.Children().Count();
+            for (var i = 0; i < numChars; i++) {
                 var diffs = beatMapSets.ElementAt(i);
-                int numDiffs = diffs["_difficultyBeatmaps"].Children().Count();
-                for (int i2 = 0; i2 < numDiffs; i2++) {
+                var numDiffs = diffs["_difficultyBeatmaps"].Children().Count();
+                for (var i2 = 0; i2 < numDiffs; i2++) {
                     var diff = diffs["_difficultyBeatmaps"].ElementAt(i2);
-                    string beatmapPath = Path.Combine(songDirectory, diff["_beatmapFilename"].Value<string>());
+                    var beatmapPath = Path.Combine(songDirectory, diff["_beatmapFilename"].Value<string>());
                     if (File.Exists(beatmapPath))
                         combinedBytes = combinedBytes.Concat(File.ReadAllBytes(beatmapPath)).ToArray();
                 }
             }
 
-            string hash = CreateSha1FromBytes(combinedBytes.ToArray());
+            var hash = CreateSha1FromBytes(combinedBytes.ToArray());
             if (!string.IsNullOrEmpty(existingHash) && existingHash != hash)
                 logger.Info($"Hash doesn't match the existing hash for {songDirectory}");
             return hash;
@@ -215,10 +214,10 @@ namespace BeatServerBrowser.Core.Services
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path), "Path cannot be null or empty for GenerateDirectoryHash");
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(path);
+            var directoryInfo = new DirectoryInfo(path);
             if (!directoryInfo.Exists)
                 throw new DirectoryNotFoundException($"GenerateDirectoryHash couldn't find {path}");
-            long dirHash = 0L;
+            var dirHash = 0L;
             foreach (var file in directoryInfo.GetFiles()) {
                 dirHash ^= file.CreationTimeUtc.ToFileTimeUtc();
                 dirHash ^= file.LastWriteTimeUtc.ToFileTimeUtc();
@@ -231,8 +230,8 @@ namespace BeatServerBrowser.Core.Services
         private static int SumCharacters(string str)
         {
             unchecked {
-                int charSum = 0;
-                for (int i = 0; i < str.Count(); i++) {
+                var charSum = 0;
+                for (var i = 0; i < str.Count(); i++) {
                     charSum += str[i];
                 }
                 return charSum;

@@ -1,20 +1,13 @@
 ﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Collections;
-using BeatServerBrowser.Core.Extentions;
 using BeatServerBrowser.Core.ScoreSaberSherp;
 using NLog;
 using Prism.Mvvm;
 using StatefulModel;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace BeatServerBrowser.Core.Models
 {
@@ -24,9 +17,9 @@ namespace BeatServerBrowser.Core.Models
         #region // プロパティ
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
-        public static readonly string ThisDirectoryPath = new DirectoryInfo(@".\").FullName;
+        public static string ThisDirectoryPath => Directory.GetCurrentDirectory();
 
-        public static readonly string TempralyDirectory = Path.Combine(Path.GetTempPath(), "BSBTemp");
+        public static string TempralyDirectory => Path.Combine(Path.GetTempPath(), "BSBTemp");
 
         /// <summary>ダークモードフラグ を取得、設定</summary>
         private bool isDark_;
@@ -152,38 +145,31 @@ namespace BeatServerBrowser.Core.Models
         #region // パブリックメソッド
         public void CreateLocalBeatmaps()
         {
-            try
-            {
+            try {
                 this.IsLoading = true;
                 this.LocalBeatmaps.Clear();
                 var path = $@"{this.InstallFolder}\Beat Saber_Data\CustomLevels";
                 var info = new DirectoryInfo(path);
-                if (!Directory.Exists(info.FullName))
-                {
+                if (!Directory.Exists(info.FullName)) {
                     return;
                 }
-                info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).AsParallel().ForAll(folder => {
+                info.EnumerateDirectories("*", SearchOption.TopDirectoryOnly).AsParallel().ForAll(folder =>
+                {
                     this.LocalBeatmaps.Add(new LocalBeatmapInfo(folder, true));
-                    
+
                 });
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 this.Logger.Error(e);
             }
-            finally
-            {
+            finally {
                 this.IsLoading = false;
             }
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数
-        private readonly HttpOptions options_ = new HttpOptions()
-        {
-            ApplicationName = "BeatServerBrowser",
-            Version = new Version(0, 1, 5),
-        };
+        private readonly HttpOptions options_ = new HttpOptions("BeatServerBrowser", Assembly.GetCallingAssembly().GetName().Version);
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // 構築・破棄

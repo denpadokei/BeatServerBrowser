@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace BeatServerBrowser.Style.Controls
@@ -12,14 +9,8 @@ namespace BeatServerBrowser.Style.Controls
         #region // プロパティ
         public object CurrentListViewContext
         {
-            get
-            {
-                return this.GetValue(CurrentListViewContextProperty);
-            }
-            set
-            {
-                this.SetValue(CurrentListViewContextProperty, value);
-            }
+            get => this.GetValue(CurrentListViewContextProperty);
+            set => this.SetValue(CurrentListViewContextProperty, value);
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
@@ -47,7 +38,7 @@ namespace BeatServerBrowser.Style.Controls
             if (this.SelectedItem is TabItem tabitem) {
                 this.CurrentListViewContext = tabitem.DataContext;
             }
-            
+
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

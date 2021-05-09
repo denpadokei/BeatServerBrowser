@@ -8,8 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Security.AccessControl;
-using System.Security.Principal;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace BeatServerBrowser.Core.Models
@@ -132,7 +131,7 @@ namespace BeatServerBrowser.Core.Models
                     return;
                 }
                 var directoryInfo = Directory.CreateDirectory(path);
-                var body = await Application.Current.Dispatcher.Invoke(() => this.Beatmap.DownloadZip());
+                var body = await Application.Current.Dispatcher.Invoke(() => this.Beatmap.ZipBytes());
                 using (var stream = new MemoryStream(body)) {
                     using (var aricive = new ZipArchive(stream)) {
                         foreach (var entry in aricive.Entries) {
@@ -168,11 +167,7 @@ namespace BeatServerBrowser.Core.Models
             return !this.IsInstalled;
         }
 
-        private void ShowDetail()
-        {
-            SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);
-            //this.ShowDetailAction?.Invoke(this);
-        }
+        private void ShowDetail() => SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);//this.ShowDetailAction?.Invoke(this);
 
         private async void Preview()
         {
@@ -180,7 +175,7 @@ namespace BeatServerBrowser.Core.Models
                 if (SoundPlayerService.CurrentPlayer.IsPreview) {
                     SoundPlayerService.CurrentPlayer.Stop();
                 }
-                var body = await this.Beatmap.DownloadZip();
+                var body = await this.Beatmap.ZipBytes();
                 var path = ConfigMaster.TempralyDirectory;
                 Directory.CreateDirectory(Path.Combine(path, this.Hash));
                 using (var stream = new MemoryStream(body)) {
@@ -225,8 +220,11 @@ namespace BeatServerBrowser.Core.Models
         public BeatmapEntity(Beatmap beatmap)
         {
             this.Beatmap = beatmap;
-            this.CoverUri = new Uri(BeatSaver.BaseURL + $"{this.Beatmap.CoverURL}");
-            this.CoverBuff = this.Beatmap.FetchCoverImage().Result;
+            this.CoverUri = new Uri(BeatSaver.BaseURL + $"{this.Beatmap?.CoverURL}");
+            this.Beatmap?.CoverImageBytes().Await(r =>
+            {
+                this.CoverBuff = r;
+            }, e => { });
         }
         #endregion
     }

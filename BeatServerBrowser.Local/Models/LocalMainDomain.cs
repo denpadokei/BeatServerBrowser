@@ -1,10 +1,6 @@
 ﻿using BeatServerBrowser.Core.Models;
-using StatefulModel;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
-using System.Windows;
 
 namespace BeatServerBrowser.Local.Models
 {
@@ -36,10 +32,7 @@ namespace BeatServerBrowser.Local.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        protected override void OnLocalmapPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            this.Serch();
-        }
+        protected override void OnLocalmapPropertyChanged(object sender, PropertyChangedEventArgs e) => this.Serch();
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックイベント
@@ -49,7 +42,7 @@ namespace BeatServerBrowser.Local.Models
         #region // 構築・破棄
         public LocalMainDomain()
         {
-            
+
         }
         #endregion
     }

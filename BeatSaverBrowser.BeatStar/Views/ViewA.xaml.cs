@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace BeatServerBrowser.Setting.Views
+namespace BeatSaverBrowser.BeatStar.Views
 {
     /// <summary>
     /// Interaction logic for ViewA.xaml
     /// </summary>
-    public partial class SettingView : UserControl
+    public partial class ViewA : UserControl
     {
-        public SettingView()
+        public ViewA()
         {
             this.InitializeComponent();
         }

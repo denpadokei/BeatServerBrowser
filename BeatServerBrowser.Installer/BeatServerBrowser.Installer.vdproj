@@ -209,15 +209,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:BeatServerBrowser"
-        "ProductCode" = "8:{378A65BC-E5FF-4C95-AE4C-1DB39AD5F41D}"
-        "PackageCode" = "8:{4642D764-793C-4F27-860D-21993EB8118C}"
+        "ProductCode" = "8:{89EB54BD-4D62-454E-82B3-D41CB508D988}"
+        "PackageCode" = "8:{0D9B40C0-BB77-476A-83A7-482B7DBF3183}"
         "UpgradeCode" = "8:{DCC2E04E-F2C5-4AE3-9037-2E6821DD3328}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.3.0"
+        "ProductVersion" = "8:1.4.0"
         "Manufacturer" = "8:BeatSaverBrowser"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -759,7 +759,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7F19E387DC384726A890384BB618335B"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Release\\netcoreapp3.1\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"

@@ -4,9 +4,8 @@ using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace BeatServerBrowser.Core.Models
 {
@@ -32,11 +31,16 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>曲詳細コマンド を取得、設定</summary>
         private DelegateCommand<BeatmapEntity> showDetailCommand_;
         /// <summary>曲詳細コマンド を取得、設定</summary>
-        public DelegateCommand<BeatmapEntity> ShowDeailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand<BeatmapEntity>(this.ShowDetail));
+        public DelegateCommand<BeatmapEntity> ShowDeailCommand => this.showDetailCommand_ ?? (this.showDetailCommand_ = new DelegateCommand<BeatmapEntity>(async b => await this.ShowDetail(b)));
+
+        /// <summary>曲詳細コマンド を取得、設定</summary>
+        private DelegateCommand<BeatmapEntity> showDetailCommandOnPlaylistView_;
+        /// <summary>曲詳細コマンド を取得、設定</summary>
+        public DelegateCommand<BeatmapEntity> ShowDeailCommandOnPlaylistView => this.showDetailCommandOnPlaylistView_ ?? (this.showDetailCommandOnPlaylistView_ = new DelegateCommand<BeatmapEntity>(async b => await this.ShowDetailOnPlaylistView(b)));
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private async void ShowDetail(BeatmapEntity beatmap)
+        private async Task ShowDetail(BeatmapEntity beatmap, string identifier = null)
         {
             if (this.IsOpen == true) {
                 return;
@@ -44,7 +48,13 @@ namespace BeatServerBrowser.Core.Models
             try {
                 var view = new SongDetail();
                 view.DataContext = new SongDetailDialogViewModel() { Beatmap = beatmap };
-                await DialogHost.Show(view, "SongDetail");
+                if (string.IsNullOrEmpty(identifier)) {
+                    await DialogHost.Show(view, "SongDetail");
+                }
+                else {
+                    await DialogHost.Show(view, identifier);
+                }
+                
             }
             catch (Exception e) {
                 Debug.WriteLine(e);
@@ -52,7 +62,12 @@ namespace BeatServerBrowser.Core.Models
             finally {
                 this.IsOpen = false;
             }
-            
+
+        }
+
+        private async Task ShowDetailOnPlaylistView(BeatmapEntity beatmap)
+        {
+            await this.ShowDetail(beatmap, "PlaylistDetail");
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

@@ -9,7 +9,7 @@ namespace BeatServerBrowser.Core.Views
     {
         public ConfimationDialog()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

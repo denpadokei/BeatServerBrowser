@@ -2,8 +2,6 @@
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BeatServerBrowser.Core.ViewModels
 {
@@ -39,31 +37,22 @@ namespace BeatServerBrowser.Core.ViewModels
         /// <summary>OKコマンド を取得、設定</summary>
         public DelegateCommand YesCommand => this.YesOommand_ ?? (this.YesOommand_ = new DelegateCommand(this.Yes));
 
-        private void Yes()
-        {
-            this.RequestClose?.Invoke(new DialogResult(ButtonResult.Yes));
-        }
+        private void Yes() => this.RequestClose?.Invoke(new DialogResult(ButtonResult.Yes));
 
         /// <summary>NOコマンド を取得、設定</summary>
         private DelegateCommand noCommand_;
         /// <summary>NOコマンド を取得、設定</summary>
         public DelegateCommand NoCommand => this.noCommand_ ?? (this.noCommand_ = new DelegateCommand(this.No));
 
-        private void No()
-        {
-            this.RequestClose?.Invoke(new DialogResult(ButtonResult.No));
-        }
+        private void No() => this.RequestClose?.Invoke(new DialogResult(ButtonResult.No));
 
         public event Action<IDialogResult> RequestClose;
 
-        public bool CanCloseDialog()
-        {
-            return true;
-        }
+        public bool CanCloseDialog() => true;
 
         public void OnDialogClosed()
         {
-            
+
         }
 
         public void OnDialogOpened(IDialogParameters parameters)

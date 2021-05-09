@@ -1,5 +1,5 @@
-﻿using Microsoft.Xaml.Behaviors;
-using BeatServerBrowser.Core.Interfaces;
+﻿using BeatServerBrowser.Core.Interfaces;
+using Microsoft.Xaml.Behaviors;
 using System.Windows;
 
 namespace BeatServerBrowser.Core.Actions

@@ -9,7 +9,7 @@ namespace BeatServerBrowser.Home.Views
     {
         public HomeView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

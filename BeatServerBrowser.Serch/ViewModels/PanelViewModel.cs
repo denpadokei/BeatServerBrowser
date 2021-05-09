@@ -1,13 +1,8 @@
-﻿using BeatSaverSharp;
-using BeatServerBrowser.Core.Bases;
+﻿using BeatServerBrowser.Core.Bases;
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.Serch.Models;
 using Prism.Commands;
-using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BeatServerBrowser.Serch.ViewModels
 {
@@ -54,13 +49,10 @@ namespace BeatServerBrowser.Serch.ViewModels
             if (this.IsLoading == true) {
                 return;
             }
-            this.loadingService_?.Load(this.serchDomain_.Serch);
+            this.loadingService_?.Load(async () => await this.serchDomain_.Serch());
         }
 
-        private void Reset()
-        {
-            this.serchDomain_.Reset();
-        }
+        private void Reset() => this.serchDomain_.Reset();
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト

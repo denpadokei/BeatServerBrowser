@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using StatefulModel;
-using System.Text;
-using System.Linq;
 
 namespace BeatServerBrowser.Core.Extentions
 {
