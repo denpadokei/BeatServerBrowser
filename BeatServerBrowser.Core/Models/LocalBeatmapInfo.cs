@@ -204,14 +204,14 @@ namespace BeatServerBrowser.Core.Models
 
         private async void KeyCopy()
         {
-            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
             if (beatmap == null) {
                 return;
             }
-            Clipboard.SetText($"!bsr {beatmap.Key}");
+            Clipboard.SetText($"!bsr {beatmap.ID}");
             this.CopyKey?.Invoke();
-            this.Logger.Info($"{beatmap.Key}をクリップボードに送りました。");
-            Debug.WriteLine($"{beatmap.Key}をクリップボードに送りました。");
+            this.Logger.Info($"{beatmap.ID}をクリップボードに送りました。");
+            Debug.WriteLine($"{beatmap.ID}をクリップボードに送りました。");
         }
 
         private void PreView()
@@ -237,7 +237,7 @@ namespace BeatServerBrowser.Core.Models
             if (string.IsNullOrWhiteSpace(this.SongHash)) {
                 return;
             }
-            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
             if (beatmap == null) {
                 return;
             }
@@ -251,7 +251,7 @@ namespace BeatServerBrowser.Core.Models
             if (string.IsNullOrWhiteSpace(this.SongHash)) {
                 return;
             }
-            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
             if (beatmap == null) {
                 return;
             }
@@ -290,8 +290,8 @@ namespace BeatServerBrowser.Core.Models
 
         public async Task<string> GetKey()
         {
-            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.Hash(this.SongHash);
-            return beatmap == null ? "" : beatmap.Key;
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
+            return beatmap == null ? "" : beatmap.ID;
         }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*

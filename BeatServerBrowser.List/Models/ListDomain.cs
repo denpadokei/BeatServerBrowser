@@ -1,4 +1,5 @@
 ﻿using BeatSaverSharp;
+using BeatSaverSharp.Models.Pages;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.List.DataBases;
 using Prism.Mvvm;
@@ -50,42 +51,37 @@ namespace BeatServerBrowser.List.Models
         #region // パブリックメソッド
         public async Task Serch()
         {
-            var page = new Page<PagedRequestOptions>();
+            Page page = null;
             switch (this.Filter.CurrentPageType) {
                 case Static.Enums.PageType.Latest:
                     page = await ListDataBase.GetLatestPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
-                case Static.Enums.PageType.Hot:
-                    page = await ListDataBase.GetHotPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
-                    break;
                 case Static.Enums.PageType.Raiting:
                     page = await ListDataBase.GetRatingPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
                     break;
-                case Static.Enums.PageType.Downloads:
-                    page = await ListDataBase.GetDownloadsPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
-                    break;
                 case Static.Enums.PageType.Rank:
-                    var songs = await ListDataBase.GetRankPage(ConfigMaster.Current.CurrentScoreSaber, this.Filter.Count);
-                    if (songs == null) {
-                        return;
-                    }
-                    foreach (var scoremap in songs.Scoremaps) {
-                        var scorebeatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(scoremap.ID).Result;
-                        if (scorebeatmap == null) {
-                            break;
-                        }
-                        this.Beatmaps.Add(new BeatmapEntity(scorebeatmap));
-                    }
-                    this.Filter.Count++;
-                    return;
+                    page = await ListDataBase.GetRankPage(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Count);
+                    //if (songs == null) {
+                    //    return;
+                    //}
+                    //foreach (var scoremap in songs.Scoremaps) {
+                    //    var scorebeatmap = ConfigMaster.Current.CurrentBeatSaver.Hash(scoremap.ID).Result;
+                    //    if (scorebeatmap == null) {
+                    //        break;
+                    //    }
+                    //    this.Beatmaps.Add(new BeatmapEntity(scorebeatmap));
+                    //}
+                    //this.Filter.Count++;
+                    //return;
+                    break;
                 default:
                     break;
             }
-            if (page.Docs == null) {
+            if (page.Beatmaps == null) {
                 return;
             }
 
-            foreach (var beatmap in page.Docs) {
+            foreach (var beatmap in page.Beatmaps) {
                 this.Beatmaps.Add(new BeatmapEntity(beatmap));
             }
             this.Filter.Count++;

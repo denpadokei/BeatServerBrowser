@@ -7,12 +7,12 @@ namespace BeatServerBrowser.Static.Enums
     {
         [Description("最新")]
         Latest,
-        [Description("HOT！")]
-        Hot,
+        //[Description("HOT！")]
+        //Hot,
         [Description("Upvoteレーティング")]
         Raiting,
-        [Description("ダウンロード数")]
-        Downloads,
+        //[Description("ダウンロード数")]
+        //Downloads,
         [Description("ランク")]
         Rank
     }

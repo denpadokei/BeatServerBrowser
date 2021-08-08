@@ -24,7 +24,6 @@
     <Page Remove="Models\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BeatSaverSharp" Version="2.0.1" />
     <PackageReference Include="MaterialDesignColors" Version="2.0.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
@@ -35,6 +34,7 @@
     <PackageReference Include="StatefulModel.Standard" Version="0.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BeatSaverSharper\BeatSaverSharp\BeatSaverSharp.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Core\BeatServerBrowser.Core.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.Home\BeatServerBrowser.Home.csproj" />
     <ProjectReference Include="..\BeatServerBrowser.List\BeatServerBrowser.List.csproj" />

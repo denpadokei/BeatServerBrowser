@@ -1,4 +1,5 @@
 ﻿using BeatSaverSharp;
+using BeatSaverSharp.Models;
 using BeatServerBrowser.Core.Services;
 using NLog;
 using Prism.Commands;
@@ -52,19 +53,19 @@ namespace BeatServerBrowser.Core.Models
 
         public string SongTitle => this.Beatmap.Name;
 
-        public string UploaderName => this.Beatmap.Uploader.Username;
+        public string UploaderName => this.Beatmap.Uploader.Name;
 
-        public string Hash => this.Beatmap.Hash;
+        public string Hash => this.Beatmap.LatestVersion.Hash;
 
-        public string CoverURL => this.Beatmap.CoverURL;
+        public string CoverURL => this.Beatmap.LatestVersion.CoverURL;
 
-        public string DownloadURL => this.Beatmap.DownloadURL;
+        public string DownloadURL => this.Beatmap.LatestVersion.DownloadURL;
 
-        public string DirectDownload => this.Beatmap.DirectDownload;
+        public string DirectDownload => this.Beatmap.LatestVersion.DownloadURL;
+        public BeatmapVersion Version => this.Beatmap.LatestVersion;
+        public BeatmapVersion.VersionState Stats => this.Beatmap.LatestVersion.State;
 
-        public Stats Stats => this.Beatmap.Stats;
-
-        public Metadata Metadata => this.Beatmap.Metadata;
+        public BeatmapMetadata Metadata => this.Beatmap.Metadata;
 
         public DateTime Uploaded => this.Beatmap.Uploaded;
 
@@ -74,13 +75,13 @@ namespace BeatServerBrowser.Core.Models
 
         public string Name => this.Beatmap.Name;
 
-        public string Key => this.Beatmap.Key;
+        public string Key => this.Beatmap.ID;
 
         public string ID => this.Beatmap.ID;
 
-        public string CoverFilename => this.Beatmap.CoverFilename;
+        public string CoverFilename => this.Beatmap.LatestVersion.CoverURL;
 
-        public bool Partial => this.Beatmap.Partial;
+        //public bool Partial => this.Beatmap.Partial;
 
         /// <summary>インストール済みかどうか を取得、設定</summary>
         private bool isInstalled_;
@@ -131,7 +132,7 @@ namespace BeatServerBrowser.Core.Models
                     return;
                 }
                 var directoryInfo = Directory.CreateDirectory(path);
-                var body = await Application.Current.Dispatcher.Invoke(() => this.Beatmap.ZipBytes());
+                var body = await Application.Current.Dispatcher.Invoke(() => this.Beatmap.LatestVersion.DownloadZIP());
                 using (var stream = new MemoryStream(body)) {
                     using (var aricive = new ZipArchive(stream)) {
                         foreach (var entry in aricive.Entries) {
@@ -175,7 +176,7 @@ namespace BeatServerBrowser.Core.Models
                 if (SoundPlayerService.CurrentPlayer.IsPreview) {
                     SoundPlayerService.CurrentPlayer.Stop();
                 }
-                var body = await this.Beatmap.ZipBytes();
+                var body = await this.Beatmap.LatestVersion.DownloadZIP();
                 var path = ConfigMaster.TempralyDirectory;
                 Directory.CreateDirectory(Path.Combine(path, this.Hash));
                 using (var stream = new MemoryStream(body)) {
@@ -220,8 +221,8 @@ namespace BeatServerBrowser.Core.Models
         public BeatmapEntity(Beatmap beatmap)
         {
             this.Beatmap = beatmap;
-            this.CoverUri = new Uri(BeatSaver.BaseURL + $"{this.Beatmap?.CoverURL}");
-            this.Beatmap?.CoverImageBytes().Await(r =>
+            this.CoverUri = new Uri(this.Beatmap?.LatestVersion?.CoverURL);
+            this.Beatmap?.LatestVersion.DownloadCoverImage().Await(r =>
             {
                 this.CoverBuff = r;
             }, e => { });
