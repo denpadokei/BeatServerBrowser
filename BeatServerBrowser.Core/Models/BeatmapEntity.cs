@@ -80,7 +80,9 @@ namespace BeatServerBrowser.Core.Models
         public string ID => this.Beatmap.ID;
 
         public string CoverFilename => this.Beatmap.LatestVersion.CoverURL;
-
+        public int Upvotes => this.Beatmap.Stats.Upvotes;
+        public int Downvotes => this.Beatmap.Stats.Downvotes;
+        public int Downloads => this.Beatmap.Stats.Downloads;
         //public bool Partial => this.Beatmap.Partial;
 
         /// <summary>インストール済みかどうか を取得、設定</summary>

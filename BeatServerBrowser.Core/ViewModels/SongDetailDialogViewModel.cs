@@ -25,23 +25,23 @@ namespace BeatServerBrowser.Core.ViewModels
         }
 
         /// <summary>難易度種別 を取得、設定</summary>
-        private ObservableSynchronizedCollection<BeatmapDifficulty> BeatmapDifficults_;
+        private ObservableSynchronizedCollection<BeatmapDifficulty.BeatmapCharacteristic> characteristic_;
         /// <summary>難易度種別 を取得、設定</summary>
-        public ObservableSynchronizedCollection<BeatmapDifficulty> BeatmapDifficults
+        public ObservableSynchronizedCollection<BeatmapDifficulty.BeatmapCharacteristic> Characteristics
         {
-            get => this.BeatmapDifficults_;
+            get => this.characteristic_;
 
-            set => this.SetProperty(ref this.BeatmapDifficults_, value);
+            set => this.SetProperty(ref this.characteristic_, value);
         }
 
         /// <summary>難易度リスト を取得、設定</summary>
-        private ObservableSynchronizedCollection<KeyValuePair<string, BeatmapDifficulty>> diffivults_;
+        private ObservableSynchronizedCollection<BeatmapDifficulty> beatmapDifficults_;
         /// <summary>難易度リスト を取得、設定</summary>
-        public ObservableSynchronizedCollection<KeyValuePair<string, BeatmapDifficulty>> Difficults
+        public ObservableSynchronizedCollection<BeatmapDifficulty> BeatmapDifficults
         {
-            get => this.diffivults_;
+            get => this.beatmapDifficults_;
 
-            set => this.SetProperty(ref this.diffivults_, value);
+            set => this.SetProperty(ref this.beatmapDifficults_, value);
         }
 
         /// <summary>選択中の種別 を取得、設定</summary>
@@ -105,15 +105,16 @@ namespace BeatServerBrowser.Core.ViewModels
         protected override void OnPropertyChanged(PropertyChangedEventArgs args)
         {
             base.OnPropertyChanged(args);
-            //if (args.PropertyName == nameof(this.SelectedCharacteristic) && this.SelectedCharacteristic is BeatmapDifficulty.BeatSaverBeatmapDifficulty bch) {
-            //    this.Difficults.Clear();
-            //    foreach (var item in bch) {
-            //        this.Difficults.Add(item);
-            //    }
-            //    this.SelectedDifficult = this.Difficults[0];
-            //}else 
-            if (args.PropertyName == nameof(this.SelectedDifficult) && this.SelectedDifficult is KeyValuePair<string, BeatmapDifficulty> dict) {
-                this.Difficulity = dict.Value;
+            if (args.PropertyName == nameof(this.SelectedCharacteristic) && this.SelectedCharacteristic is BeatmapDifficulty.BeatmapCharacteristic bch) {
+                this.BeatmapDifficults.Clear();
+                foreach (var item in this.Beatmap.Version.Difficulties.Where(x => x.Characteristic == bch)) {
+                    this.BeatmapDifficults.Add(item);
+                }
+                this.SelectedDifficult = this.BeatmapDifficults[0];
+            }
+            else
+            if (args.PropertyName == nameof(this.SelectedDifficult) && this.SelectedDifficult is BeatmapDifficulty dict) {
+                this.Difficulity = dict;
                 this.NPS = $"{(double)this.Difficulity.Notes / (double)this.Difficulity.Length:N2}";
             }
         }
@@ -121,9 +122,9 @@ namespace BeatServerBrowser.Core.ViewModels
         public override void OnInitialize()
         {
             base.OnInitialize();
-            this.BeatmapDifficults.Clear();
-            foreach (var difficulty in this.Beatmap.Version.Difficulties) {
-                this.BeatmapDifficults.Add(difficulty);
+            this.Characteristics.Clear();
+            foreach (var difficulty in this.Beatmap.Version.Difficulties.GroupBy(x => x.Characteristic)) {
+                this.Characteristics.Add(difficulty.Key);
             }
             var span = new TimeSpan(0, 0, (int)this.Beatmap.Metadata.Duration);
             this.Time = $"{span}";
@@ -142,8 +143,8 @@ namespace BeatServerBrowser.Core.ViewModels
         #region // 構築・破棄
         public SongDetailDialogViewModel()
         {
-            this.Difficults = new ObservableSynchronizedCollection<KeyValuePair<string, BeatmapDifficulty>>();
             this.BeatmapDifficults = new ObservableSynchronizedCollection<BeatmapDifficulty>();
+            this.Characteristics = new ObservableSynchronizedCollection<BeatmapDifficulty.BeatmapCharacteristic>();
         }
         #endregion
     }

@@ -78,13 +78,13 @@
                         </WrapPanel>
                         <WrapPanel>
                             <Label Content="ダウンロード数"/>
-                            <Label Content="{Binding Beatmap.Stats.Downloads}"/>
+                            <Label Content="{Binding Beatmap.Downloads}"/>
                         </WrapPanel>
                         <WrapPanel>
                             <material:PackIcon Kind="LikeDislike" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Label Content="{Binding Beatmap.Stats.UpVotes}" Margin="10,0,0,0"/>
+                            <Label Content="{Binding Beatmap.Upvotes}" Margin="10,0,0,0"/>
                             <Label Content="/"/>
-                            <Label Content="{Binding Beatmap.Stats.DownVotes}"/>
+                            <Label Content="{Binding Beatmap.Downvotes}"/>
                         </WrapPanel>
                     </StackPanel>
                     <Grid Grid.Row="1" Height="207" VerticalAlignment="Bottom">
@@ -93,8 +93,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <ListBox Grid.Row="0" Style="{StaticResource MaterialDesignToolToggleListBox}" SelectedIndex="0" ItemsSource="{Binding BeatmapDifficults}" SelectedItem="{Binding SelectedCharacteristic}" DisplayMemberPath="Name"/>
-                        <ListBox Grid.Row="1" Style="{StaticResource MaterialDesignToolToggleListBox}" SelectedIndex="0" ItemsSource="{Binding Difficults}" SelectedItem="{Binding SelectedDifficult}" DisplayMemberPath="Key"/>
+                        <ListBox Grid.Row="0" Style="{StaticResource MaterialDesignToolToggleListBox}" SelectedIndex="0" ItemsSource="{Binding Characteristics}" SelectedItem="{Binding SelectedCharacteristic}"/>
+                        <ListBox Grid.Row="1" Style="{StaticResource MaterialDesignToolToggleListBox}" SelectedIndex="0" ItemsSource="{Binding BeatmapDifficults}" SelectedItem="{Binding SelectedDifficult}" DisplayMemberPath="Difficulty"/>
                         <StackPanel Grid.Row="2">
                             <DockPanel>
                                 <Label Content="ノーツ数"/>
@@ -114,7 +114,11 @@
                             </DockPanel>
                             <DockPanel>
                                 <Label Content="NJS"/>
-                                <Label Content="{Binding Difficulity.NoteJumpSpeed}"/>
+                                <Label Content="{Binding Difficulity.NJS}"/>
+                            </DockPanel>
+                            <DockPanel>
+                                <Label Content="NPS"/>
+                                <Label Content="{Binding Difficulity.NPS}"/>
                             </DockPanel>
                         </StackPanel>
                     </Grid>
