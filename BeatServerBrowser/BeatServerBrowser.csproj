@@ -4,9 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>BeatServerBrowser</AssemblyName>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
-    <Version>2.0.0.0</Version>
+    <Version>2.1.0.0</Version>
     <Authors>denpadokei</Authors>
     <StartupObject></StartupObject>
     <ApplicationIcon>icon.ico</ApplicationIcon>
