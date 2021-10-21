@@ -378,35 +378,59 @@ namespace BeatServerBrowser.Core.Services
                         this.Player.Play();
                         break;
                     case PackIconKind.Repeat:
-                        this.PlayIndex++;
-                        if (this.Playlist.Count <= this.PlayIndex) {
-                            this.PlayIndex = 0;
+                        while (true) {
+                            try {
+                                this.PlayIndex++;
+                                if (this.Playlist.Count <= this.PlayIndex) {
+                                    this.PlayIndex = 0;
+                                }
+                                this.Beatmap = this.Playlist[this.PlayIndex];
+                                var file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                                if (file == null) {
+                                    continue;
+                                }
+                                this.IsPreview = true;
+                                this.SoundFile?.Dispose();
+                                this.SoundFile = new VorbisWaveReader(file.FullName);
+                                this.Player.Init(this.SoundFile);
+                                this.SetTimer();
+                                this.Player.Play();
+                                break;
+                            }
+                            catch (Exception e) {
+                                this.Logger.Error(e);
+                                continue;
+                            }
                         }
-                        this.Beatmap = this.Playlist[this.PlayIndex];
-                        var file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
-                        this.IsPreview = true;
-                        this.SoundFile?.Dispose();
-                        this.SoundFile = new VorbisWaveReader(file.FullName);
-                        this.Player.Init(this.SoundFile);
-                        this.SetTimer();
-                        this.Player.Play();
                         break;
                     default:
-                        this.PlayIndex++;
-                        if (this.Playlist.Count <= this.PlayIndex) {
-                            this.PlayIndex = 0;
-                            this.IsPreview = false;
-                            return;
-                        }
-                        else {
-                            this.Beatmap = this.Playlist[this.PlayIndex];
-                            file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
-                            this.IsPreview = true;
-                            this.SoundFile?.Dispose();
-                            this.SoundFile = new VorbisWaveReader(file.FullName);
-                            this.Player.Init(this.SoundFile);
-                            this.SetTimer();
-                            this.Player.Play();
+                        while (true) {
+                            this.PlayIndex++;
+                            if (this.Playlist.Count <= this.PlayIndex) {
+                                this.PlayIndex = 0;
+                                this.IsPreview = false;
+                                return;
+                            }
+                            else {
+                                try {
+                                    this.Beatmap = this.Playlist[this.PlayIndex];
+                                    var file = this.Beatmap.Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                                    if (file == null) {
+                                        continue;
+                                    }
+                                    this.IsPreview = true;
+                                    this.SoundFile?.Dispose();
+                                    this.SoundFile = new VorbisWaveReader(file.FullName);
+                                    this.Player.Init(this.SoundFile);
+                                    this.SetTimer();
+                                    this.Player.Play();
+                                    break;
+                                }
+                                catch (Exception e) {
+                                    this.Logger.Error(e);
+                                    continue;
+                                }
+                            }
                         }
                         break;
                 }
