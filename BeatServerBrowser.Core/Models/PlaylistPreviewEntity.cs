@@ -136,7 +136,7 @@ namespace BeatServerBrowser.Core.Models
             if (this.Entity.TryGetValue("songs", out var songs)) {
                 foreach (var songjson in songs.ToObject<List<JObject>>()) {
                     if (songjson.TryGetValue("hash", out var hash)) {
-                        var beatmap = ConfigMaster.Current.SortedLocalBeatmaps.FirstOrDefault(x => x.SongHash == hash.ToString());
+                        var beatmap = ConfigMaster.Current.SortedLocalBeatmaps.FirstOrDefault(x => string.Equals(x.SongHash, hash.ToString(), StringComparison.CurrentCultureIgnoreCase));
                         list.Add(beatmap);
                     }
                 }
