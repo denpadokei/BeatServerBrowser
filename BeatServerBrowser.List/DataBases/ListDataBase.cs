@@ -1,8 +1,5 @@
 ﻿using BeatSaverSharp;
 using BeatSaverSharp.Models.Pages;
-using BeatServerBrowser.Core.ScoreSaberSherp;
-using BeatServerBrowser.Core.ScoreSaberSherp.Types;
-using System;
 using System.Threading.Tasks;
 
 namespace BeatServerBrowser.List.DataBases

@@ -2,7 +2,6 @@
 using BeatServerBrowser.Core.Collections;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.PlayList.Models;
-using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 

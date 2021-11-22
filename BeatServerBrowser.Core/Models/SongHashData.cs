@@ -14,6 +14,7 @@ namespace BeatServerBrowser.Core.Models
         public string Directory
         {
             get => this._directory;
+
             set => this._directory = value?.TrimEnd('\\', '/');
         }
         [JsonProperty("directoryHash")]
@@ -62,7 +63,10 @@ namespace BeatServerBrowser.Core.Models
             return this.SongHash;
         }
 
-        public void GenerateDirectoryHash() => this.DirectoryHash = SongHashDataProviderService.GenerateDirectoryHash(this.Directory);
+        public void GenerateDirectoryHash()
+        {
+            this.DirectoryHash = SongHashDataProviderService.GenerateDirectoryHash(this.Directory);
+        }
 
         /// <summary>
         /// Returns true if the folder path matches. Case sensitive

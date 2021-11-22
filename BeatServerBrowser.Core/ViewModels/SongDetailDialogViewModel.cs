@@ -1,10 +1,8 @@
-﻿using BeatSaverSharp;
-using BeatSaverSharp.Models;
+﻿using BeatSaverSharp.Models;
 using BeatServerBrowser.Core.Bases;
 using BeatServerBrowser.Core.Models;
 using StatefulModel;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -115,7 +113,7 @@ namespace BeatServerBrowser.Core.ViewModels
             else
             if (args.PropertyName == nameof(this.SelectedDifficult) && this.SelectedDifficult is BeatmapDifficulty dict) {
                 this.Difficulity = dict;
-                this.NPS = $"{(double)this.Difficulity.Notes / (double)this.Difficulity.Length:N2}";
+                this.NPS = $"{this.Difficulity.Notes / (double)this.Difficulity.Length:N2}";
             }
         }
 
@@ -126,7 +124,7 @@ namespace BeatServerBrowser.Core.ViewModels
             foreach (var difficulty in this.Beatmap.Version.Difficulties.GroupBy(x => x.Characteristic)) {
                 this.Characteristics.Add(difficulty.Key);
             }
-            var span = new TimeSpan(0, 0, (int)this.Beatmap.Metadata.Duration);
+            var span = new TimeSpan(0, 0, this.Beatmap.Metadata.Duration);
             this.Time = $"{span}";
         }
         #endregion

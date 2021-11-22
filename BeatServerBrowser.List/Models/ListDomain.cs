@@ -1,5 +1,4 @@
-﻿using BeatSaverSharp;
-using BeatSaverSharp.Models.Pages;
+﻿using BeatSaverSharp.Models.Pages;
 using BeatServerBrowser.Core.Models;
 using BeatServerBrowser.List.DataBases;
 using Prism.Mvvm;

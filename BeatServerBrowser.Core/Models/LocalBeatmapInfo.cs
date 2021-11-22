@@ -1,5 +1,6 @@
 ﻿using BeatServerBrowser.Core.Interfaces;
 using BeatServerBrowser.Core.Services;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json;
 using NLog;
 using Prism.Commands;
@@ -162,7 +163,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>曲詳細コマンド を取得、設定</summary>
         public DelegateCommand ShowDeailCommandOnPlaylistView => this.showDetailCommandOnPlaylistView_ ?? (this.showDetailCommandOnPlaylistView_ = new DelegateCommand(async () => await this.ShowDetailOnPlaylistView()));
 
-        
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
@@ -207,14 +208,17 @@ namespace BeatServerBrowser.Core.Models
             try {
                 var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
                 if (beatmap == null) {
+                    new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
                     return;
                 }
                 Clipboard.SetText($"!bsr {beatmap.ID}");
+                new ToastContentBuilder().AddText($"「!bsr {beatmap.ID}」をクリップボードに送りました。").Show();
                 this.CopyKey?.Invoke();
                 this.Logger.Info($"{beatmap.ID}をクリップボードに送りました。");
                 Debug.WriteLine($"{beatmap.ID}をクリップボードに送りました。");
             }
             catch (Exception e) {
+                new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
                 Debug.WriteLine(e);
             }
         }
@@ -235,7 +239,10 @@ namespace BeatServerBrowser.Core.Models
 
         }
 
-        private void Delete() => this.DeleteSongAction?.Invoke(this);
+        private void Delete()
+        {
+            this.DeleteSongAction?.Invoke(this);
+        }
 
         private async Task ShowDetail()
         {
@@ -273,8 +280,15 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        public override bool Equals(object obj) => this.Equals(obj as LocalBeatmapInfo);
-        public override int GetHashCode() => base.GetHashCode();
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as LocalBeatmapInfo);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド

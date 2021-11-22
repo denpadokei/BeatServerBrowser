@@ -11,6 +11,9 @@ namespace BeatServerBrowser.Home
 
         }
 
-        public void RegisterTypes(IContainerRegistry containerRegistry) => containerRegistry.RegisterForNavigation(typeof(HomeView), "HomeView");
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterForNavigation(typeof(HomeView), "HomeView");
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using BeatServerBrowser.Core.Bases;
-using Prism.Regions;
 
 namespace BeatServerBrowser.PlayList.ViewModels
 {

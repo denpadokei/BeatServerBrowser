@@ -1,6 +1,6 @@
-﻿using BeatSaverSharp;
-using BeatSaverSharp.Models;
+﻿using BeatSaverSharp.Models;
 using BeatServerBrowser.Core.Services;
+using Microsoft.Toolkit.Uwp.Notifications;
 using NLog;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -62,7 +62,9 @@ namespace BeatServerBrowser.Core.Models
         public string DownloadURL => this.Beatmap.LatestVersion.DownloadURL;
 
         public string DirectDownload => this.Beatmap.LatestVersion.DownloadURL;
+
         public BeatmapVersion Version => this.Beatmap.LatestVersion;
+
         public BeatmapVersion.VersionState Stats => this.Beatmap.LatestVersion.State;
 
         public BeatmapMetadata Metadata => this.Beatmap.Metadata;
@@ -80,9 +82,13 @@ namespace BeatServerBrowser.Core.Models
         public string ID => this.Beatmap.ID;
 
         public string CoverFilename => this.Beatmap.LatestVersion.CoverURL;
+
         public int Upvotes => this.Beatmap.Stats.Upvotes;
+
         public int Downvotes => this.Beatmap.Stats.Downvotes;
+
         public int Downloads => this.Beatmap.Stats.Downloads;
+
         //public bool Partial => this.Beatmap.Partial;
 
         /// <summary>インストール済みかどうか を取得、設定</summary>
@@ -159,12 +165,14 @@ namespace BeatServerBrowser.Core.Models
         {
             try {
                 Clipboard.SetText($"!bsr {this.Key}");
+                new ToastContentBuilder().AddText($"「!bsr {this.Key}」をクリップボードに送りました。").Show();
                 this.CopyKey?.Invoke();
                 this.Logger.Info($"{this.Key}をクリップボードに送りました。");
                 Debug.WriteLine($"{this.Key}をクリップボードに送りました。");
             }
             catch (Exception e) {
                 Debug.Write(e);
+                new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
             }
         }
 
@@ -175,7 +183,10 @@ namespace BeatServerBrowser.Core.Models
             return !this.IsInstalled;
         }
 
-        private void ShowDetail() => SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);//this.ShowDetailAction?.Invoke(this);
+        private void ShowDetail()
+        {
+            SongManager.CurrentSongManager.ShowDeailCommand?.Execute(this);//this.ShowDetailAction?.Invoke(this);
+        }
 
         private async void Preview()
         {

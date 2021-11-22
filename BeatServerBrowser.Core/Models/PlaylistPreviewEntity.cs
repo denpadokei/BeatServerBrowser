@@ -126,9 +126,15 @@ namespace BeatServerBrowser.Core.Models
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private void Edit() => this.EditEvent?.Invoke(this);
+        private void Edit()
+        {
+            this.EditEvent?.Invoke(this);
+        }
 
-        private void Delete() => this.DeleteEvent?.Invoke(this);
+        private void Delete()
+        {
+            this.DeleteEvent?.Invoke(this);
+        }
 
         private void Preview()
         {
@@ -141,7 +147,7 @@ namespace BeatServerBrowser.Core.Models
                     }
                 }
             }
-            
+
             var soundFileInfo = list[0].Directory.EnumerateFiles("*.egg", SearchOption.TopDirectoryOnly).FirstOrDefault();
             SoundPlayerService.CurrentPlayer.Play(soundFileInfo, list[0], list);
         }
@@ -161,9 +167,9 @@ namespace BeatServerBrowser.Core.Models
                 if (this.Entity.TryGetValue("playlistDescription", out var description)) {
                     this.DescriptionText = description.ToString();
                 }
-                
-                
-                
+
+
+
                 try {
                     if (this.Entity.TryGetValue("image", out var image)) {
                         var stringArray = image.ToString().Split(',');

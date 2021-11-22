@@ -74,7 +74,7 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
                     throw new TaskCanceledException();
 
                 if (contentLength != null) {
-                    var prog = (double)totalRead / (double)contentLength;
+                    var prog = totalRead / (double)contentLength;
                     progress?.Report(prog);
                 }
 
@@ -135,8 +135,16 @@ namespace BeatServerBrowser.Core.ScoreSaberSherp.Types
             this._body = body;
         }
 
-        public byte[] Bytes() => this._body;
-        public string String() => Encoding.UTF8.GetString(this._body);
+        public byte[] Bytes()
+        {
+            return this._body;
+        }
+
+        public string String()
+        {
+            return Encoding.UTF8.GetString(this._body);
+        }
+
         public T JSON<T>()
         {
             var body = this.String();

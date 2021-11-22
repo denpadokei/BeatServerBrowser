@@ -11,28 +11,46 @@ namespace BeatServerBrowser.Core.DependencyPropaties
         #region LazySource 添付プロパティ
 
         [AttachedPropertyBrowsableForType(typeof(Image))]
-        public static Uri GetLazySource(Image element) => (Uri)element.GetValue(LazySourceProperty);
+        public static Uri GetLazySource(Image element)
+        {
+            return (Uri)element.GetValue(LazySourceProperty);
+        }
 
         [AttachedPropertyBrowsableForType(typeof(Image))]
-        public static void SetLazySource(Image element, Uri value) => element.SetValue(LazySourceProperty, value);
+        public static void SetLazySource(Image element, Uri value)
+        {
+            element.SetValue(LazySourceProperty, value);
+        }
 
         public static readonly DependencyProperty LazySourceProperty =
             DependencyProperty.RegisterAttached("LazySource", typeof(Uri), typeof(LazyImageBehavior), new PropertyMetadata(null, LazySource_Changed));
 
         [AttachedPropertyBrowsableForType(typeof(Image))]
-        public static string GetBase64Source(Image element) => (string)element.GetValue(Base64SourceProperty);
+        public static string GetBase64Source(Image element)
+        {
+            return (string)element.GetValue(Base64SourceProperty);
+        }
 
         [AttachedPropertyBrowsableForType(typeof(Image))]
-        public static void SetBase64Source(Image element, string value) => element.SetValue(Base64SourceProperty, value);
+        public static void SetBase64Source(Image element, string value)
+        {
+            element.SetValue(Base64SourceProperty, value);
+        }
 
         public static readonly DependencyProperty Base64SourceProperty =
             DependencyProperty.RegisterAttached("Base64Source", typeof(string), typeof(LazyImageBehavior), new PropertyMetadata("", Base64Source_Changed));
 
         [AttachedPropertyBrowsableForType(typeof(Image))]
-        public static string GetKeySource(Image element) => (string)element.GetValue(KeySourceProperty);
+        public static string GetKeySource(Image element)
+        {
+            return (string)element.GetValue(KeySourceProperty);
+        }
 
         [AttachedPropertyBrowsableForType(typeof(Image))]
-        public static void SetKeySource(Image element, string value) => element.SetValue(KeySourceProperty, value);
+        public static void SetKeySource(Image element, string value)
+        {
+            element.SetValue(KeySourceProperty, value);
+        }
 
         public static readonly DependencyProperty KeySourceProperty =
             DependencyProperty.RegisterAttached("KeySource", typeof(byte[]), typeof(LazyImageBehavior), new PropertyMetadata(null, KeySourse_Changed));
@@ -45,10 +63,16 @@ namespace BeatServerBrowser.Core.DependencyPropaties
         #region LazyImageSource 添付プロパティ
 
         [AttachedPropertyBrowsableForType(typeof(ImageBrush))]
-        public static Uri GetLazyImageSource(ImageBrush element) => (Uri)element.GetValue(LazyImageSourceProperty);
+        public static Uri GetLazyImageSource(ImageBrush element)
+        {
+            return (Uri)element.GetValue(LazyImageSourceProperty);
+        }
 
         [AttachedPropertyBrowsableForType(typeof(ImageBrush))]
-        public static void SetLazyImageSource(ImageBrush element, Uri value) => element.SetValue(LazyImageSourceProperty, value);
+        public static void SetLazyImageSource(ImageBrush element, Uri value)
+        {
+            element.SetValue(LazyImageSourceProperty, value);
+        }
 
         public static readonly DependencyProperty LazyImageSourceProperty =
             DependencyProperty.RegisterAttached("LazyImageSource", typeof(Uri), typeof(LazyImageBehavior), new PropertyMetadata(null, LazyImageSource_Changed));

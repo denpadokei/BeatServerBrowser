@@ -46,15 +46,16 @@ namespace BeatServerBrowser.Core.Models
                 return;
             }
             try {
-                var view = new SongDetail();
-                view.DataContext = new SongDetailDialogViewModel() { Beatmap = beatmap };
+                var view = new SongDetail
+                {
+                    DataContext = new SongDetailDialogViewModel() { Beatmap = beatmap }
+                };
                 if (string.IsNullOrEmpty(identifier)) {
                     await DialogHost.Show(view, "SongDetail");
                 }
                 else {
                     await DialogHost.Show(view, identifier);
                 }
-                
             }
             catch (Exception e) {
                 Debug.WriteLine(e);
@@ -62,7 +63,6 @@ namespace BeatServerBrowser.Core.Models
             finally {
                 this.IsOpen = false;
             }
-
         }
 
         private async Task ShowDetailOnPlaylistView(BeatmapEntity beatmap)

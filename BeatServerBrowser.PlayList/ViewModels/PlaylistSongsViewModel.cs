@@ -197,7 +197,10 @@ namespace BeatServerBrowser.PlayList.ViewModels
             }
         }
 
-        private void Cancel() => this.RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel, null));
+        private void Cancel()
+        {
+            this.RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel, null));
+        }
 
         private void Add(IList songs)
         {
@@ -250,9 +253,15 @@ namespace BeatServerBrowser.PlayList.ViewModels
             this.domain_.Move(list, false);
         }
 
-        private void Stop() => this.Player.Stop();
+        private void Stop()
+        {
+            this.Player.Stop();
+        }
 
-        private bool IsFilterd(IList _) => this.domain_.nonFilteredPlaylistbeatmaps_.Count == this.domain_.SortedPlaylistBeatmaps.Count;
+        private bool IsFilterd(IList _)
+        {
+            return this.domain_.nonFilteredPlaylistbeatmaps_.Count == this.domain_.SortedPlaylistBeatmaps.Count;
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
@@ -270,7 +279,10 @@ namespace BeatServerBrowser.PlayList.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        public bool CanCloseDialog() => !this.IsLoading;
+        public bool CanCloseDialog()
+        {
+            return !this.IsLoading;
+        }
 
         public void OnDialogClosed()
         {
@@ -301,11 +313,20 @@ namespace BeatServerBrowser.PlayList.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // プライベートメソッド
-        private void OnLocalmapFilterPropertyChanged(object sender, PropertyChangedEventArgs e) => this.domain_.FilteringLocalBeatmap();
+        private void OnLocalmapFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.domain_.FilteringLocalBeatmap();
+        }
 
-        private void OnPlaylistFilterPropertyChanged(object sender, PropertyChangedEventArgs e) => this.domain_.FilteringPlaylist();
+        private void OnPlaylistFilterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.domain_.FilteringPlaylist();
+        }
 
-        private void OnPlaylistPreviewPropertyChanged(object sender, PropertyChangedEventArgs e) => this.RaisePropertyChanged(nameof(this.CanApply));
+        private void OnPlaylistPreviewPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.RaisePropertyChanged(nameof(this.CanApply));
+        }
 
         private bool CanApplyMethod()
         {

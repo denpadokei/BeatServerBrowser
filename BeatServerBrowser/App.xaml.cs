@@ -26,7 +26,10 @@ namespace BeatServerBrowser
     /// </summary>
     public partial class App
     {
-        protected override Window CreateShell() => this.Container.Resolve<MainWindow>();
+        protected override Window CreateShell()
+        {
+            return this.Container.Resolve<MainWindow>();
+        }
 
         protected override void OnInitialized()
         {

@@ -13,9 +13,15 @@ namespace BeatServerBrowser.Core.Services
         [Dependency]
         public IDialogService dialogService_;
 
-        public void Show(string name, IDialogParameters parameters, Action<IDialogResult> callback) => this.dialogService_?.Show(name, parameters, callback);
+        public void Show(string name, IDialogParameters parameters, Action<IDialogResult> callback)
+        {
+            this.dialogService_?.Show(name, parameters, callback);
+        }
 
-        public void ShowDialog(string name, IDialogParameters parameters, Action<IDialogResult> callback) => this.dialogService_?.ShowDialog(name, parameters, callback);
+        public void ShowDialog(string name, IDialogParameters parameters, Action<IDialogResult> callback)
+        {
+            this.dialogService_?.ShowDialog(name, parameters, callback);
+        }
 
         public void ShowOpenFileDialog(OpenFileDialogParameters parameters, out IEnumerable<string> fileNames)
         {

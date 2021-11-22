@@ -13,6 +13,9 @@ namespace BeatServerBrowser.Setting
             reagionManager.RegisterViewWithRegion("SettingRegion", typeof(SettingView));
         }
 
-        public void RegisterTypes(IContainerRegistry containerRegistry) => containerRegistry.RegisterDialog<SettingView>();
+        public void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterDialog<SettingView>();
+        }
     }
 }

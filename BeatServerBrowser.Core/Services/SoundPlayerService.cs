@@ -28,7 +28,6 @@ namespace BeatServerBrowser.Core.Services
 
         public static SoundPlayerService CurrentPlayer => player_;
 
-
         private Logger Logger => LogManager.GetCurrentClassLogger();
 
         /// <summary>再生中の譜面情報 を取得、設定</summary>
@@ -319,22 +318,28 @@ namespace BeatServerBrowser.Core.Services
             }
         }
 
-        private void SetTimer() => this.timer_.Start();
+        private void SetTimer()
+        {
+            this.timer_.Start();
+        }
 
-        private async void RaiseLength(object sender, ElapsedEventArgs e) => await Task.Run(() =>
-                                                                           {
-                                                                               try {
-                                                                                   this.SongPosition = ((double)this.Player.GetPosition() / (double)this.SoundFile.Length) * 100d;
-                                                                                   Debug.WriteLine($"{DateTime.Now:yyyy/MM/dd hh:mm:ss} {this.SongPosition}");
-                                                                                   //this.Logger.Info($"{this.SongPosition}");
-                                                                               }
-                                                                               catch (Exception e) {
-                                                                                   this.Player?.Stop();
-                                                                                   this.timer_.Stop();
-                                                                                   this.SoundFile?.Dispose();
-                                                                                   Debug.WriteLine(e);
-                                                                               }
-                                                                           });
+        private async void RaiseLength(object sender, ElapsedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try {
+                    this.SongPosition = (this.Player.GetPosition() / (double)this.SoundFile.Length) * 100d;
+                    Debug.WriteLine($"{DateTime.Now:yyyy/MM/dd hh:mm:ss} {this.SongPosition}");
+                    //this.Logger.Info($"{this.SongPosition}");
+                }
+                catch (Exception e) {
+                    this.Player?.Stop();
+                    this.timer_.Stop();
+                    this.SoundFile?.Dispose();
+                    Debug.WriteLine(e);
+                }
+            });
+        }
 
         private void CreatePlaylist(IList<LocalBeatmapInfo> list)
         {

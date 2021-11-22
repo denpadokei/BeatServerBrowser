@@ -1,5 +1,4 @@
 ﻿using BeatServerBrowser.Core.Bases;
-using Prism.Regions;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;

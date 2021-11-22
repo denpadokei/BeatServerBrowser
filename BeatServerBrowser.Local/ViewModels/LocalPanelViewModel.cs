@@ -59,7 +59,10 @@ namespace BeatServerBrowser.Local.ViewModels
 
         }
 
-        private void Serch() => this.loadingService_?.Load(this.domain_.Serch);
+        private void Serch()
+        {
+            this.loadingService_?.Load(this.domain_.Serch);
+        }
 
 
         #endregion

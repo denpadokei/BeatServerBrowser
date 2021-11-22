@@ -1,5 +1,4 @@
 ﻿using BeatServerBrowser.Core.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Prism.Mvvm;
 using StatefulModel;

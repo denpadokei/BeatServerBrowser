@@ -52,7 +52,10 @@ namespace BeatServerBrowser.List.ViewModels
             this.loadingService_?.Load(async () => await this.domain_.Serch());
         }
 
-        private void Reset() => this.domain_.Reset();
+        private void Reset()
+        {
+            this.domain_.Reset();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト

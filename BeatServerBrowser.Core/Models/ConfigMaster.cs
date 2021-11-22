@@ -175,6 +175,7 @@ namespace BeatServerBrowser.Core.Models
         #region // 構築・破棄
         private static readonly ConfigMaster current_ = new ConfigMaster();
         public static ConfigMaster Current => current_;
+
         private ConfigMaster()
         {
             this.InstallFolder = Properties.Settings.Default.InstallFolder;

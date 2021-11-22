@@ -28,7 +28,10 @@ namespace BeatServerBrowser.Style.Controls
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // オーバーライドメソッド
-        public override void OnApplyTemplate() => base.OnApplyTemplate();
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+        }
 
         protected override void OnScrollChanged(ScrollChangedEventArgs e)
         {

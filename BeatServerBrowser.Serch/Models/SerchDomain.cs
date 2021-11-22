@@ -55,6 +55,9 @@ namespace BeatServerBrowser.Serch.Models
             }
 
             var page = await SerchDataBase.Serch(ConfigMaster.Current.CurrentBeatSaver, this.Filter.Filter, this.Filter.Count);
+            if (page == null) {
+                return;
+            }
             foreach (var beatmap in page.Beatmaps) {
                 this.Beatmaps.Add(new BeatmapEntity(beatmap));
             }

@@ -4,7 +4,6 @@ using BeatServerBrowser.Core.Models;
 using MaterialDesignThemes.Wpf;
 using NAudio.Wave;
 using Prism.Commands;
-using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Specialized;
@@ -139,23 +138,50 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // コマンド用メソッド
-        private void NavigateList() => this.regionManager_?.RequestNavigate("MainRegion", "ListMain");
+        private void NavigateList()
+        {
+            this.regionManager_?.RequestNavigate("MainRegion", "ListMain");
+        }
 
-        private void NavigateSerch() => this.regionManager_?.RequestNavigate("MainRegion", "SerchMain");
+        private void NavigateSerch()
+        {
+            this.regionManager_?.RequestNavigate("MainRegion", "SerchMain");
+        }
 
-        private void NavigateLocal() => this.regionManager_?.RequestNavigate("MainRegion", "LocalMain");
+        private void NavigateLocal()
+        {
+            this.regionManager_?.RequestNavigate("MainRegion", "LocalMain");
+        }
 
-        private void NavigatePlaylist() => this.regionManager_?.RequestNavigate("MainRegion", "PlaylistMain");
+        private void NavigatePlaylist()
+        {
+            this.regionManager_?.RequestNavigate("MainRegion", "PlaylistMain");
+        }
 
-        private void ShowSettingWindow() => this.dialogService_?.ShowDialog("SettingView", new DialogParameters(), _ => { });
+        private void ShowSettingWindow()
+        {
+            this.dialogService_?.ShowDialog("SettingView", new DialogParameters(), _ => { });
+        }
 
-        private void Stop() => this.Player.Stop();
+        private void Stop()
+        {
+            this.Player.Stop();
+        }
 
-        private void ShowDetail() => this.Player.Beatmap.ShowDetailCommand?.Execute();
+        private void ShowDetail()
+        {
+            this.Player.Beatmap.ShowDetailCommand?.Execute();
+        }
 
-        private void SkipForword() => this.Player.SkipForward();
+        private void SkipForword()
+        {
+            this.Player.SkipForward();
+        }
 
-        private void SkipBackword() => this.Player.SkipBackword();
+        private void SkipBackword()
+        {
+            this.Player.SkipBackword();
+        }
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // リクエスト
@@ -255,7 +281,10 @@ namespace BeatServerBrowser.Home.ViewModels
             }
         }
 
-        private void OnCollectionChanged(object sendor, NotifyCollectionChangedEventArgs e) => this.RaisePropertyChanged(nameof(this.LocalSongCount));
+        private void OnCollectionChanged(object sendor, NotifyCollectionChangedEventArgs e)
+        {
+            this.RaisePropertyChanged(nameof(this.LocalSongCount));
+        }
 
         private void OnLoadingServicePropertyChanged(Object sender, PropertyChangedEventArgs e)
         {
@@ -266,7 +295,7 @@ namespace BeatServerBrowser.Home.ViewModels
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // パブリックメソッド
-        
+
         #endregion
         //ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*ﾟ+｡｡+ﾟ*｡+ﾟ ﾟ+｡*
         #region // メンバ変数

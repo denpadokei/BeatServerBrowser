@@ -51,27 +51,29 @@ namespace BeatServerBrowser.Core.Models
             });
         }
 
-        public static Task<BitmapImage> ConvertImage(string base64string) => Task.Run(() =>
+        public static Task<BitmapImage> ConvertImage(string base64string)
         {
-            try {
-                var coverbyte = Convert.FromBase64String(base64string);
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.CreateOptions = BitmapCreateOptions.None;
-                image.StreamSource = new MemoryStream(coverbyte);
-                image.EndInit();
-                image.Freeze();
-                return image;
-            }
-            catch (Exception e) {
-                var logger = LogManager.GetCurrentClassLogger();
-                logger.Error(e);
-            }
+            return Task.Run(() =>
+{
+    try {
+        var coverbyte = Convert.FromBase64String(base64string);
+        var image = new BitmapImage();
+        image.BeginInit();
+        image.CacheOption = BitmapCacheOption.OnLoad;
+        image.CreateOptions = BitmapCreateOptions.None;
+        image.StreamSource = new MemoryStream(coverbyte);
+        image.EndInit();
+        image.Freeze();
+        return image;
+    }
+    catch (Exception e) {
+        var logger = LogManager.GetCurrentClassLogger();
+        logger.Error(e);
+    }
 
-            return null;
-        });
-
+    return null;
+});
+        }
 
         public static Task<BitmapImage> GetBeatmapImage(byte[] keyByte)
         {
@@ -108,6 +110,9 @@ namespace BeatServerBrowser.Core.Models
             });
         }
 
-        public static Task<BitmapImage> GetImage(string uri) => GetImage(new Uri(uri));
+        public static Task<BitmapImage> GetImage(string uri)
+        {
+            return GetImage(new Uri(uri));
+        }
     }
 }
