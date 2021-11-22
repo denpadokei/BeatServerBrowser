@@ -157,10 +157,15 @@ namespace BeatServerBrowser.Core.Models
 
         private void Copy()
         {
-            Clipboard.SetText($"!bsr {this.Key}");
-            this.CopyKey?.Invoke();
-            this.Logger.Info($"{this.Key}をクリップボードに送りました。");
-            Debug.WriteLine($"{this.Key}をクリップボードに送りました。");
+            try {
+                Clipboard.SetText($"!bsr {this.Key}");
+                this.CopyKey?.Invoke();
+                this.Logger.Info($"{this.Key}をクリップボードに送りました。");
+                Debug.WriteLine($"{this.Key}をクリップボードに送りました。");
+            }
+            catch (Exception e) {
+                Debug.Write(e);
+            }
         }
 
         private bool CanInstalled()

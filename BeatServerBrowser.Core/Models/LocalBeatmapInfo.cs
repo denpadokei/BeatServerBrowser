@@ -139,7 +139,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>キーコピーコマンド を取得、設定</summary>
         private DelegateCommand CopyCommand_;
         /// <summary>キーコピーコマンド を取得、設定</summary>
-        public DelegateCommand CopyCommand => this.CopyCommand_ ?? (this.CopyCommand_ = new DelegateCommand(this.KeyCopy));
+        public DelegateCommand CopyCommand => this.CopyCommand_ ?? (this.CopyCommand_ = new DelegateCommand(() => this.KeyCopy().Await()));
 
 
         /// <summary>プレビューコマンド を取得、設定</summary>
@@ -202,16 +202,21 @@ namespace BeatServerBrowser.Core.Models
             this.SongHash = SongHashDataProviderService.GenerateHash(this.Directory.FullName, this.SongHash);
         }
 
-        private async void KeyCopy()
+        private async Task KeyCopy()
         {
-            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
-            if (beatmap == null) {
-                return;
+            try {
+                var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
+                if (beatmap == null) {
+                    return;
+                }
+                Clipboard.SetText($"!bsr {beatmap.ID}");
+                this.CopyKey?.Invoke();
+                this.Logger.Info($"{beatmap.ID}をクリップボードに送りました。");
+                Debug.WriteLine($"{beatmap.ID}をクリップボードに送りました。");
             }
-            Clipboard.SetText($"!bsr {beatmap.ID}");
-            this.CopyKey?.Invoke();
-            this.Logger.Info($"{beatmap.ID}をクリップボードに送りました。");
-            Debug.WriteLine($"{beatmap.ID}をクリップボードに送りました。");
+            catch (Exception e) {
+                Debug.WriteLine(e);
+            }
         }
 
         private void PreView()

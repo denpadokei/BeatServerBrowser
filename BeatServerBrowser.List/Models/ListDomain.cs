@@ -77,7 +77,8 @@ namespace BeatServerBrowser.List.Models
                 default:
                     break;
             }
-            if (page.Beatmaps == null) {
+            if (page?.Beatmaps == null) {
+                this.Filter.Count++;
                 return;
             }
 
