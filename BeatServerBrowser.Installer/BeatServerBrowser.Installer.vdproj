@@ -217,7 +217,7 @@
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:3.0.0"
+        "ProductVersion" = "8:3.0.1"
         "Manufacturer" = "8:BeatSaverBrowser"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -759,7 +759,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7F19E387DC384726A890384BB618335B"
             {
-            "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Release\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\BeatServerBrowser\\obj\\Release\\net6.0-windows10.0.17763.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_47664DB4D50644BF870632F254879A4B"

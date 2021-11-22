@@ -140,7 +140,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>キーコピーコマンド を取得、設定</summary>
         private DelegateCommand CopyCommand_;
         /// <summary>キーコピーコマンド を取得、設定</summary>
-        public DelegateCommand CopyCommand => this.CopyCommand_ ?? (this.CopyCommand_ = new DelegateCommand(() => this.KeyCopy().Await()));
+        public DelegateCommand CopyCommand => this.CopyCommand_ ?? (this.CopyCommand_ = new DelegateCommand(this.KeyCopy().Await));
 
 
         /// <summary>プレビューコマンド を取得、設定</summary>
@@ -205,22 +205,30 @@ namespace BeatServerBrowser.Core.Models
 
         private async Task KeyCopy()
         {
-            try {
-                var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
-                if (beatmap == null) {
-                    new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
+            var beatmap = await ConfigMaster.Current.CurrentBeatSaver.BeatmapByHash(this.SongHash);
+            if (beatmap == null) {
+                new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
+                return;
+            }
+            for (int i = 0; i < 10; i++) {
+                try {
+                    Clipboard.Clear();
+                    await Task.Delay(500);
+                    Clipboard.SetText($"!bsr {beatmap.ID}");
+                    new ToastContentBuilder().AddText($"「!bsr {beatmap.ID}」をクリップボードに送りました。").Show();
+                    this.CopyKey?.Invoke();
+                    this.Logger.Info($"{beatmap.ID}をクリップボードに送りました。");
+                    Debug.WriteLine($"{beatmap.ID}をクリップボードに送りました。");
                     return;
                 }
-                Clipboard.SetText($"!bsr {beatmap.ID}");
-                new ToastContentBuilder().AddText($"「!bsr {beatmap.ID}」をクリップボードに送りました。").Show();
-                this.CopyKey?.Invoke();
-                this.Logger.Info($"{beatmap.ID}をクリップボードに送りました。");
-                Debug.WriteLine($"{beatmap.ID}をクリップボードに送りました。");
+                catch (Exception e) {
+                    this.Logger.Error(e);
+                }
+                finally {
+                    await Task.Delay(500);
+                }
             }
-            catch (Exception e) {
-                new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
-                Debug.WriteLine(e);
-            }
+            new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
         }
 
         private void PreView()

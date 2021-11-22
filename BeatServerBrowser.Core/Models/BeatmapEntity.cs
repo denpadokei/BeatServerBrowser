@@ -111,7 +111,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>コピー を取得、設定</summary>
         private DelegateCommand copyCommand_;
         /// <summary>コピー を取得、設定</summary>
-        public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy));
+        public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy().Await));
 
         /// <summary>詳細表示 を取得、設定</summary>
         private DelegateCommand showDetailCommand_;
@@ -161,19 +161,27 @@ namespace BeatServerBrowser.Core.Models
             }
         }
 
-        private void Copy()
+        private async Task Copy()
         {
-            try {
-                Clipboard.SetText($"!bsr {this.Key}");
-                new ToastContentBuilder().AddText($"「!bsr {this.Key}」をクリップボードに送りました。").Show();
-                this.CopyKey?.Invoke();
-                this.Logger.Info($"{this.Key}をクリップボードに送りました。");
-                Debug.WriteLine($"{this.Key}をクリップボードに送りました。");
+            for (int i = 0; i < 10; i++) {
+                try {
+                    Clipboard.Clear();
+                    await Task.Delay(500);
+                    Clipboard.SetText($"!bsr {this.Key}");
+                    new ToastContentBuilder().AddText($"「!bsr {this.Key}」をクリップボードに送りました。").Show();
+                    this.CopyKey?.Invoke();
+                    this.Logger.Info($"{this.Key}をクリップボードに送りました。");
+                    Debug.WriteLine($"{this.Key}をクリップボードに送りました。");
+                    return;
+                }
+                catch (Exception e) {
+                    this.Logger.Error(e);
+                }
+                finally {
+                    await Task.Delay(500);
+                }
             }
-            catch (Exception e) {
-                Debug.Write(e);
-                new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
-            }
+            new ToastContentBuilder().AddText($"{this.SongTitle}のキーのコピーに失敗しました。").Show();
         }
 
         private bool CanInstalled()
