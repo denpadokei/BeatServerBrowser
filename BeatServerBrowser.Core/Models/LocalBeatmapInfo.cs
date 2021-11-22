@@ -140,7 +140,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>キーコピーコマンド を取得、設定</summary>
         private DelegateCommand CopyCommand_;
         /// <summary>キーコピーコマンド を取得、設定</summary>
-        public DelegateCommand CopyCommand => this.CopyCommand_ ?? (this.CopyCommand_ = new DelegateCommand(this.KeyCopy().Await));
+        public DelegateCommand CopyCommand => this.CopyCommand_ ?? (this.CopyCommand_ = new DelegateCommand(async () => await this.KeyCopy()));
 
 
         /// <summary>プレビューコマンド を取得、設定</summary>

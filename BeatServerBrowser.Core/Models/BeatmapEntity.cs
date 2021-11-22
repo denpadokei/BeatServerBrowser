@@ -111,7 +111,7 @@ namespace BeatServerBrowser.Core.Models
         /// <summary>コピー を取得、設定</summary>
         private DelegateCommand copyCommand_;
         /// <summary>コピー を取得、設定</summary>
-        public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(this.Copy().Await));
+        public DelegateCommand CopyCommand => this.copyCommand_ ?? (this.copyCommand_ = new DelegateCommand(async () => await this.Copy()));
 
         /// <summary>詳細表示 を取得、設定</summary>
         private DelegateCommand showDetailCommand_;
