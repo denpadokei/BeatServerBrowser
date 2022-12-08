@@ -11,7 +11,7 @@
     <PackageReference Include="MaterialDesignColors" Version="2.0.3" />
     <PackageReference Include="MaterialDesignThemes" Version="4.2.1" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
     <PackageReference Include="StatefulModel.Standard" Version="0.1.0" />
   </ItemGroup>
